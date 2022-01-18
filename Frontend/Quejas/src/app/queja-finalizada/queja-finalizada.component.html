@@ -1,0 +1,87 @@
+<ng-container *ngIf="flagformvisible; else NoForm">
+<div class="container">
+	<div class="row">
+		<div class="col-lg-10">
+			&nbsp;
+		</div>
+	</div>
+	<ng-container *ngIf="FinoArchivo==1 || FinoArchivo==2">
+		<div class="row">
+			<div class="col-lg-10">
+				<b>{{lblTitulo}}</b>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-10">
+				Queja No. {{lblquejano}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-10">
+				Razón Queja Finalizada: {{lblRazon}}
+			</div>
+		</div>
+		<ng-container *ngIf="FinoArchivo===2">
+		<div class="row">
+			<div class="col-lg-10">
+				Categoría Queja Finalizada: {{lblCategoria}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-10">
+				Razon POA Queja: {{lblPOA}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-10">
+				Monto: {{lblMonto | number:'1.2-2'}}
+			</div>
+		</div>
+		</ng-container>
+		<ng-container *ngIf="lblDetalle!=''">
+		<div class="row">
+			<div class="col-lg-10">
+				Detalle: {{lblDetalle}}
+			</div>
+		</div>
+		</ng-container>
+		<ng-container *ngIf="lblcomentario!=''">
+		<div class="row">
+			<div class="col-lg-10">
+				Comentario: {{lblcomentario}}
+			</div>
+		</div>
+		</ng-container>
+		<ng-container *ngIf="lblconclusion!=''">
+		<div class="row">
+			<div class="col-lg-10">
+				Conclusión: {{lblconclusion}}
+			</div>
+		</div>
+		</ng-container>
+	</ng-container>
+</div>
+</ng-container>
+<ng-template #NoForm>
+<div class="container">	
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>	
+	<div class="row">
+	 <div class="col-lg-10" align="center">
+		<i class="frmicon"></i>&nbsp;xxx
+	 </div>
+	</div>	
+</div>	
+</ng-template>
+<ng-container *ngIf="FinoArchivo===3">
+<div class="container">	
+	<div class="row">
+		<div class="col-lg-10">
+			No hay información ingresada
+		</div>
+	</div>
+</div>
+</ng-container>

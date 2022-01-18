@@ -1,0 +1,182 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Reasignar/Reactivar Queja
+			</td>
+			<td width="10%" align="right" class="modaltitltdb">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 0; else NoForm">
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row" >
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<form (ngSubmit)="onSubmit()" [formGroup]="frmMain" >
+		<div class="container" >
+				<div class="row">
+					<div class="col-lg-2">
+						<b>No. Queja:</b>
+					</div>
+					<div class="col-lg-3">
+						<input class="form-control" formControlName="noqueja" ng-maxlength='100' class="form-control" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),-]*" >
+					</div>
+					<div *ngIf="NoQuejaCtrl.invalid && (NoQuejaCtrl.dirty && NoQuejaCtrl.touched)" class="col-lg-12">
+						  <div *ngIf="NoQuejaCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+							Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) - ,
+						  </div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6">
+						<button class="btn btn-primary" [disabled]="!frmMain.valid" (click)="SearchQueja()" type="button">Buscar</button>
+					</div>
+				</div>
+			<ng-container *ngIf="QuejaResult > 0">
+				<ng-container *ngIf="!flagUpdate">
+					<div class="row">
+						<div class="col-lg-6">
+							&nbsp;
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							Queja No.: {{lst_queja[0]['quejanumero']}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							Flujo: {{lst_queja[0]['nombre_flujo']}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							Estado de la Queja: {{lst_queja[0]['id_estado_queja']}} - {{lst_queja[0]['estado_descripcion']}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							&Uacute;ltima Persona Asignada: {{lst_queja[0]['usuario_asignado_nombre']}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6">
+							&nbsp;
+						</div>
+					</div>
+				</ng-container>
+				<ng-container *ngIf="!flagUpdate">
+					<ng-container *ngIf="lst_queja[0]['id_flujo'] == data.Flujo || lst_queja[0]['id_flujo'] == 5 || (lst_queja[0]['id_flujo'] == 6 && data.Flujo == 1); else OtroFlujo">
+						<div class="row">
+							<div class="col-lg-2">
+								<b>Asignar a:</b>
+							</div>
+							<div class="col-lg-3">
+								<select class="form-control" formControlName="asignar_a">
+									<option *ngFor="let x of lst_visitapor" [value]="x.id_usuario">{{x.nombre}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="row">
+								<div class="col-lg-6">
+									&nbsp;
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<ng-container *ngIf="lst_queja[0]['id_estado_queja'] == 501; else Reasignar">
+									<button class="btn btn-primary" (click)="ReactivarQ()" type="button">Reactivar Queja</button>
+								</ng-container>	
+								<ng-template #Reasignar>
+									<button class="btn btn-primary" (click)="ReasignarQ()" type="button">Reasignar a otra Persona</button>
+								</ng-template>
+							</div>
+						</div>
+					</ng-container>	
+					<ng-template #OtroFlujo>
+						<div class="row">
+							<div class="col-lg-12">
+								<b>No es posible reasignar esta queja porque no pertenece a su flujo.</b>
+							</div>
+						</div>
+					</ng-template>
+				</ng-container>
+				<ng-container *ngIf="flagUpdate">
+					<div class="row">
+						<div class="col-lg-6">
+							&nbsp;
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							El movimiento de la queja fu&eacute; completado exitosamente.
+						</div>
+					</div>
+				</ng-container>
+			</ng-container>
+			<ng-container *ngIf="QuejaResult == 0">
+				<div class="row">
+					<div class="col-lg-6">
+						&nbsp;
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12">
+						No se encontró la queja en el sistema.
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6">
+						&nbsp;
+					</div>
+				</div>
+			</ng-container>
+		</div>
+		</form>
+	</div>	
+	<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+		Hubo un error al procesar esta acción, por favor intente de nuevo.
+	</div>
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+<ng-container *ngIf="loaderror">
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10">
+			Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+		 </div>
+		</div>
+	</div>	
+</ng-container>
+</body>
+</html>
+

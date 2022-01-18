@@ -1,0 +1,243 @@
+<html>
+<head>
+</head>
+<body>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Movimiento Expediente Confirmar
+			</td>
+			<td width="10%" align="right" class="modaltitltdb">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 4; else NoForm">
+		<div class="container">
+			<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+				<div class="row">
+				 <div class="col-lg-1">
+					&nbsp;
+				 </div>
+				</div>
+				<div class="row">
+					<div class="col-lg-2">
+					  <label><b>Mover Hacia:</b></label>
+					</div>
+					<div class="col-lg-8">
+							<!---<ng-container *ngIf="data.Editable; else ReadOnly1">--->
+								<select class="form-control" formControlName="moverhacia" (change)="MoverHaciaUpdate()">
+									<option *ngFor="let x of cmb_hacia" [value]="x.id_departamento_interno">{{x.nombre}}</option>
+									<option value="9">Pendiente Asignación por Jefe</option>
+								</select>
+							<!---</ng-container>--->
+					</div>
+					<div *ngIf="MoverHaciaCtrl.invalid && (MoverHaciaCtrl.dirty && MoverHaciaCtrl.touched)" class="col-lg-12">
+						<div *ngIf="MoverHaciaCtrl.errors.required" class="alert alert-danger col-lg-12">
+							El campo 'Mover Hacia' es obligatorio
+						</div>
+					</div>
+				</div>
+				<ng-container *ngIf="MoverHaciaCtrl.value != 9">
+					<div class="row">
+					 <div class="col-lg-1">
+						&nbsp;
+					 </div>
+					</div>
+					<div class="row" style="border-style: ridge" >
+					<ng-container formArrayName="lst_quejasimple" *ngFor="let thisitem of myForm.controls.lst_quejasimple.controls; let i = index">
+						<div class="col-lg-3" >
+							<input type="checkbox" [formControlName]="i">
+							Queja {{lst_quejasimple[i].quejanumero}}
+						</div>			
+					</ng-container>		
+					<ng-container *ngIf="flagemtpyList">
+						No hay ninguna queja pendiente de realizar este movimiento.
+					</ng-container>
+					</div>
+					<div class="row">
+					 <div class="col-lg-1">
+						&nbsp;
+					 </div>
+					</div>
+				</ng-container>
+				<div class="row">
+					  <div class="col-lg-3" *ngIf="!flagemtpyList">
+						
+						<ng-container *ngIf="btnvisible; else nobutton">
+							<button class="btn btn-primary" type="button" (click)="GuardarMovimiento()">Confirmar Movimiento</button>
+						</ng-container>
+						<ng-template #nobutton>
+							<span><i class="icon"></i></span>&nbsp;
+						</ng-template>
+					  </div>
+
+					  			  
+					  <div>
+				       <!--<ng-container *ngIf="id_registro_mvm != 0">
+						 <a #replink (click)="openMovimientoExpRegistro();" [routerLink]=""> AQ-FO-03</a>
+				  	   </ng-container>-->
+					  </div>
+				</div>
+				<div class="row">
+				 <div class="col-lg-1">
+					&nbsp;
+				 </div>
+				</div>
+			</form>
+			<form (ngSubmit)="onSubmit()" [formGroup]="Form2" >
+				<div class="row" *ngIf="MoverHaciaCtrl.value == 9">
+					<ng-container *ngIf="flagListPendiente">
+						<div class="col-lg-12">
+							<table>
+								<ng-container *ngIf="lst_pendassig?.length > 0; else EmptyPend">
+									<ng-container *ngFor="let thisItem of lst_pendassig">
+										<tr>									
+											<td colspan="100%"><a (click)="PendienteClick(thisItem.id_queja)" class="formlink" [routerLink]="">{{thisItem.quejanumero}}</a></td>
+										</tr>
+									</ng-container>
+								</ng-container>
+								<ng-template #EmptyPend>
+									<tr><td colspan="100%">No hay quejas pendientes de asignación</td></tr>
+								</ng-template>
+							</table>
+						</div>
+					</ng-container>
+					<ng-container *ngIf="!flagListPendiente">
+						<div class="col-lg-12">
+							<div class="row">
+								<div class="col-lg-12">
+									<b>Queja No.</b> {{sing_queja['quejanumero']}}, <b>Fecha Queja:</b> {{sing_queja['fecha_queja'] | date:'d/M/yy, h:mm a'}}
+								</div>
+								<div class="col-lg-12">
+									<b>Consumidor:</b> {{sing_queja['nombre_consumidor']}}
+								</div>
+								<div class="col-lg-12">	
+									<b>Proveedor:</b> {{sing_queja['nombre_proveedor']}}
+								</div>
+								<div class="col-lg-12">	
+									<b>Detalle Queja:</b> {{sing_queja['detalle_queja']}}
+								</div>
+								<div class="col-lg-12">	
+									<b>Solicita Que:</b> {{sing_queja['solicita_que']}}
+								</div>
+								<div class="col-lg-2">
+									<b>Enviar a:</b>
+								</div>
+								<div class="col-lg-6">
+									<select class="form-control" formControlName="haciaInd">
+										<option [value]="99">Sede Regional</option>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<ng-container *ngIf="HaciaIndCtrl.value == 99">
+									<div class="col-lg-2">
+										<b>Sede:</b>
+									</div>
+									<div class="col-lg-6">
+										<select class="form-control" formControlName="sede">
+											<option *ngFor="let x of lst_sede" [value]="x.id_sede">{{x.nombre}}</option>
+										</select>
+									</div>
+								</ng-container>	
+								<div class="col-lg-12">
+									<ng-container *ngIf="btnvisible2; else nobutton2">
+										<button class="btn btn-primary" type="button" (click)="GuardarIndividual()">Guardar Movimiento</button>
+										<button class="btn btn-primary" type="button" (click)="VolverListado()">Volver a Listado</button>
+									</ng-container>
+									<ng-template #nobutton2>
+										<span><i class="icon"></i></span>&nbsp;
+									</ng-template> 
+								</div>									
+							</div>
+						</div>
+					</ng-container>
+				</div>
+			</form>
+			<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+				Hubo un error al procesar esta acción, por favor intente de nuevo.
+			</div>
+			<div *ngIf="flagInfoError2" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+				Hubo un error al procesar esta acción, por favor intente de nuevo. Verifique que la cola de asignación hacia donde esta enviando la queja tenga personal activo.
+			</div>
+			<div *ngIf="flagNinguno" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+				Debe existir al menos un elemento escogido.
+			</div>
+			<div *ngIf="flagUpdate" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+				El movimiento fué completado.
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-1">
+					&nbsp;
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<ng-container *ngIf="lst_mov?.length > 0">
+						<table class="table table-striped" >
+						<thead>
+						  <tr>
+							<th scope="col" width="10%">Fecha</th>
+							<th scope="col" width="70%">&Uacute;ltimos 5 Movimientos Realizados</th>
+							<th scope="col" width="20%">Registro</th>
+						  </tr>
+						</thead>
+						<tbody>
+							<ng-container *ngFor="let thisItem of lst_mov">			
+								<tr>
+									<td>{{thisItem.fecha | date: "dd/MM/yyyy"}}</td>
+									<td>{{thisItem.display}}</td>
+									<td><a #replink (click)="openMovimientoExpRegistro(thisItem.reportid);" [routerLink]=""> {{thisItem.codigo_reporte}}</a></td>
+								</tr>
+							</ng-container>
+						</tbody>
+						</table>
+					</ng-container>
+				</div>
+			</div>
+		</div>
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10">
+			Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+		 </div>
+		</div>
+	</div>	
+</ng-container>
+
+</body>
+</html>
+
+
+
+

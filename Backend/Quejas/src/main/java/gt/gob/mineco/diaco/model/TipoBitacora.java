@@ -1,0 +1,183 @@
+package gt.gob.mineco.diaco.model;
+
+import com.google.gson.JsonObject;
+import java.io.Serializable;
+import javax.persistence.*;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.Date;
+
+/**
+ * The persistent class for the diaco_bitacora database table.
+ * 
+ */
+@Entity
+@Table(name="diaco_bitacora")
+@NamedQueries({
+    @NamedQuery(
+        name = "TipoBitacora.findAllFlujoConsumidor",
+        query = "SELECT t FROM TipoBitacora t where t.id_queja = :idqueja and t.id_flujo in (1,2,3,4,6) ORDER BY t.fecha desc"),
+    @NamedQuery(
+        name = "TipoBitacora.findAllFlujoConcVirt",
+        query = "SELECT t FROM TipoBitacora t where t.id_queja = :idqueja and t.id_flujo = 4 ORDER BY t.fecha desc"),
+    @NamedQuery(
+        name = "TipoBitacora.findAllFlujoServPub",
+        query = "SELECT t FROM TipoBitacora t where t.id_queja = :idqueja and t.id_flujo in (1,2,3,4,6) ORDER BY t.fecha desc"),
+    @NamedQuery(
+        name = "TipoBitacora.findAllFlujoVyV",
+        query = "SELECT t FROM TipoBitacora t where t.id_queja = :idqueja and t.id_flujo in (1,2,3,4,6) ORDER BY t.fecha desc"),
+    @NamedQuery(
+        name = "TipoBitacora.findAllFlujoJuridico",
+        query = "SELECT t FROM TipoBitacora t where t.id_queja = :idqueja and t.id_flujo in (1,2,3,4,6) ORDER BY t.fecha desc")
+})
+public class TipoBitacora implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+        @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id", precision=0) 
+        private double id;
+        @Column(name="id_queja")
+        private Integer id_queja;
+        @Temporal(TemporalType.TIMESTAMP)
+        @Column(name="fecha")        
+        private Date fecha;
+        @Column(name="usuario")
+        private Integer usuario;
+        @Column(name="bitacora")        
+	private String bitacora;
+        @Column(name="consumidor")        
+	private String consumidor;
+        //@Column(name="estado")        
+	//private String estado;
+        @Temporal(TemporalType.TIMESTAMP)
+        @Column(name="fecha_actualizado")        
+        private Date fecha_actualizado;
+        @Column(name="usuario_actualizado")
+        private Integer usuario_actualizado;
+	//@Column(name="accion")        
+	//private String accion;
+        @Column(name="id_queja_paso")
+        private Integer id_queja_paso;
+	@Column(name="id_tipo_registro")
+        private Integer id_tipo_registro;
+	@Column(name="id_flujo")
+        private Integer id_flujo;
+	@Column(name="auto_fuente")
+        private Integer auto_fuente;	
+	
+        public TipoBitacora() {
+	}
+
+    public Integer getAuto_fuente() {
+        return auto_fuente;
+    }
+
+    public void setAuto_fuente(Integer auto_fuente) {
+        this.auto_fuente = auto_fuente;
+    }
+
+    public Integer getId_flujo() {
+        return id_flujo;
+    }
+
+    public void setId_flujo(Integer id_flujo) {
+        this.id_flujo = id_flujo;
+    }
+
+    public Integer getId_queja_paso() {
+        return id_queja_paso;
+    }
+
+    public void setId_queja_paso(Integer id_queja_paso) {
+        this.id_queja_paso = id_queja_paso;
+    }
+
+    public Integer getId_tipo_registro() {
+        return id_tipo_registro;
+    }
+
+    public void setId_tipo_registro(Integer id_tipo_registro) {
+        this.id_tipo_registro = id_tipo_registro;
+    }
+
+        
+        
+    public double getId() {
+        return id;
+    }
+
+    public void setId(double id) {
+        this.id = id;
+    }
+
+    public Integer getId_queja() {
+        return id_queja;
+    }
+
+    public void setId_queja(Integer id_queja) {
+        this.id_queja = id_queja;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Integer getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Integer usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getBitacora() {
+        return bitacora;
+    }
+
+    public void setBitacora(String bitacora) {
+        this.bitacora = bitacora;
+    }
+
+    public String getConsumidor() {
+        return consumidor;
+    }
+
+    public void setConsumidor(String consumidor) {
+        this.consumidor = consumidor;
+    }
+
+    public Date getFecha_actualizado() {
+        return fecha_actualizado;
+    }
+
+    public void setFecha_actualizado(Date fecha_actualizado) {
+        this.fecha_actualizado = fecha_actualizado;
+    }
+
+    public Integer getUsuario_actualizado() {
+        return usuario_actualizado;
+    }
+
+    public void setUsuario_actualizado(Integer usuario_actualizado) {
+        this.usuario_actualizado = usuario_actualizado;
+    }
+
+        @Override
+        public String toString() {
+            JsonObject temp = new JsonObject();
+            temp.addProperty("id",this.id);
+            temp.addProperty("id_queja",this.id_queja);
+            temp.addProperty("fecha",this.fecha.toString());
+            temp.addProperty("usuario",this.usuario);
+            temp.addProperty("bitacora",this.bitacora);
+            temp.addProperty("consumidor",this.consumidor);
+            temp.addProperty("id_flujo",this.id_flujo);
+            return temp.toString()+",";
+        }
+        
+}

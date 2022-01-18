@@ -1,0 +1,116 @@
+
+
+
+<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12 modaltitl">
+				<table width="100%">
+				<tr><td width="90%" class="modaltitltd">
+					Catalogo Motivo de Queja Finalizada
+				</td>
+				<td width="10%" align="right" class="modaltitltd">
+					<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+				</td></tr>
+				</table>
+			</div>
+		</div>
+	</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-8 mt-4">
+          <ul>
+				<li 
+				*ngFor="let final of finalizacionArray"
+				class="list-group-item list-group-item-action"
+				(click)="openForEdit(final)"
+				[class.active]="final == selectedFinalizacion"
+				>
+				<span class="badge badge.primary">{{final.id}}</span> {{final.descripcion}}
+				</li>
+		  </ul>
+		  <div class="card mt-4">
+			  <div class="card-body">
+				  <div class="card-title">
+					 Ingresa un nuevo motivo de queja finalizada				 
+				  </div>
+		
+				  <table>
+					  <tr>
+						 	<td>
+								(*)tipo de motivo finalizacion	
+							 </td>
+							 <td>
+								<select>
+									<option selected>
+										{{selectedFinalizacion.tipo}}  {{selectedFinalizacion.nombreTipo}}
+									</option>
+									<option (click)="openForEditTipo('F')">
+										Razón Finalización
+									</option>
+									<option (click)="openForEditTipo('S')">
+										Servicios publicos
+									</option>
+									<option (click)="openForEditTipo('C')">
+										Categoria Atención Al Consumidor
+									</option>
+									<option (click)="openForEditTipo('A')">
+										Razón Atención Al Consumidor
+									</option>
+						
+								  </select>
+								 
+							 </td> 
+					  </tr>
+				  </table>
+          <table>
+			  <tr>
+				  <td>
+						motivo padre (opcional)
+				  </td>
+				  <td>
+					<select>
+						<option selected >
+							   {{selectedFinalizacion.padre}} {{selectedFinalizacion.nombrePadre}}	
+						</option>  
+						<option *ngFor="let fin of finalizacionArray"
+						(click)="openForEditPadre(fin)"
+						(change)="GetList()"
+						[ngValue]="selectedFinalizacion"
+						>
+					  <span class="badge badge.primary">{{fin.id}}</span> {{fin.descripcion}}
+						  </option>
+					  </select>  
+			
+				  </td>
+			  </tr>
+		  </table>
+		 
+
+      <table>
+		  <tr>
+			  <td>
+					descripcion
+			  </td>
+			  <td>
+				<input type="text" [(ngModel)]="selectedFinalizacion.descripcion" (blur)="setAfterAuxiliar()" (focus)="setBeforeAuxiliar()" placeholder="agregar motivo de queja finalizada" class="form-control">
+      
+			  </td>
+		  </tr>
+	  </table>
+				
+        
+				<button (click)="addOrEdit()" class="btn btn-primary">
+						Guardar cambios
+				</button>
+				<button
+				*ngIf="selectedFinalizacion.id !== 0"
+				class="btn btn-danger"
+				(click)="delete()">
+					Borrar
+				</button>
+			  </div>
+		  </div>
+		</div>
+		
+	</div>
+</div>

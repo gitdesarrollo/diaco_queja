@@ -1,0 +1,192 @@
+<html>
+<head>
+</head>
+<body>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Movimiento Expediente
+			</td>
+			<td width="10%" align="right" class="modaltitltdb">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 3; else NoForm">
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+			 <div class="col-lg-4">
+			  <label><b>Queja No.:</b> {{data.quejanumero}}</label>
+			 </div>
+			 <div class="col-lg-4">
+			  <label><b>Lugar Actual:</b> {{htmlLugarActual}}</label>
+			</div>
+		</div>
+	</div>
+		<div class="container">
+			<div class="row">
+			 <div class="col-lg-1">
+				&nbsp;
+			 </div>
+			</div>
+			<ng-container *ngIf="flagEditable">
+			<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+			<ng-container *ngIf="htmlidflujo === 2 && flagsaved === false">
+				<div class="row">
+					 <div class="col-lg-2">
+					  <label><b>Mover Hacia:</b></label>
+					 </div>
+					<div class="col-lg-8">
+							<!---<ng-container *ngIf="data.Editable; else ReadOnly1">--->
+								<select class="form-control" formControlName="moverhacia">
+									<option [value]="91">Enviar a Jefe</option>
+									<!--<option *ngFor="let x of cmb_hacia2" [value]="x.id_departamento_interno">{{x.nombre}}</option>
+									<option [value]="98">Proveedor</option>-->
+									<option [value]="1">Atención al Consumidor</option>
+									<option [value]="3">Verificación y Vigilancia</option>
+									<ng-container *ngIf="flagValidaArchivo">
+										<option [value]="4">Archivo</option>
+									</ng-container>	
+								</select>
+							<!---</ng-container>--->
+					</div>
+					<div *ngIf="MoverHaciaCtrl.invalid && (MoverHaciaCtrl.dirty && MoverHaciaCtrl.touched)" class="col-lg-12">
+						<div *ngIf="MoverHaciaCtrl.errors.required" class="alert alert-danger col-lg-12">
+							El campo 'Mover Hacia' es obligatorio
+						</div>
+					</div>
+					<div *ngIf="!flagValidaArchivo" class="alert alert-warning col-lg-12">
+						Para poder enviar esta queja a Archivo debe llenar la sección Archivo.
+					</div>
+				</div>
+				<div class="row">
+					 <div class="col-lg-2">
+					  <label><b>Observaciones:</b></label>
+					 </div>
+					 <div style="display: block;" id="rulesformitem" class="col-lg-10">
+							<textarea rows='3' formControlName="observaciones" ng-maxlength='500' class="form-control" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),/:'\-\n]*"></textarea>
+					 </div>	
+					<div *ngIf="observacionesCtrl.invalid && (observacionesCtrl.dirty || observacionesCtrl.touched)" class="col-lg-12">
+					  <div *ngIf="observacionesCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+						Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) , ' : / -
+					  </div>
+					</div>
+				</div>
+				<div class="row">
+				 <div class="col-lg-1">
+					&nbsp;
+				 </div>
+				</div>
+				<div class="row">
+				 <div class="col-lg-1">
+					&nbsp;
+				 </div>
+				</div>
+				<div class="row">
+					  <div class="col-lg-3">
+						
+						<ng-container *ngIf="btnvisible; else nobutton">
+							<button class="btn btn-primary" type="button" (click)="GuardarMovimiento()">Confirmar Movimiento</button>
+						</ng-container>
+						<ng-template #nobutton>
+							<span><i class="icon"></i></span>&nbsp;
+						</ng-template>
+					  </div>
+				</div>
+				<div class="row">
+				 <div class="col-lg-1">
+					&nbsp;
+				 </div>
+				</div>
+			</ng-container>
+			</form>
+			</ng-container>
+			<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+				Hubo un error al procesar esta acción, por favor intente de nuevo.
+			</div>
+
+			<ng-container *ngIf="lst_mov?.length > 0">
+				<table class="table table-striped" >
+				<thead>
+				  <tr>
+					<th scope="col" width="10%">Fecha</th>
+					<th scope="col" width="70%">Movimientos Realizados</th>
+					<th scope="col" width="20%">Registro</th>
+				  </tr>
+				</thead>
+				<tbody>
+					<ng-container *ngFor="let thisItem of lst_mov">			
+						<tr>
+							<td>{{thisItem.fecha | date: "dd/MM/yyyy"}}</td>
+							<td>{{thisItem.display}}</td>
+							<td><a #replink (click)="openMovimientoExpRegistro(thisItem.reportid);" [routerLink]=""> {{thisItem.codigo_reporte}}</a></td>
+						</tr>
+					</ng-container>
+				</tbody>
+				</table>
+			</ng-container>
+			<ng-container *ngIf="Flagestadoqueja">
+			<div class="row">
+				 <div class="col-lg-1">
+					&nbsp;
+				 </div>
+				</div>	
+				<div class="row">
+				 <div class="col-lg-10">
+					El movimiento aún no ha sido confirmado por su Revisor/Administrador.
+				 </div>
+			</div>	
+			</ng-container>
+		</div>
+		
+		
+	<div *ngIf="flagUpdate" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+		El movimiento fué guardado.
+	</div>
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10">
+			Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+		 </div>
+		</div>
+	</div>	
+</ng-container>
+
+</body>
+</html>
+
+
+
+

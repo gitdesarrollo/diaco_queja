@@ -1,0 +1,163 @@
+<html>
+<body>
+<!------ Include the above in your HEAD tag ---------->
+<!------<div id="wrap">
+<div id="main" class="container clear-top">---------->
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 text-center">
+				&nbsp;
+			</div>
+			<div class="col-lg-4 text-center">
+				<img class="headerimg" />
+			</div>
+			<div class="col-lg-4 text-center">
+				&nbsp;
+			</div>
+		</div>
+	</div>
+	<div>&nbsp;</div>
+	<div class="wrapper fadeInDown">
+	  <div id="formContent">
+		<!-- Tabs Titles -->
+		
+
+		<!-- Login Form -->
+		<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+			<div>&nbsp;</div>
+		  <input type="text" id="login" class="fadeIn first" name="login" formControlName="usrname" placeholder="Usuario">
+		  <input type="password" id="password" class="fadeIn second" name="login" formControlName="pssword" placeholder="Clave">
+		  <input type="button" class="fadeIn third" (click)="LogIn()" value="Entrar">
+		  <ng-container *ngIf="flagErrorPassword"><label class="highlight">Datos incorrectos, intente de nuevo</label></ng-container>
+		  <ng-container *ngIf="flagDBError"><label class="highlight">Error de conexión</label></ng-container>
+		</form>
+
+		<!-- Remind Passowrd -->
+		<div id="formFooter">
+		  <a class="underlineHover" href="#">Olvido su clave?</a>
+		</div>
+
+	  </div>
+	</div>
+	<div>&nbsp;</div>
+	<div>&nbsp;</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 text-center">
+				&nbsp;
+			</div>
+		</div>	
+		<div class="row">
+			<div class="col-lg-4 text-center">
+				&nbsp;
+			</div>
+			<div class="col-lg-4 text-center">
+				<img class="footerimg" />
+			</div>
+			<div class="col-lg-4 text-center">
+				&nbsp;
+			</div>
+		</div>
+	</div>
+
+<!------</div>
+</div>
+
+
+	<footer class="footer">
+      <div class="container">
+        <p class="text-muted">Place sticky footer content here.</p>
+      </div>
+    </footer>--->
+	
+	<div class="footer-margin">
+	  <footer class="footer-font-style footer-position page-footer">
+		<!-- Footer Links -->
+			<div class="container text-center text-md-left">
+
+			  <!-- Grid row -->
+			  <div class="row">
+
+				<!-- Grid column -->
+				<div class="col-md-3 mx-auto">
+
+				  <ul class="list-unstyled">
+					<li>
+					  <a href="#!" class="footer-link">Solicitud de Usuario</a>
+					</li>
+					<li>
+					  <a href="#!" class="footer-link">Manual de Usuario</a>
+					</li>
+				  </ul>
+
+				</div>
+				<!-- Grid column -->
+
+				<hr class="clearfix w-100 d-md-none">
+
+				<!-- Grid column -->
+				<div class="col-md-3 mx-auto">
+
+				  <ul class="list-unstyled">
+					<li>
+					  <a href="#!" class="footer-link">Link 1</a>
+					</li>
+					<li>
+					  <a href="#!" class="footer-link">Link 2</a>
+					</li>
+				  </ul>
+
+				</div>
+				<!-- Grid column -->
+
+				<hr class="clearfix w-100 d-md-none">
+
+				<!-- Grid column -->
+				<div class="col-md-3 mx-auto">
+
+				  <ul class="list-unstyled">
+					<li>
+					  <a href="#!" class="footer-link">Link 1</a>
+					</li>
+					<li>
+					  <a href="#!" class="footer-link">Link 2</a>
+					</li>
+				  </ul>
+
+				</div>
+				<!-- Grid column -->
+
+				<hr class="clearfix w-100 d-md-none">
+
+				<!-- Grid column -->
+				<div class="col-md-3 mx-auto">
+
+				  <ul class="list-unstyled">
+					<li>
+					  <a href="#!" class="footer-link">Link 1</a>
+					</li>
+					<li>
+					  <a href="#!" class="footer-link">Link 2</a>
+					</li>
+				  </ul>
+
+				</div>
+				<!-- Grid column -->
+
+			  </div>
+			  <!-- Grid row -->
+
+			</div>
+			<!-- Footer Links -->
+
+			<!-- Copyright -->
+			<div class="text-center">© 2019 Derechos Reservados:
+				<a href="https://www.mineco.gob.gt/" class="footer-link" target="_blank"> Ministerio de Economia</a> -
+				<a href="https://www.diaco.gob.gt/site/" class="footer-link" target="_blank"> DIACO</a>			  
+			</div>
+			<div class="text-center">&nbsp;</div>
+	  </footer>
+	</div>
+	
+</body>
+</html>

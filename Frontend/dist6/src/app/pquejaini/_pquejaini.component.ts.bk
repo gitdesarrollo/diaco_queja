@@ -1,0 +1,15 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-pquejaini',
+  templateUrl: './pquejaini.component.html',
+  styleUrls: ['./pquejaini.component.css']
+})
+export class PquejainiComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}

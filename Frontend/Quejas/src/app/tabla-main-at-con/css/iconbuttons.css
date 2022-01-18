@@ -1,0 +1,62 @@
+@font-face {
+  font-family: LatoBold;
+  src: url('../../../assets/fonts/Lato-Bold.ttf') format('truetype');
+}
+
+.btn-image:before {
+    content: "";
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    margin-right: 0px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position : center center;
+    background-repeat:no-repeat;
+}
+
+table thead th{ font-family: LatoBold, sans-serif !important; }
+
+table tbody tr td div.hoverbtns { display:none; }
+
+table tbody tr:hover td div.hoverbtns { display:inline-block; }
+
+table tbody tr.popupline:hover  { background-color: #4d4d4d !important; color: white; font-size:125%;}
+
+.ConcPrevia:before{
+     background-image : url("icons/headap-w.png");
+}
+.Verify:before{
+     background-image : url("icons/list-w.png");
+}
+.ComPermanente:before{
+     background-image : url("icons/phone2-w.png");
+}
+.Meeting:before{
+     background-image : url("icons/clock-w.png");
+}
+.Lupa:before{
+     background-image : url("icons/search-w.png");
+}
+.Conciliacion:before{
+     background-image : url("icons/check-w.png");
+}
+.No:before{
+     background-image : url("icons/del-prop-w.png");
+}
+.Visita:before{
+     background-image : url("icons/home-w.png");
+}
+.Move:before{
+     background-image : url("icons/arrow-w.png");
+}
+.Closed:before{
+     background-image : url("icons/x-w.png");
+}
+.File:before{
+     background-image : url("icons/folders-w.png");
+}
+.Log:before{
+     background-image : url("icons/db-w.png");
+}
+

@@ -1,0 +1,409 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12 modaltitl">
+      <table width="100%">
+        <tr>
+          <td width="90%" class="modaltitltd">
+            Configuraci&oacute;n de Usuario Detalle
+          </td>
+          <td width="10%" align="right" class="modaltitltd">
+            <button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<ng-container *ngIf="flagformvisible >= 2; else NoForm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-1">
+        &nbsp;
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-3">
+        <button class="btn btn-primary" type="button" (click)="BackDialog()">Regresar a Listado</button>
+      </div>
+      <div class="col-lg-1">
+        &nbsp;
+      </div>
+      <div class="col-lg-3">
+        <button class="btn btn-primary" type="button" (click)="closeDialog()">Cerrar Ventana</button>
+      </div>
+    </div>
+    <form (ngSubmit)="onSubmit()" [formGroup]="myForm">
+      <div class="row">
+        <div class="col-lg-1">
+          &nbsp;
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-1">
+          NIT:
+        </div>
+        <div class="col-lg-5">
+          <input type="text" class="form-control" formControlName="nit" (change)="txtTrim(1)" ng-maxlength="50"
+                 pattern="[A-Za-z áéíóúÁÉÍÓÚÑñ1234567890_+*.()]*">
+        </div>
+        <div *ngIf="nitCtrl.invalid && (nitCtrl.dirty && nitCtrl.touched)" class="col-lg-12">
+          <div *ngIf="nitCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+            Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( )
+          </div>
+        </div>
+        <div class="col-lg-1">
+          Usuario:
+        </div>
+        <div class="col-lg-5">
+          <input type="text" class="form-control" formControlName="usuario" (change)="txtTrim(2)" ng-maxlength="100"
+                 pattern="[A-Za-z áéíóúÁÉÍÓÚÑñ1234567890_+*.()]*">
+        </div>
+        <div *ngIf="usuarioCtrl.invalid && (usuarioCtrl.dirty && usuarioCtrl.touched)" class="col-lg-12">
+          <div *ngIf="usuarioCtrl.errors.required" class="alert alert-danger col-lg-12">
+            Debe ingresar información en la sección Usuario
+          </div>
+        </div>
+        <div *ngIf="usuarioCtrl.invalid && (usuarioCtrl.dirty && usuarioCtrl.touched)" class="col-lg-12">
+          <div *ngIf="usuarioCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+            Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( )
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-1">
+          Nombre:
+        </div>
+        <div class="col-lg-5">
+          <input type="text" class="form-control" formControlName="nombre" (change)="txtTrim(3)" ng-maxlength="50"
+                 pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),]*">
+        </div>
+        <div *ngIf="nombreCtrl.invalid && (nombreCtrl.dirty && nombreCtrl.touched)" class="col-lg-12">
+          <div *ngIf="nombreCtrl.errors.required" class="alert alert-danger col-lg-12">
+            Debe ingresar información en la sección Nombre
+          </div>
+        </div>
+        <div *ngIf="nombreCtrl.invalid && (nombreCtrl.dirty && nombreCtrl.touched)" class="col-lg-12">
+          <div *ngIf="nombreCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+            Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) ,
+          </div>
+        </div>
+        <div class="col-lg-1">
+          DPI:
+        </div>
+        <div class="col-lg-5">
+          <input type="text" class="form-control" formControlName="dpi" (change)="txtTrim(4)" ng-maxlength="100"
+                 pattern="[1234567890]*">
+        </div>
+        <div *ngIf="dpiCtrl.invalid && (dpiCtrl.dirty && dpiCtrl.touched)" class="col-lg-12">
+          <div *ngIf="dpiCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+            Ingreso un caracter inválido, solo puede ingresar números
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-1">
+          Estado:
+        </div>
+        <div class="col-lg-5">
+          <select class="form-control" formControlName="estado">
+            <option value='1' selected>Activo</option>
+            <option value='0'>Inactivo</option>
+          </select>
+        </div>
+        <div class="col-lg-1">
+          Email:
+        </div>
+        <div class="col-lg-5">
+          <input type="text" class="form-control" formControlName="email" (change)="txtTrim(5)" ng-maxlength="50"
+                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+        </div>
+        <div *ngIf="emailCtrl.invalid && (emailCtrl.dirty && emailCtrl.touched)" class="col-lg-12">
+          <div *ngIf="emailCtrl.errors.required" class="alert alert-danger col-lg-12">
+            Debe ingresar información en la sección Email
+          </div>
+        </div>
+        <div *ngIf="emailCtrl.invalid && (emailCtrl.dirty && emailCtrl.touched)" class="col-lg-12">
+          <div *ngIf="emailCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+            Por favor revise la dirección de correo electrónico ingresada
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-1">
+          Puesto:
+        </div>
+        <div class="col-lg-5">
+          <select name="puesto" class="form-control" formControlName="puesto" (change)="FormUpdate()">
+            <option *ngFor="let x of cmbpuesto" [value]="x.id">{{x.nombre}}</option>
+          </select>
+        </div>
+        <div class="col-lg-1">
+          Sede:
+        </div>
+        <div class="col-lg-5">
+          <select name="sede" class="form-control" formControlName="sede" (change)="FormUpdate()">
+            <option *ngFor="let x of cmbsede" [value]="x.id_diaco_sede">{{x.nombre_sede}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-1">
+          Tel&eacute;fono:
+        </div>
+        <div class="col-lg-5">
+          <input type="text" class="form-control" formControlName="telefono" (change)="txtTrim(7)" ng-maxlength="100"
+                 pattern="[A-Za-z áéíóúÁÉÍÓÚÑñ1234567890_+*.(),]*">
+        </div>
+        <div *ngIf="telefonoCtrl.invalid && (telefonoCtrl.dirty && telefonoCtrl.touched)" class="col-lg-12">
+          <div *ngIf="telefonoCtrl.errors.required" class="alert alert-danger col-lg-12">
+            Debe ingresar información en la sección Teléfono
+          </div>
+        </div>
+        <div *ngIf="telefonoCtrl.invalid && (telefonoCtrl.dirty && telefonoCtrl.touched)" class="col-lg-12">
+          <div *ngIf="telefonoCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+            Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) ,
+          </div>
+        </div>
+      </div>
+      <div class="row" style="border-style:groove">
+        <div class="col-lg-12">
+          Permisos Globales:
+        </div>
+        <div class="col-lg-6">
+          <input #chbox_global_paramgen type="checkbox" name="global_paramgen" (change)="FormUpdate()">&nbsp;Parámetros
+          Generales
+        </div>
+        <div class="col-lg-6">
+          <input #chkbox_global_admusuarios type="checkbox" name="global_admusuarios" (change)="FormUpdate()">&nbsp;Administración
+          de Usuarios
+        </div>
+        <div class="col-lg-6">
+          <input #chkbox_global_confsist type="checkbox" name="sp_confsist" (change)="FormUpdate()">&nbsp;Configuración
+          de Sistema
+        </div>
+        <div class="col-lg-6">
+          <input #chkbox_global_aprobarpp type="checkbox" name="global_aprobarppp" (change)="FormUpdate()">&nbsp;Aprobación
+          Petición a Portal Prov.
+        </div>
+        <div class="col-lg-6">
+          <input #chkbox_global_catalogos type="checkbox" name="global_catalogos" (change)="FormUpdate()">&nbsp;Catálogos
+        </div>
+      </div>
+      <div class="row" style="border-style:groove">
+        <div class="col-lg-12">
+          Permisos Atención al Consumidor:
+        </div>
+        <div class="col-lg-1">
+          Rol:
+        </div>
+        <div class="col-lg-5">
+          <select class="form-control" formControlName="rolAtCon" (change)="FormUpdate()">
+            <option value='0' selected>Ninguno</option>
+            <option value='1'>Operador</option>
+            <option value='2'>Supervisor</option>
+            <option value='3'>Administrador</option>
+            <option value='4'>Verificador</option>
+          </select>
+        </div>
+        <div class="col-lg-5">
+          &nbsp;
+        </div>
+        <!--<div class="col-lg-6">
+          <input #chkbox_atcon_confsist type="checkbox" name="atcon_confsist" >&nbsp;Configuración de Sistema
+        </div>-->
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <input #chkbox_atcon_admcolas type="checkbox" name="atcon_admcolas" (change)="FormUpdate()" class="mr-1">Administración
+              de Colas
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <input #chkbox_atcon_presencial type="checkbox" name="atcon_presencial" (change)="FormUpdate()" class="mr-1">Link
+              Ingreso Queja Presencial
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <input #chkbox_atencion_call type="checkbox" name="atencion_call" (change)="FormUpdate()" class="mr-1">Link Call Center
+            </div>
+          </div>
+        </div>
+
+        <!--			<div class="col-lg-4">-->
+        <!--				<input #chkbox_atcon_call_center type="checkbox" name="atcon_call_center" (change)="FormUpdate()">&nbsp;Link Ingreso Queja Call Center-->
+        <!--			</div>-->
+      </div>
+      <div class="row" style="border-style:groove">
+        <div class="col-lg-12">
+          Permisos Jurídico:
+        </div>
+        <div class="col-lg-1">
+          Rol:
+        </div>
+        <div class="col-lg-5">
+          <select class="form-control" formControlName="rolJur" (change)="FormUpdate()">
+            <option value='0' selected>Ninguno</option>
+            <option value='1'>Operador</option>
+            <option value='2'>Supervisor</option>
+            <option value='3'>Administrador</option>
+          </select>
+        </div>
+        <div class="col-lg-5">
+          &nbsp;
+        </div>
+        <!--<div class="col-lg-6">
+          <input #chkbox_jur_confsist type="checkbox" name="jur_confsist" >&nbsp;Configuración de Sistema
+        </div>-->
+        <div class="col-lg-6">
+          <input #chkbox_jur_admcolas type="checkbox" name="jur_admcolas" (change)="FormUpdate()">&nbsp;Administración
+          de Colas
+        </div>
+      </div>
+      <div class="row" style="border-style:groove">
+        <div class="col-lg-12">
+          Permisos Verificación y Vigilancia:
+        </div>
+        <div class="col-lg-1">
+          Rol:
+        </div>
+        <div class="col-lg-5">
+          <select class="form-control" formControlName="rolVyV" (change)="FormUpdate()">
+            <option value='0' selected>Ninguno</option>
+            <option value='1'>Operador</option>
+            <option value='2'>Supervisor</option>
+            <option value='3'>Administrador</option>
+          </select>
+        </div>
+        <div class="col-lg-5">
+          &nbsp;
+        </div>
+        <!--<div class="col-lg-6">
+          <input #chkbox_vyv_confsist type="checkbox" name="vyv_confsist" >&nbsp;Configuración de Sistema
+        </div>-->
+        <div class="col-lg-6">
+          <input #chkbox_vyv_admcolas type="checkbox" name="vyv_admcolas" (change)="FormUpdate()">&nbsp;Administración
+          de Colas
+        </div>
+      </div>
+      <div class="row" style="border-style:groove">
+        <div class="col-lg-12">
+          Permisos Servicios Públicos:
+        </div>
+        <div class="col-lg-1">
+          Rol:
+        </div>
+        <div class="col-lg-5">
+          <select class="form-control" formControlName="rolSP" (change)="FormUpdate()">
+            <option value='0' selected>Ninguno</option>
+            <option value='1'>Operador</option>
+            <option value='2'>Supervisor</option>
+            <option value='3'>Administrador</option>
+          </select>
+        </div>
+        <div class="col-lg-5">
+          &nbsp;
+        </div>
+        <!--<div class="col-lg-6">
+          <input #chkbox_sp_confsist type="checkbox" name="sp_confsist" >&nbsp;Configuración de Sistema
+        </div>-->
+        <div class="col-lg-6">
+          <input #chkbox_sp_admcolas type="checkbox" name="sp_admcolas" (change)="FormUpdate()">&nbsp;Administración de
+          Colas
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <ng-container *ngIf="data.IDUsuario != 0">
+            <input #chkbox_resetpassword type="checkbox" name="resetpassword" (change)="FormUpdate()">&nbsp;Reiniciar
+            Password de Usuario
+          </ng-container>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-1">
+          &nbsp;
+        </div>
+      </div>
+
+      <div *ngIf="flagNewUserSaved" class="alert alert-warning col-lg-12">
+        Se ha guardado el nuevo usuario {{lbl_newuser}} y su clave es 12345678
+      </div>
+      <div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+        Hubo un error al procesar esta acción, por favor intente de nuevo.
+      </div>
+      <div *ngIf="flagSaved" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+        Los datos fueron guardados correctamente.
+      </div>
+      <div *ngIf="flagErrorLogin" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+        No se pudo guardar la información, el Usuario que quiere guardar ya existe y debe usar otro.
+      </div>
+      <div *ngIf="flagErrorEmail" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+        No se pudo guardar la información, el Email que quiere guardar ya existe y debe usar otro.
+      </div>
+
+      <div class="row">
+        <div class="col-lg-4">
+          <ng-container *ngIf="flagBoton; else NoButton">
+            <button class="btn btn-primary" type="button" (click)="GuardarUsuario()" [disabled]="!myForm.valid">Guardar
+              Usuario
+            </button>
+          </ng-container>
+          <ng-template #NoButton>
+            <span><i class="icon"></i></span>&nbsp;
+          </ng-template>
+        </div>
+        <div class="col-lg-1">
+          &nbsp;
+        </div>
+        <div class="col-lg-4">
+          &nbsp;
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-1">
+          &nbsp;
+        </div>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="flagChange" class="alert alert-warning col-lg-12">
+    Tiene cambios realizados pendientes de grabar.
+  </div>
+</ng-container>
+<ng-template #NoForm>
+  <div class="container" *ngIf="!loaderror">
+    <div class="row">
+      <div class="col-lg-1">
+        &nbsp;
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-10" align="center">
+        <i class="frmicon"></i>&nbsp;
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-container *ngIf="loaderror">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-1">
+        &nbsp;
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-10">
+        Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+      </div>
+    </div>
+  </div>
+</ng-container>
+</body>
+</html>

@@ -1,0 +1,53 @@
+
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12 modaltitl">
+      <table width="100%">
+      <tr><td width="90%" class="modaltitltd">
+        Catalogo Actividad Economica
+      </td>
+      <td width="10%" align="right" class="modaltitltd">
+        <button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+      </td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="container">
+<div class="row">
+  <div class="col-md-8 mt-4">
+        <ul>
+      <li 
+      *ngFor="let actividad of actividadArray"
+      class="list-group-item list-group-item-action"
+      (click)="openForEdit(actividad)"
+      [class.active]="actividad == selectedActividad"
+      >
+      <span class="badge badge.primary">{{actividad.id_actividad_economica}}</span> {{actividad.nombre_actividad_economica}}
+      </li>
+    </ul>
+    <div class="card mt-4">
+      <div class="card-body">
+        <div class="card-title">
+         Ingresa una nueva actividad economica			 
+        </div>
+      <div class="form-group">
+        <input type="text" [(ngModel)]="selectedActividad.nombre_actividad_economica" (blur)="setAfterAuxiliar()" (focus)="setBeforeAuxiliar()" placeholder="agregar actividad" class="form-control">
+      </div>  
+      <button (click)="addOrEdit()" class="btn btn-primary">
+          Guardar cambios
+      </button>
+      <button
+      *ngIf="selectedActividad.id_actividad_economica !== 0"
+      class="btn btn-danger"
+      (click)="delete()">
+        Borrar
+      </button>
+      </div>
+    </div>
+  </div>
+  
+</div>
+</div>

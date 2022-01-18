@@ -1,0 +1,47 @@
+textarea
+{
+  border:1px solid #999999;
+  width:100%;
+  margin:5px 0;
+  padding:3px;
+}
+
+body {
+  background-color: transparent;
+}
+
+.btn-image:before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 0px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position : center center;
+    background-repeat:no-repeat;
+}
+
+.btn-image2:before {
+    content: "";
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    margin-right: 0px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position : center center;
+    background-repeat:no-repeat;
+}
+
+.edit:before{
+     background-image : url("../../assets/icons/edit.png");
+}
+
+.delete:before{
+     background-image : url("../../assets/icons/x24-w.png");
+}
+
+.zip:before{
+     background-image : url("css/zip-32.png");
+}

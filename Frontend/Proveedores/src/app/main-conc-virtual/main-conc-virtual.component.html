@@ -1,0 +1,118 @@
+<html>
+<head>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <span class="navbar-text whitefont">DIACO - Portal de Proveedores</span>
+  <span class="navbar-text whitefont">&nbsp;&nbsp;&nbsp;Proveedor: {{nombre_proveedor}}</span>
+  <!---- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>--->
+  <div class="collapse navbar-collapse" id="navbarText">
+  <ul class="navbar-nav mr-auto">
+   <!----     <li class="nav-item active">
+        <a class="nav-link whitelink" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link whitelink" href="#">Features</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link whitelink" href="#">Pricing</a>
+      </li>--->
+	  <!----<li class="nav-item dropdown" >
+			  <a class="nav-link dropdown-toggle whitefont" data-toggle="dropdown"><u>Opciones Usuario</u></a>
+			<div class="dropdown-menu">
+				<a class="dropdown-item whitefont" (click)="openCambiarPW()" >Cambiar mi clave</a>
+			</div>
+			<a class="dropdown-item whitefont" (click)="openCambiarPW()" >Clave Usuario/a>
+		</li>--->
+		<li class="nav-item">
+			<a class="nav-link whitelink" (click)="openCambiarPW()" ><u>Clave Usuario</u></a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link whitelink" (click)="openQR()" ><u>C&oacute;digo QR</u></a>
+		</li>
+    </ul>  
+  </div>
+  <span class="navbar-text whitefont">
+    Usuario: {{str_usuario}}
+  </span>
+  <span class="navbar-text whitefont">
+    <a class="nav-link whitelink" (click)="CerrarSesion()" [routerLink]="">Cerrar Sesi&oacute;n</a>
+  </span>
+</nav>
+
+<!---- <div class="container">
+	<div class="form-group">
+	<h2 align="center">Flujo ConciliaciÃ³n Virtual</h2>
+	<span> </span></div>
+</div>--->
+<ng-container *ngIf="flagAccesoConVir">
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-12">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-2">
+		  <label><b>Departamento:</b></label>
+		 </div>
+		 <div class="col-lg-4">
+			<select class="form-control" [(ngModel)]="frmmain.departamento" (change)="UpdateMunicipio()">
+				<option value="0">Todos</option>
+				<option *ngFor="let x of lstcmb_departamento" [value]="x.codigo_departamento">{{x.nombre_departamento}}</option>
+			</select>
+		 </div>
+		 <div class="col-lg-2">
+		  <label><b>Municipio:</b></label>
+		 </div>
+		 <div class="col-lg-4">
+			<select class="form-control" [(ngModel)]="frmmain.municipio">
+				<option value="0">Todos</option>
+				<option *ngFor="let x of lstcmb_municipio" [value]="x.codigo_municipio">{{x.nombre_municipio}}</option>
+			</select>
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-2">
+		  <label><b>Estado:</b></label>
+		 </div>
+		 <div class="col-lg-6">
+			<select class="form-control" [(ngModel)]="frmmain.estado">
+				<option *ngFor="let x of list_filtro" [value]="x.id">{{x.nombre}}</option>
+			</select>
+		 </div>
+		 </div>
+		 <div class="row">
+		 <div class="col-lg-2">
+		  <label><b>Fecha:</b></label>
+		 </div>
+		 <div class="col-lg-3">
+				<input type="date" class="form-control" id="FechaDesde" name="FechaDesde" [(ngModel)]="frmmain.SelectedFDesde" placeholder="dd/mm/yyyy" >
+		 </div>
+		 <div class="col-lg-0">
+				&nbsp;<b>-</b>&nbsp;
+		 </div>		
+		 <div class="col-lg-3">
+				<input type="date" class="form-control" id="FechaHasta" name="FechaHasta" [(ngModel)]="frmmain.SelectedFHasta" placeholder="dd/mm/yyyy" >		
+		 </div>	
+		<div class="col-lg-3">
+			<button (click)="RefreshTable()" class="btn btn-primary">Actualizar B&uacute;squeda</button>
+		 </div>
+		</div>	
+	</div>
+
+		<div *ngIf="flagInfoError" class="alert alert-alert col-lg-12" [@EnterLeave]="'flyIn'">
+			Hubo un error al procesar esta acción, por favor intente de nuevo.
+		</div>
+
+		<app-table-conc-virtual [frmmain]="frmmain" ></app-table-conc-virtual>
+</ng-container>
+<ng-container *ngIf="!flagAccesoConVir">
+	<b>Usted no tiene acceso a Conciliaci&oacute;n Previa</b>
+</ng-container>
+</body>
+</html>
+

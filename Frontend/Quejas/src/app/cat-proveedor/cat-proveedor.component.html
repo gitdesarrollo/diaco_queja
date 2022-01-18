@@ -1,0 +1,324 @@
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+				<tr><td width="90%" class="modaltitltd">
+						Catalogo Proveedor
+					</td>
+					<td width="10%" align="right" class="modaltitltd">
+						<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+					</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+
+		<table width="100%" class="mt-4">
+			<tr>
+
+			</tr>
+			<tr>
+				<td width="5%" class="modaltitltd">
+				</td>
+				<td width="50%" class="modaltitltd">
+					<input type="text" [(ngModel)]="selectedProveedor.nit_proveedor"
+						placeholder="buscar por nit" class="form-control">
+
+				</td>
+				<td width="10%" class="modaltitltd"></td>
+				<td width="30%" class="modaltitltd">
+					<button (click)="find()" class="btn btn-primary">
+						Buscar Datos
+					</button>
+				</td>
+			</tr>
+		</table>
+
+
+
+		<div class="card mt-4">
+			<div class="card-body">
+				<div class="card-title">
+					Ingresa los datos para del proveedor
+				</div>
+				<div class="form-group">
+					<table width="100%">
+						<!-- 				<tr>
+					<td>	
+							<select>
+									<option disabled selected>Elegir proveedor comun</option>
+									<option *ngFor="let proveedorComun of proveedorComunArray"
+									(click)="openForEditProveedorComun(proveedorComun)"
+									[ngValue]="selectedProveedorComun"
+										>
+								
+									 <span class="badge badge.primary">{{proveedorComun.id_proveedor_comun}}</span> {{proveedorComun.proveedor}}
+									</option>
+							</select>
+		 					<p>Si el proveedor no está en el listado por favor ingrese el NIT del proveedor</p>		
+					</td>
+				</tr> -->
+						<tr>
+							<td>
+								<select>
+									<option selected> 
+										{{selectedProveedor.nombre_tipo_proveedor}}</option>
+									<option value="6" (click)="openForEditTipoProveedor(6)">Individual</option>
+									<option value="7" (click)="openForEditTipoProveedor(7)">Juridico</option>
+								</select>
+							</td>
+						</tr>
+
+
+
+					</table>
+
+					<table width="100%">
+						<tr>
+							<td width="30%">
+								<select>
+
+									<option selected> <!-- {{selectedProveedor.id_actividad_economica}}-->
+										{{selectedProveedor.nombre_actividad_economica}} </option>
+
+									<option *ngFor="let actividad of actividadArray"
+										(click)="openForEditActividad(actividad)"
+										(change)="GetActividadEconomicaList()"
+										[ngValue]="selectedActividad">
+										<span class="badge badge.primary"><!--{{actividad.id_actividad_economica}}--></span>
+										{{actividad.nombre_actividad_economica}}
+									</option>
+								</select>
+
+							</td>
+							<td width="20%"></td>
+							<td width="30%">
+
+								<select>
+									<option selected> <!-- {{selectedProveedor.id_tipo_comercio}}-->
+										{{selectedProveedor.tipo_comercio}} </option>
+
+									<option *ngFor="let comercio of comercioArray"
+										(click)="openForEditTipoComercio(comercio)"
+										[ngValue]="selectedComercio"
+										(change)="GetTipoComercioList(selectedActividad.id_actividad_economica)">
+										<span class="badge badge.primary"><!--{{comercio.id_tipo_comercio}}--></span>
+										{{comercio.tipo_comercio}}
+									</option>
+								</select>
+
+							</td>
+						</tr>
+					</table>
+
+
+					<label for="nit" class="col-sm-3 col-form-label">(*)NIT</label>
+					<input id="nit" type="text" [(ngModel)]="selectedProveedor.nit_proveedor"
+						placeholder="(*)agregar nit" class="form-control">
+
+					<div class="form-row" *ngIf="selectedProveedor.tipo_proveedor == 6">
+						<label for="proveedor" class="col-sm-2 col-form-label">(*)Nombre Comercial</label>
+						<input id="proveedor" type="text" [(ngModel)]="selectedProveedor.nombre"
+						placeholder="(*)Nombre Comercial" class="form-control">
+					</div>
+					
+
+					<div class="form-group row mt-4">
+
+						<label for="nombre1" class="col-sm-2 col-form-label">(*) Primer Nombre</label>
+						<div class="col-sm-4">
+							<input id="nombre1" type="text"
+								[(ngModel)]="selectedProveedor.primer_nombre" placeholder="(*)Primer Nombre" 
+								class="form-control">
+						</div>
+
+						<label for="nombre2" class="col-sm-2 col-form-label"> Segundo Nombre</label>
+						<div class="col-sm-4">
+							<input id="nombre2" type="text"
+								[(ngModel)]="selectedProveedor.segundo_nombre" placeholder="Segundo Nombre" class="form-control">
+						</div>
+
+						<label for="nombre3" class="col-sm-2 col-form-label">Tercer Nombre</label>
+						<div class="col-sm-4">
+							<input id="nombre3" type="text"
+								[(ngModel)]="selectedProveedor.tercer_nombre" placeholder="Tercer Nombre" class="form-control">
+						</div>
+
+
+						<label for="apellido1" class="col-sm-2 col-form-label">(*) Primer Apellido</label>
+						<div class="col-sm-4">
+							<input id="apellido1" type="text"
+								[(ngModel)]="selectedProveedor.primer_apellido" placeholder="(*) Primer Apellido" class="form-control">
+						</div>
+
+
+						<label for="apellido2" class="col-sm-2 col-form-label"> Segundo Apellido</label>
+						<div class="col-sm-4">
+							<input id="apellido2" type="text"
+								[(ngModel)]="selectedProveedor.segundo_apellido" placeholder="Segundo Apellido" class="form-control">
+						</div>
+
+
+						<label for="apellidocasada" class="col-sm-2 col-form-label">Apellido de
+							Casada</label>
+						<div class="col-sm-4">
+							<input id="apellidocasada" type="text"
+								[(ngModel)]="selectedProveedor.apellido_casada" placeholder="Apellido de casada" class="form-control">
+						</div>
+					</div>
+					<div class="form-group row" *ngIf="selectedProveedor.tipo_proveedor == 7">
+						<label for="empresa1" class="col-sm-2 col-form-label">(*)nombre empresa</label>
+						<div class="col-sm-4">
+							<input id="empresa1" type="text"
+								[(ngModel)]="selectedProveedor.nombre_empresa" placeholder="(*)nombre
+								empresa" class="form-control">
+						</div>
+
+					</div>
+					<div class="form-group row" *ngIf="selectedProveedor.tipo_proveedor == 7">
+						
+						<label for="empresa2" class="col-sm-2 col-form-label">(*)razon social</label>
+						<div class="col-sm-4">
+							<input id="empresa2" type="text"
+								[(ngModel)]="selectedProveedor.razon_social" placeholder="razon social"
+								class="form-control">
+						</div>
+					</div>
+
+					<h4>Datos de Contacto (para recibir notificaciones) </h4>
+
+
+					<div class="form-group row">
+
+						<label for="telefono" class="col-sm-2 col-form-label">(*)numero de
+							telefono</label>
+						<div class="col-sm-4">
+							<input id="telefono" type="text" [(ngModel)]="selectedProveedor.telefono"
+								placeholder="numero de telefono" pattern="[0-9]+"
+								class="form-control">
+						</div>
+
+						<label for="correo1" class="col-sm-2 col-form-label">(*)correo electronico</label>
+						<div class="col-sm-4">
+							<input id="correo1" type="text" [(ngModel)]="selectedProveedor.email"
+								placeholder="email" class="form-control">
+						</div>
+
+					</div>
+					<table width="100%">
+						<td width="30%">
+							Habilitar notificaciones electronicas
+						</td>
+						<td width="10%">
+							<input id="checknotification" type="checkbox" name="tc"
+								[ngModel]="notificacion" (change)="notificacion= !notificacion"
+								placeholder="marcar aqui para notificaciones electronicas">
+						</td>
+						<td width="30%"></td>
+						<td width="30%"></td>
+					</table>
+					<table width="100%">
+						<td width="30%">
+							Permitir calificacion
+						</td>
+						<td width="10%">
+							<input id="checknotification4" type="checkbox" name="tc"
+								[ngModel]="calificacion" (change)="calificacion= !calificacion"
+								placeholder="marcar aqui para permitir calificacion">
+						</td>
+						<td width="30%"></td>
+						<td width="30%"></td>
+					</table>
+
+					<h4 class="mt-4">Dirección</h4>
+					<select>
+						<option selected> <!--{{selectedProveedor.codigo_departamento}}-->
+							{{selectedProveedor.nombre_departamento}} </option>
+
+						<option *ngFor="let departamento of departamentoArray"
+							(click)="openForEditDepartamento(departamento)"
+							(change)="GetDepartamentoList()"
+							[ngValue]="selectedDepartamento">
+							<span class="badge badge.primary"><!--{{departamento.codigo_departamento}}--></span>
+							{{departamento.nombre_departamento}}
+						</option>
+					</select>
+					&nbsp; &nbsp;
+					<select>
+
+						<option selected> {{selectedProveedor.codigo_municipio}}
+							{{selectedProveedor.nombre_municipio}} </option>
+						<option *ngFor="let municipio of municipioArray"
+							(click)="openForEditMunicipio(municipio)"
+							(change)="GetMunicipioList(selectedDepartamento.codigo_departamento)"
+							[ngValue]="selectedMunicipio">
+							<span class="badge badge.primary">{{municipio.codigo_municipio}}</span>
+							{{municipio.nombre_municipio}}
+						</option>
+					</select>
+
+
+					<div class="form-group row">
+
+						<label for="direccion" class="col-sm-2 col-form-label">(*)direccion</label>
+						<div class="col-sm-4">
+							<input id="direccion" type="text"
+								[(ngModel)]="selectedProveedor.direccion" placeholder="direccion"
+								class="form-control">
+						</div>
+
+						<label for="zona" class="col-sm-2 col-form-label">(*)zona</label>
+						<div class="col-sm-4">
+							<input id="zona" type="text"
+								[(ngModel)]="selectedProveedor.direccion_zona" pattern="[0-9]+"
+								placeholder="zona" class="form-control">
+						</div>
+
+					</div>
+					<table width="100%">
+						<td width="30%">
+							Habilitar conciliacion previa
+						</td>
+						<td width="10%">
+							<input id="checknotification3" type="checkbox" name="tc"
+								[ngModel]="conciliacion" (change)="conciliacion= !conciliacion"
+								placeholder="marcar aqui para habilitar conciliacion previa">
+						</td>
+						<td width="30%"></td>
+						<td width="30%"></td>
+					</table>
+
+					<table width="100%">
+						<tr><td width="20%" class="modaltitltd">
+								Es servicio publico
+							</td>
+							<td width="10%" class="modaltitltd">
+								<input id="checknotification2" type="checkbox" name="tc"
+									[ngModel]="servicioPublico" (change)="servicioPublico=
+									!servicioPublico" placeholder="Es servicio publico">
+							</td>
+							<td width="30%"></td>
+							<td width="30%"></td>
+
+						</tr>
+					</table>
+				</div>
+				<button (click)="addOrEdit()" class="btn btn-primary">
+					Guardar cambios
+				</button>
+				<button
+					*ngIf="selectedProveedor.id_proveedor !== 0"
+					class="btn btn-danger"
+					(click)="delete()">
+					Borrar
+				</button>
+			</div>
+		</div>
+
+
+	</div>
+</div>

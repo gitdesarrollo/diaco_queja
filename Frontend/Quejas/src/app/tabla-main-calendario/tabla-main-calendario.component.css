@@ -1,0 +1,240 @@
+
+
+@import url("css/iconbuttons.css");
+@import url("css/ngxbootstrap.css");
+
+@font-face {
+  font-family: ABeeZeeRegular;
+  src: url('../../assets/fonts/ABeeZee-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: ABeeZeeItalic;
+  src: url('../../assets/fonts/ABeeZee-Italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: LatoBold;
+  src: url('../../assets/fonts/Lato-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Lato;
+  src: url('../../assets/fonts/Lato-Regular.ttf') format('truetype');
+}
+
+textarea
+{
+  border:1px solid #999999;
+  width:100%;
+  margin:5px 0;
+  padding:3px;
+  font-family: ABeeZeeItalic, sans-serif ;	
+}
+
+* {
+	font-size: 100%;
+	font-family: ABeeZeeRegular, sans-serif ;
+}
+
+h2 {
+	color:#3385ff;
+	font-size:200%;
+	font-family: LatoBold, sans-serif ;
+}
+
+h3 {
+	color:#3385ff;
+	font-size:200%;
+	font-family: Lato, sans-serif ;
+	text-decoration: underline;
+}
+
+input {
+	font-family: ABeeZeeItalic, sans-serif ;	
+}
+
+select {
+	font-family: ABeeZeeItalic, sans-serif ;	
+}
+
+.btn-primary{
+	background-color:#00284d !important;
+}
+
+.btn-primary:hover{
+	background-color:#004f99 !important;
+}
+
+.btn-apgreen{
+	background-color:#006600 !important;
+	color:white !important;
+}
+
+.btn-apgreen:hover{
+	background-color:#009900 !important;
+	color:white !important;
+}
+
+button:disabled,
+button[disabled]{
+    background-color: #b3b3b3 !important;
+	color:black !important;
+}
+button:disabled:hover,
+button[disabled]:hover{
+    background-color: #b3b3b3 !important;
+	color:black !important;
+}
+
+.formlink{
+	color:#00284d;
+	text-decoration: underline;
+}
+.formlink:hover{
+	color:#1aa3ff;
+	text-decoration: underline;
+}
+
+/*nav.navmodal{
+	background-color: #00284d !important;
+	padding-top:3px !important; 
+	padding-bottom:3px !important;
+	min-height:20px !important;
+	font-size:28px;
+	font-weight: bold;
+	color: white;
+	position: fixed;
+	width: 100%;
+}*/
+
+.mat-dialog-container {
+	background-color: white;
+	border-radius: 25px !important;
+	padding: 0px !important;
+	border-style: inset  ;
+	border-color:#e68a00;
+	/*z-index: 100;*/
+}
+
+.modaltitlb{
+	  background-color: #00284d;
+	  border: 5px solid #00284d; 
+	  color: white ;
+	  padding: 0px 12px;
+	  text-align: center;
+	  text-decoration: none;
+	  display: inline-block;
+	  font-size:24px;
+	  align-items: center;
+	  font-family: LatoBold, sans-serif ;	
+	  font-weight: bold;
+	  /*z-index: 20;*/
+}
+
+.modaltitlb:hover{
+	  background-color: #004f99;
+	  border: 5px solid #004f99; 
+	  color: white ;
+	  padding: 0px 12px;
+	  text-align: center;
+	  text-decoration: none;
+	  display: inline-block;
+	  font-size:24px;
+	  font-family: LatoBold, sans-serif ;	
+	  font-weight: bold;
+	  /*z-index: 20;*/
+}
+
+.modaltitlb:active {
+	  background-color: #0069cc;
+	  border: 5px solid #0069cc; 
+	  color: white ;
+	  padding: 0px 12px;
+	  text-align: center;
+	  text-decoration: none;
+	  display: inline-block;
+	  font-size:28px;
+	  font-family: LatoBold, sans-serif ;
+	  font-weight: bold;
+	  /*z-index: 20;*/
+}
+
+.modaltitlb:focus {
+  outline: none !important;
+  /*z-index: 20;*/
+}
+
+table tr td.modaltitltd{
+	font-family: LatoBold, sans-serif ;	
+	vertical-align:middle;
+	cellpadding:2px;
+	/*z-index: 1;*/
+}
+
+table tr td.modaltitltdb{
+	font-family: LatoBold, sans-serif ;	
+	vertical-align:middle;
+	cellpadding:2px;
+	/*z-index: 10;*/
+}
+
+
+.md-content {
+    border-radius: inherit;
+}
+
+div .modaltitl{
+	background-color:#00284d;
+	color:white;
+	font-size:200%;
+	font-family: LatoBold, sans-serif ;	
+	/*position: absolute;*/
+	/*z-index: 1;*/
+}
+
+.ngx-datatable.bootstrap:not(.cell-selection) .datatable-body-row:hover,
+.ngx-datatable.material:not(.cell-selection) .datatable-body-row:hover .datatable-row-group
+{ 
+   background: #99ccff;
+   color: white !important;
+}
+
+.ngx-datatable.material.single-selection .datatable-body-row.active,
+.ngx-datatable.material.single-selection .datatable-body-row.active .datatable-row-group
+ {
+    /*background: #4da6ff !important;*/
+	background: #99ccff !important;
+	
+}
+
+.ngx-datatable.material.single-selection .datatable-body-row.active,
+.ngx-datatable.material.single-selection .datatable-body-row.active .datatable-row-group div.hoverbtns
+ {
+    display:inline-block !important;
+}
+
+.ngx-datatable.material.single-selection .datatable-body-row.active:hover,
+.ngx-datatable.material.single-selection .datatable-body-row.active:hover .datatable-row-group {
+    background: #99ccff !important;
+}
+
+:host ::ng-deep .datatable-body-cell {
+  padding: 0 !important;
+}
+
+.icon {
+width: 128px;
+height: 2px;
+background-image: url("../../assets/icons/loadingbar.gif");
+display: inline-block; 
+margin: 0 10px 0 0;
+}
+
+.frmicon {
+width: 64px;
+height: 64px;
+background-image: url("../../assets/icons/frmloading.gif");
+display: inline-block; 
+margin: 0 10px 0 0;
+}

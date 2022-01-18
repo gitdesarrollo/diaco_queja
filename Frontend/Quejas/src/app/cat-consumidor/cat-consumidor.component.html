@@ -1,0 +1,366 @@
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+				<tr><td width="90%" class="modaltitltd">
+						Catalogo Consumidor
+					</td>
+					<td width="10%" align="right" class="modaltitltd">
+						<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+					</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+
+		<table width="100%" class="mt-4">
+			<tr>
+				<td></td>
+
+			</tr>
+			<tr>
+				<td width="5%" class="modaltitltd">
+				</td>
+				<td width="50%" class="modaltitltd">
+					<input type="text" [(ngModel)]="selectedConsumidor.nit_consumidor"
+						placeholder="Buscar por nit" class="form-control">
+
+				</td>
+				<td width="10%" class="modaltitltd"></td>
+				<td width="30%" class="modaltitltd">
+					<button (click)="find()" class="btn btn-primary">
+						Buscar por Nit
+					</button>
+				</td>
+			</tr>
+
+			<tr>
+				<td width="5%" class="modaltitltd">
+				</td>
+				<td width="50%" class="modaltitltd">
+					<input type="text" [(ngModel)]="selectedConsumidor.documento_identificacion"
+						placeholder="Buscar por DPI" class="form-control">
+
+				</td>
+				<td width="10%" class="modaltitltd"></td>
+				<td width="30%" class="modaltitltd">
+					<button (click)="findByDpi()" class="btn btn-primary">
+						Buscar por DPI
+					</button>
+				</td>
+			</tr>
+		</table>
+
+
+
+		<div class="card mt-4">
+			<div class="card-body">
+				<div class="card-title">
+					Ingresa los datos para del consumidor
+				</div>
+				<div class="form-group">
+					<table width="100%">
+						<tr>
+							<td>
+
+								<select>
+									<option selected> {{selectedConsumidor.nombre_tipo_consumidor}}</option>
+									<option value="6" (click)="openForEditTipoConsumidor(6)">Individual</option>
+									<option value="7" (click)="openForEditTipoConsumidor(7)">Juridico</option>
+								</select>
+
+							</td>
+
+						</tr>
+
+
+
+					</table>
+
+					<table width="100%">
+						<tr>
+							<td width="30%">
+								<select>
+
+									<option selected> {{selectedConsumidor.nombre_nacionalidad}} </option>
+									<option *ngFor="let nacionalidadF of nacionalidadArray"
+										(click)="openForEditNacionalidad(nacionalidadF)"
+										[ngValue]="nacionalidad">
+										<span class="badge badge.primary">{{nacionalidadF}}</span>
+									</option>
+								</select>
+
+							</td>
+
+						</tr>
+					</table>
+					<div class="form-group row" *ngIf="selectedConsumidor.nacionalidad == 2">
+						<select>
+							<option selected> {{selectedConsumidor.nombre_pais}} </option>
+
+							<option *ngFor="let pais of paisArray"
+								(click)="openForEditPais(pais)"
+								(change)="GetPaisList()"
+								[ngValue]="selectedPais">
+								<span class="badge badge.primary"></span> {{pais.nombre_pais}}
+							</option>
+						</select>
+					</div>
+
+
+					<label for="nit" class="col-sm-3 col-form-label">(*)NIT</label>
+					<input id="nit" type="text" [(ngModel)]="selectedConsumidor.nit_consumidor"
+						placeholder="" class="form-control">
+					<div class="form-group row mt-4">
+
+
+						<label for="dpiInput" class="col-sm-2 col-form-label">(*)DPI o Pasaporte</label>
+						<div class="col-sm-4">
+							<input id="dpiInput" type="text"
+								[(ngModel)]="selectedConsumidor.documento_identificacion"
+								placeholder="" class="form-control">
+						</div>
+
+						<label for="nombre1" class="col-sm-2 col-form-label">(*) Primer Nombre</label>
+						<div class="col-sm-4">
+							<input id="nombre1" type="text" [(ngModel)]="selectedConsumidor.nombre1"
+								placeholder="" class="form-control">
+						</div>
+
+						<label for="nombre2" class="col-sm-2 col-form-label">Segundo Nombre</label>
+						<div class="col-sm-4">
+							<input id="nombre2" type="text" [(ngModel)]="selectedConsumidor.nombre2"
+								placeholder="" class="form-control">
+						</div>
+
+						<label for="nombre3" class="col-sm-2 col-form-label">Tercer Nombre</label>
+						<div class="col-sm-4">
+							<input id="nombre3" type="text" [(ngModel)]="selectedConsumidor.nombre3"
+								placeholder="" class="form-control">
+						</div>
+
+						<label for="apellido1" class="col-sm-2 col-form-label">(*) Primer Apellido</label>
+						<div class="col-sm-4">
+							<input id="apellido1" type="text"
+								[(ngModel)]="selectedConsumidor.apellido1" placeholder="" class="form-control">
+						</div>
+
+						<label for="apellido2" class="col-sm-2 col-form-label">Segundo Apellido</label>
+						<div class="col-sm-4">
+							<input id="apellido2" type="text"
+								[(ngModel)]="selectedConsumidor.apellido2" placeholder="" class="form-control">
+						</div>
+
+
+						<label for="apellidocasada" class="col-sm-2 col-form-label">Apellido de casada</label>
+						<div class="col-sm-4">
+							<input id="apellidocasada" type="text"
+								[(ngModel)]="selectedConsumidor.apellido_casada" placeholder="" class="form-control">
+						</div>
+
+
+						<div class="col-sm-4">
+							<select>
+								<option selected> {{selectedConsumidor.nombre_etnia}} </option>
+
+								<option *ngFor="let etnia of etniaArray"
+									(click)="openForEditEtnia(etnia)"
+									(change)="GetEtniaList()"
+									[ngValue]="selectedEtnia">
+									<span class="badge badge-primary"></span>
+									{{etnia.descripcion}}
+								</option>
+							</select>
+						</div>
+
+						<div class="col-sm-4">
+							<select>
+								<option selected> {{selectedConsumidor.nombre_genero}} </option>
+								<option (click)="openForEditGenero(1)">
+									Masculino
+								</option>
+								<option (click)="openForEditGenero(2)">
+									Femenino
+								</option>
+							</select>
+						</div>
+
+					</div>
+					<div class="form-group row" *ngIf="selectedConsumidor.tipo_consumidor ==
+						7">
+
+						<label for="nombreempresa" class="col-sm-2 col-form-label">nombre empresa</label>
+						<div class="col-sm-4">
+							<input id="nombreempresa" type="text"
+								[(ngModel)]="selectedConsumidor.nombre_empresa" placeholder="nombre
+								empresa" class="form-control">
+						</div>
+
+						<label for="razon" class="col-sm-2 col-form-label">razon social</label>
+						<div class="col-sm-4">
+							<input id="razon" type="text"
+								[(ngModel)]="selectedConsumidor.razon_social" placeholder="razon social"
+								class="form-control">
+						</div>
+
+						<label for="representante" class="col-sm-2 col-form-label">representante
+							legal</label>
+						<div class="col-sm-4">
+							<input id="representante" type="text"
+								[(ngModel)]="selectedConsumidor.representante_legal"
+								placeholder="representante legal" class="form-control">
+						</div>
+					</div>
+<!-- 					<h4>Motivo de la Queja</h4>
+					<select>
+						<option selected> {{selectedConsumidor.id_motivo_queja}}
+							{{selectedConsumidor.nombre_motivo_queja}} </option>
+
+						<option *ngFor="let motivo of motivoArray"
+							(click)="openForEditMotivo(motivo)"
+							(change)="GetMotivoList()"
+							[ngValue]="selectedMotivo">
+							<span class="badge badge.primary">{{motivo.id_motivo_queja}}</span>
+							{{motivo.motivo}}
+						</option>
+					</select> -->
+
+					<h4>Datos de Contacto (para recibir notificaciiones) </h4>
+
+
+					<div class="form-group row">
+
+						<label for="telefono" class="col-sm-2 col-form-label">(*)Teléfono personal</label>
+						<div class="col-sm-4">
+							<input id="telefono" type="text"
+								[(ngModel)]="selectedConsumidor.telefono" pattern="[0-9]+"
+								placeholder="" class="form-control">
+						</div>
+
+
+						<label for="domicilio" class="col-sm-2 col-form-label">Teléfono Domicilio</label>
+						<div class="col-sm-4">
+							<input id="domicilio" type="text"
+								[(ngModel)]="selectedConsumidor.domicilio" pattern="[0-9]*"
+								placeholder="" class="form-control">
+						</div>
+
+
+						<label for="email1" class="col-sm-2 col-form-label">(*)Correo Electrónico
+							1</label>
+						<div class="col-sm-4">
+							<input id="email1" type="text"
+								[(ngModel)]="selectedConsumidor.correo_electronico1"
+								placeholder="" class="form-control">
+						</div>
+
+						<label for="email2" class="col-sm-2 col-form-label">Correo Electrónico 2</label>
+						<div class="col-sm-4">
+							<input id="email2" type="text"
+								[(ngModel)]="selectedConsumidor.correo_electronico2" placeholder="" class="form-control">
+						</div>
+					</div>
+					<table width="100%">
+						<td width="30%">
+							Habilitar notificaciones electronicas
+						</td>
+						<td width="10%">
+							<input id="checknotification" type="checkbox" name="tc"
+								[ngModel]="notificacion" (change)="notificacion= !notificacion"
+								placeholder="marcar aqui para notificaciones electronicas">
+						</td>
+						<td width="30%"></td>
+						<td width="30%"></td>
+					</table>
+					<h4> Sede Diaco mas cercana </h4>
+					<select>
+						<option selected> {{selectedConsumidor.sede_diaco_cercana}}
+							{{selectedConsumidor.nombre_sede}} </option>
+
+						<option *ngFor="let sede of sedeArray"
+							(click)="openForEditSede(sede)"
+							(change)="GetSedeList()"
+							[ngValue]="selectedSede">
+							<span class="badge badge.primary">{{sede.id_diaco_sede}}</span>
+							{{sede.nombre_sede}}
+						</option>
+					</select>
+
+					<h4>Dirección</h4>
+					<select>
+						<option selected> {{selectedConsumidor.codigo_departamento}}
+							{{selectedConsumidor.nombre_departamento}} </option>
+
+						<option *ngFor="let departamento of departamentoArray"
+							(click)="openForEditDepartamento(departamento)"
+							(change)="GetDepartamentoList()"
+							[ngValue]="selectedDepartamento">
+							<span class="badge badge.primary">{{departamento.codigo_departamento}}</span>
+							{{departamento.nombre_departamento}}
+						</option>
+					</select>
+					&nbsp; &nbsp;
+					<select>
+
+						<option selected> {{selectedConsumidor.codigo_municipio}}
+							{{selectedConsumidor.nombre_municipio}} </option>
+						<option *ngFor="let municipio of municipioArray"
+							(click)="openForEditMunicipio(municipio)"
+							(change)="GetMunicipioList(selectedDepartamento.codigo_departamento)"
+							[ngValue]="selectedMunicipio">
+							<span class="badge badge.primary">{{municipio.codigo_municipio}}</span>
+							{{municipio.nombre_municipio}}
+						</option>
+					</select>
+
+					<div class="form-group row">
+
+						<label for="direccion" class="col-sm-2 col-form-label">direccion</label>
+						<div class="col-sm-4">
+							<input id="direccion" type="text"
+								[(ngModel)]="selectedConsumidor.direccion" placeholder="(*) direccion"class="form-control">
+						</div>
+
+						<label for="direccionzona" class="col-sm-2 col-form-label">zona</label>
+						<div class="col-sm-4">
+							<input id="direccionzona" type="text"
+								[(ngModel)]="selectedConsumidor.direccion_zona" pattern="[0-9]+"
+								placeholder="(*)zona"class="form-control">
+						</div>
+
+					</div>
+
+					<table width="100%">
+						<tr><td width="20%" class="modaltitltd">
+								Autorizo publicar la informacion
+							</td>
+							<td width="10%" class="modaltitltd">
+								<input id="checknotification2" type="checkbox" name="tc"
+									[ngModel]="autorizo" (change)="autorizo= !autorizo"
+									placeholder="Autorizo publicar">
+							</td>
+							<td width="30%"></td>
+							<td width="30%"></td>
+
+						</tr>
+					</table>
+				</div>
+				<button (click)="addOrEdit()" class="btn btn-primary">
+					Guardar cambios
+				</button>
+				<button
+					*ngIf="selectedConsumidor.id_consumidor !== 0"
+					class="btn btn-danger"
+					(click)="delete()">
+					Borrar
+				</button>
+			</div>
+		</div>
+
+
+	</div>
+</div>

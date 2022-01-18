@@ -1,0 +1,52 @@
+import { Injectable } from '@angular/core';
+//import { HttpClient } from '@angular/common/http';
+import { BASE_URL_REST_FILE } from '../conc-virt-const';
+//import { ResponseRs } from './response-rs.model';
+//import { Consumidor } from './consumidor.model';
+//import { Subject } from 'rxjs';
+//import { Proveedor } from './proveedor.model';
+import { Usuario } from './usuario.model';
+//import { FileUploader } from 'ng2-file-upload';
+
+
+import { Subject,Observable, of } from 'rxjs';
+import {Http, Response, Headers, RequestOptions} from '@angular/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse ,HttpParams} from '@angular/common/http';
+import { map, catchError, tap } from 'rxjs/operators';
+
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UsuarioService {
+	vusuario  : Usuario;
+
+  private httpOptions = {
+	  headers: new HttpHeaders({
+		'content-type':'application/json; charset=iso-8859-1'
+	  })
+	};
+	
+  operation = new Subject<Usuario>();
+
+  constructor(private http: HttpClient) {}
+  
+  saveData(usuario: Usuario) {
+    return this.http.post<any>(BASE_URL_REST_FILE + 'users/login/', usuario, this.httpOptions).pipe(
+		tap((item) => console.log('grabada la usuario')),catchError(this.handleError<any>('error en grabar '))
+	);
+  }
+  
+    private handleError<T> (operation = 'operation', result?: T) {
+		return (error: any): Observable<T> => {
+			// TODO: send the error to remote logging infrastructure
+			//console.error(error); // log to //console instead
+			// TODO: better job of transforming error for user consumption
+			//console.log('${operation} failed: ${error.message}');
+			// Let the app keep running by returning an empty result.
+			return of(result as T);
+		};
+  }
+  
+}

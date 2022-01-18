@@ -1,0 +1,575 @@
+<html>
+<head>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <span class="navbar-text whitefont">DIACO  
+    <span class="badge badge-secondary"> {{str_queja}}</span> 
+    - Datos de proveedor 
+  </span>
+  <!--span class="navbar-text whitefont">&nbsp;&nbsp;&nbsp;Proveedor: {{nombre_proveedor}}</span-->
+  <!---- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>--->
+  <div class="collapse navbar-collapse" id="navbarText">
+  <ul class="navbar-nav mr-auto">
+   <!----     <li class="nav-item active">
+        <a class="nav-link whitelink" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link whitelink" href="#">Features</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link whitelink" href="#">Pricing</a>
+      </li>--->
+    </ul>  
+  </div>
+  <span class="navbar-text whitefont">
+   {{str_usuario}}  
+  </span>
+  <!--span class="navbar-text whitefont">
+    <a class="nav-link whitelink" [routerLink]="['/Login']">Cerrar Sesi&oacute;n</a>
+  </span-->
+</nav>
+
+<div class="container">
+<div class="row">
+	 <div class="col-lg-12">
+		&nbsp;
+	 </div>
+	</div>
+  <div class="row">
+    
+    <div class="col-sm-12">
+      <form (ngSubmit)="onSubmit()" [formGroup]="proveedorForm">
+        <div class="form-group row">
+          <label for="proveedorComun" class="col-sm-2 col-form-label">Proveedores comunes</label>
+          <div class="col-sm-10">
+            <select
+              id="proveedorComun"
+              class="form-control"
+			  formControlName="proveedorComun"
+			  (change)="onProveedoresComunesChanged()"
+				  matTooltipPosition="after"
+					  matTooltip="Seleccione proveedor"
+					  matTooltipClass="custom-tooltip-blue"
+					  >
+              <option disabled select>Escoger</option>
+			  <option value="{{proveedorComun.id_proveedor}}" *ngFor="let proveedorComun of proveedoresComunes">
+			  {{proveedorComun.proveedor}}</option>
+            </select>
+			
+				
+          </div>
+        </div>
+        <div class="row">
+          <p>Si el proveedor no está en el listado por favor ingrese el NIT del proveedor</p>
+        </div>
+        <div class="form-group row">
+          <label for="nitProveedor" class="col-sm-2 col-form-label">NIT</label>
+          <div class="col-sm-5">
+            <input
+              id="nitProveedor"
+              type="text"
+              class="form-control"
+              formControlName="nitProveedor"
+			        (change)="onBuscarProveedorClicked()">
+          </div>
+          <!--div class="col-sm-5">
+            <button type="button" class="btn btn-primary" (click)="onBuscarProveedorClicked()">Buscar datos</button>
+          </div-->
+        </div>
+        <div class="form-group row">
+          <label for="tipoProveedor" class="col-sm-2 col-form-label">(*) Tipo de proveedor</label>
+          <div class="col-sm-10">
+            <select
+              id="tipoProveedor"
+              class="form-control"
+              formControlName="tipoProveedor">
+              <option value="6">Individual</option>
+              <option value="7">Juridico</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row" *ngIf="proveedorForm.value.tipoProveedor == '6'">
+          <div class="col-sm-4">
+            <div class="row">
+              <label for="primerNombre" class="col-sm-6 col-form-label">(*) Primer Nombre</label>
+              <div class="col-sm-6">
+                <input
+                  id="primerNombre"
+                  type="text"
+                  class="form-control"
+                  formControlName="primerNombre"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese primer nombre"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="primer nombre"
+					  >
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="row">
+              <label for="segundoNombre" class="col-sm-6 col-form-label">Segundo Nombre</label>
+              <div class="col-sm-6">
+                <input
+                  id="segundoNombre"
+                  type="text"
+                  class="form-control"
+                  formControlName="segundoNombre"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese segundo nombre"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Segundo nombre"
+					  
+					  >
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="row">
+              <label for="tercerNombre" class="col-sm-6 col-form-label">Tercer Nombre</label>
+              <div class="col-sm-6">
+                <input
+                  id="tercerNombre"
+                  type="text"
+                  class="form-control"
+                  formControlName="tercerNombre"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese tercer nombre"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Tercer nombre"
+					  >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row" *ngIf="proveedorForm.value.tipoProveedor == '6'">
+          <div class="col-sm-4">
+            <div class="row">
+              <label for="primerApellido" class="col-sm-6 col-form-label">(*) Primer Apellido</label>
+              <div class="col-sm-6">
+                <input
+                  id="primerApellido"
+                  type="text"
+                  class="form-control"
+                  formControlName="primerApellido"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese primer apellido"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Primer apellido"
+					  >
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="row">
+              <label for="segundoApellido" class="col-sm-6 col-form-label">Segundo Apellido</label>
+              <div class="col-sm-6">
+                <input
+                  id="segundoApellido"
+                  type="text"
+                  class="form-control"
+                  formControlName="segundoApellido"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese segundo nombre"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Segundo nombre"
+					  >
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="row">
+              <label for="apellidoCasada" class="col-sm-6 col-form-label">Apellido Casada</label>
+              <div class="col-sm-6">
+                <input
+                  id="apellidoCasada"
+                  type="text"
+                  class="form-control"
+                  formControlName="apellidoCasada"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese apellido de casada"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Apellido de casada"
+					  >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="nombreEmpresa" class="col-sm-2 col-form-label">(*) Nombre de la empresa</label>
+          <div class="col-sm-10">
+            <input
+              id="nombreEmpresa"
+              type="text"
+              class="form-control"
+              formControlName="nombreEmpresa"
+			  matTooltipPosition="after"
+					  matTooltip="Ingrese nombre de la empresa"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Nombre empresa"
+					  >
+          </div>
+        </div>
+        <div class="form-group row" *ngIf="proveedorForm.value.tipoProveedor == '7'">
+          <label for="razonSocial" class="col-sm-2 col-form-label">(*) Razón social</label>
+          <div class="col-sm-10">
+            <input
+              id="razonSocial"
+              type="text"
+              class="form-control"
+              formControlName="razonSocial"
+			  matTooltipPosition="after"
+					  matTooltip="Ingrese razon social"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Razon social"
+					  >
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col sm-6">
+            <div class="row">
+              <label for="actividadEconomica" class="col-sm-4 col-form-label">(*) Actividad económica</label>
+              <div class="col-sm-8">
+                <select
+                  id="actividadEconomica"
+                  class="form-control"
+                  formControlName="actividadEconomica"
+                  (change)="onActividadEconomicaChanged()"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese actividad economica"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Actividad economica"
+					  >
+                  <option disabled selected>Escoger</option>
+                  <option value="{{actividadEconomica.idActividadEconomica}}" *ngFor="let actividadEconomica of actividadesEconomicas">{{actividadEconomica.nombreActividadEconomica}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col sm-6">
+            <div class="row">
+              <label for="tipoComercio" class="col-sm-2 col-form-label">Tipo comercio</label>
+              <div class="col-sm-10">
+                <select
+                  id="tipoComercio"
+                  class="form-control"
+                  formControlName="tipoComercio"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese tipo de comercio"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Tipo de comercio"
+					  >
+                  <option disabled selected>Escoger</option>
+                  <option value="{{tipoComercio.idTipoComercio}}" *ngFor="let tipoComercio of tiposComercio">{{tipoComercio.tipoComercio}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <p>Datos de Contacto (para recibir notificaciones)</p>
+        </div>
+        <div class="form-group row">
+          <div class="col sm-6">
+            <div class="row">
+              <label for="telefono" class="col-sm-4 col-form-label">(*) Teléfono</label>
+              <div class="col-sm-8">
+                <input
+                  id="telefono"
+                  type="text"
+                  class="form-control"
+                  formControlName="telefono"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese numero de telefono"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Numero de telefono"
+					  >
+              </div>
+            </div>
+          </div>
+          <div class="col sm-6">
+            <div class="row">
+              <label for="email" class="col-sm-2 col-form-label">(*) E-mail</label>
+              <div class="col-sm-10">
+                <input
+                  id="email"
+                  type="text"
+                  class="form-control"
+                  formControlName="email"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese correo electronico"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Correo electronico"
+					  >
+              </div>
+            </div>
+          </div>
+        </div>
+		
+		
+        <div class="form-group row">
+          <label for="" class="col-sm-2 col-form-label">Dirección</label>
+          <div class="col-sm-10">
+            <div class="card">
+              <div class="card-body">
+                <div class="form-group row">
+                  <div class="col-sm-6">
+                    <div class="row">
+                      <label for="codigoDepartamento" class="col-sm-5 col-form-label">(*) Departamento</label>
+                      <div class="col-sm-7">
+                        <select
+                          id="codigoDepartamento"
+                          class="form-control"
+                          formControlName="codigoDepartamento"
+                          (change)="onDepartamentoChanged(1)"
+						  matTooltipPosition="after"
+					  matTooltip="Ingrese departamento"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Departamento"
+					  >
+                          <option disabled selected>Escoger</option>
+                          <option value="{{departamento.codigoDepartamento}}" *ngFor="let departamento of departamentos">{{departamento.nombreDepartamento}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="row">
+                      <label for="codigoMunicipio" class="col-sm-4 col-form-label">(*) Municipio</label>
+                      <div class="col-sm-8">
+                        <select
+                          id="codigoMunicipio"
+                          class="form-control"
+                          formControlName="codigoMunicipio"
+                          
+						  matTooltipPosition="after"
+					  matTooltip="Ingrese municipio"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Municipio"
+					  >
+                          <option disabled selected>Escoger</option>
+                          <option value="{{municipio.codigoMunicipio}}" *ngFor="let municipio of municipios">{{municipio.nombreMunicipio}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+				
+				
+                <div class="form-group row">
+                  <label for="direccionDetalle" class="col-sm-2 col-form-label">(*) Direccion</label>
+                  <div class="col-sm-10">
+                    <input
+                      id="direccionDetalle"
+                      type="text"
+                      class="form-control"
+                      formControlName="direccionDetalle"
+					  matTooltipPosition="after"
+					  matTooltip="Ingrese direccion"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Direccion"
+					  >
+                  </div>
+                </div>
+				<div class="form-group row">
+				<div class="col-sm-6">
+                    <div class="row">
+                      <label for="direccionZona" class="col-sm-4 col-form-label">(*) zona</label>
+                      <div class="col-sm-4">
+                        <input
+						  id="direccionZona"
+						  type="text"
+						  class="form-control"
+						  formControlName="direccionZona"
+						  matTooltipPosition="after"
+						  matTooltip="Ingrese zona"
+						  matTooltipClass="custom-tooltip-blue"
+						  placeholder="zona"
+						  >
+                      </div>
+                    </div>
+                  </div>
+				  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+		<!-- SE ELIMINA ESTA PARTE PARA SUCURSALES DE FORMA TEMPORAL-->
+		<div class="form-group row">
+          <label for="" class="col-sm-2 col-form-label">Sucursal</label>
+          <div class="col-sm-10">
+            <div class="card">
+              <div class="card-body">
+			  
+			  <div class="form-group row">
+                  <label for="sucursales" class="col-sm-2 col-form-label">Sucursales</label>
+                  <div class="col-sm-10">
+					<select
+					  id="sucursales"
+					  class="form-control"
+					  formControlName="sucursales"
+					  (change)="onSucursalChanged()"
+						  matTooltipPosition="after"
+							  matTooltip="Seleccione sucursal"
+							  matTooltipClass="custom-tooltip-blue"
+							  >
+					  <option disabled select>Escoger</option>
+					  <option value="{{sucursales.idEstablecimiento}}" *ngFor="let sucursales of sucursalesNit">
+					  {{sucursales.nombreComercial}} - {{sucursales.direccion}}-(zona: {{sucursales.zona}})</option>
+					</select>
+				  </div>
+                </div>
+				
+				<div class="form-group row" *ngIf="nuevasucursal == '0'">
+                  <label for="btn" class="col-sm-2 col-form-label"></label>
+                  <div class="col-sm-10">
+					<button
+					  class="btn btn-primary"
+					  (click)="onSucursalClicked('1')"
+					  type="button"
+					  >Nueva sucursal</button>
+				  </div>
+                </div>
+				
+                <div class="form-group row" *ngIf="nuevasucursal == '1'">
+                  <div class="col-sm-6">
+                    <div class="row">
+                      <label for="codigoDepartamentoS" class="col-sm-4 col-form-label">(*) Departamento</label>
+                      <div class="col-sm-8">
+                        <select
+                          id="codigoDepartamentoS"
+                          class="form-control"
+                          formControlName="codigoDepartamentoS"
+                          (change)="onDepartamentoChanged(2)"
+						  matTooltipPosition="after"
+					  matTooltip="Ingrese departamento"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Departamento"
+					  >
+                          <option disabled selected>Escoger</option>
+                          <option value="{{departamentoss.codigoDepartamento}}" *ngFor="let departamentoss of departamentos">{{departamentoss.nombreDepartamento}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="row">
+                      <label for="codigoMunicipioS" class="col-sm-4 col-form-label">(*) Municipio</label>
+                      <div class="col-sm-8">
+                        <select
+                          id="codigoMunicipioS"
+                          class="form-control"
+                          formControlName="codigoMunicipioS"
+						  matTooltipPosition="after"
+					  matTooltip="Ingrese municipio"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Municipio"
+					  >
+                          <option disabled selected>Escoger</option>
+                          <option value="{{municipioss.codigoMunicipio}}" *ngFor="let municipioss of municipiossuc">{{municipioss.nombreMunicipio}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+				<div class="form-group row" *ngIf="nuevasucursal == '1'">
+                  <label for="nombreS" class="col-sm-2 col-form-label">(*) Nombre sucursal</label>
+                  <div class="col-sm-10">
+                    <input
+                      id="nombreS"
+                      type="text"
+                      class="form-control"
+                      formControlName="nombreS"
+					  matTooltipPosition="after"
+					  matTooltip="Ingrese nombre sucursal"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Nombre sucursal"
+					  >
+                  </div>
+                </div>
+				
+                <div class="form-group row" *ngIf="nuevasucursal == '1'">
+                  <label for="direccionDetalleS" class="col-sm-2 col-form-label">(*) Direccion</label>
+                  <div class="col-sm-10">
+                    <input
+                      id="direccionDetalleS"
+                      type="text"
+                      class="form-control"
+                      formControlName="direccionDetalleS"
+					  matTooltipPosition="after"
+					  matTooltip="Ingrese direccion"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Direccion sucursal"
+					  >
+                  </div>
+				  </div>
+				  <div class="form-group row" *ngIf="nuevasucursal == '1'">
+					
+						
+						  <label for="zonaS" class="col-sm-2 col-form-label">(*) zona</label>
+						  <div class="col-sm-4">
+							<input
+							  id="zonaS"
+							  type="text"
+							  class="form-control"
+							  formControlName="zonaS"
+							  matTooltipPosition="after"
+							  matTooltip="Ingrese zona"
+							  matTooltipClass="custom-tooltip-blue"
+							  placeholder="zona"
+							  >
+						  </div>
+						
+					  
+				  </div>
+				  
+               
+				
+				<div class="form-group row" *ngIf="nuevasucursal == '1'">
+                  <label for="btn" class="col-sm-2 col-form-label"></label>
+                  <div class="col-sm-10">
+					<button
+					  class="btn btn-primary"
+					  (click)="onSucursalClicked('0')"
+					  type="button"
+					  >Cancelar nueva sucursal</button>
+				  </div>
+                </div>
+				
+              </div>
+            </div>
+          </div>
+        </div>
+		
+        <div class="form-group row">
+          <div class="col-lg-4 text-center">
+            &nbsp;
+          </div>
+          <div class="col-lg-4 centrar">
+            <button
+              class="btn btn-primary"
+              type="submit"
+              >Guardar e Ir a Siguiente Pantalla</button>
+          </div>
+          <div class="col-lg-4 text-center">
+            <img src="/assets/img/logo-diaco-ant.jpg" class="headerimg" alt="">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+	<!--div *ngIf="flagInfoError" class="alert alert-alert col-lg-12" [@EnterLeave]="'flyIn'">
+		Hubo un error al procesar esta acción, por favor intente de nuevo.
+	</div-->
+
+	
+</body>
+</html>

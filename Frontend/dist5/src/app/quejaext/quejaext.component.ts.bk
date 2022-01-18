@@ -1,0 +1,15 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-quejaext',
+  templateUrl: './quejaext.component.html',
+  styleUrls: ['./quejaext.component.css']
+})
+export class QuejaextComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}

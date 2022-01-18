@@ -1,0 +1,72 @@
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { SeguridadService } from "../shared/seguridad.service";
+import { SubmitFormService } from "../shared/submit-form.service";
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+export class LoginComponent implements OnInit {
+  myForm: FormGroup;
+  UsrNameCtrl: FormControl;
+  PsswordCtrl: FormControl;
+  flagDBError:boolean;
+  flagErrorPassword:boolean;
+
+  constructor(private router: Router, private _seguridadService:SeguridadService, private _submitFormService:SubmitFormService) { 
+		this.flagDBError=false;
+		this.flagErrorPassword=false;
+  }
+
+  ngOnInit() {
+	  this.UsrNameCtrl =  new FormControl('',Validators.required);
+	  this.PsswordCtrl =  new FormControl('',Validators.required);
+	  
+	  this.myForm = new FormGroup({
+		usrname: this.UsrNameCtrl,
+		pssword: this.PsswordCtrl,
+	  });
+  }
+
+  SaveUserMove(frmsubmit){
+	    //console.log(frmsubmit['code']);
+		if(frmsubmit['code']=='1.0'){
+			this.flagErrorPassword=false;
+			this._submitFormService.SetInitial(frmsubmit);
+			this.router.navigate(['/mainAtCon']);
+		}else{
+			this.flagErrorPassword=true;
+		}
+  }
+
+	LogIn(){
+		if (this.myForm.valid) {
+		  let tempstr='';
+		  let lst_login;
+		  this._seguridadService.Login(this.UsrNameCtrl.value, this.PsswordCtrl.value).subscribe((retvalue)=>{
+				if(retvalue["reason"] == 'OK'){
+					tempstr=retvalue['value'];
+					if(tempstr != null)	{
+						lst_login=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
+						//console.log(lst_login);
+						this.flagDBError=false;
+						this.SaveUserMove(lst_login[0]);
+					}else{
+						console.log('Rest service sin respuesta');
+						this.flagDBError=true;
+					}				
+				}else{
+					console.log('Rest service response ERROR.');
+					this.flagDBError=true;
+				}		
+			},(error)=>{
+				console.log(error);
+				this.flagDBError=true;
+			});
+		}
+	}
+
+}

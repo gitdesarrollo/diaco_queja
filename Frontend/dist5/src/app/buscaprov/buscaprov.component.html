@@ -1,0 +1,119 @@
+<mat-dialog-content>
+ <form [formGroup]="proveedorForm" >
+<div class="form-group row">
+          <label for="" class="col-lg-12 col-form-label">Ingrese parametro de busqueda, puede ser NIT o NOMBRE</label>
+		<div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+			  
+			  <div class="form-group row">
+				  <label for="nitProveedor" class="col-lg-2 col-form-label">NIT</label>
+				  <div class="col-lg-2">
+					<input 
+					  id="nitProveedor"
+					  type="text"
+					  class="form-control"
+					  matTooltipPosition="after"
+					  matTooltip="Ingrese NIT del proveedor"
+					  matTooltipClass="custom-tooltip-blue"
+					  formControlName="nitProveedor"
+					  (change)="RenderDataTableProveedor()"
+					  placeholder="NIT"
+					  >
+				  </div>
+				  <label for="nombrep" class="col-lg-2 col-form-label">Nombre</label>
+				  <div class="col-lg-2">
+					<input
+					  id="nombrep"
+					  type="text"
+					  class="form-control"
+					  matTooltipPosition="after"
+					  matTooltip="Ingrese Nombre del proveedor"
+					  matTooltipClass="custom-tooltip-blue"
+					  formControlName="nombrep"
+					  (change)="RenderDataTableProveedor()"
+					  placeholder="Nombre"
+					  >
+				  </div>
+				  
+				  <button
+              class="btn btn-primary"
+			  matTooltipPosition="after"
+					  matTooltip="Busqueda proveedor."
+					  matTooltipClass="custom-tooltip-blue"
+			  (click)="RenderDataTableProveedor()"
+              >Buscar proveedor</button>
+			</div>
+			<div>
+				<p> 
+					<strong>NOTA:</strong>
+					 
+					Si no encuentra el proveedor, cerrar esta ventana y llenar los campos de NIT, Ubicación y factura ó Contrato.
+				</p>
+			</div>
+</div></div></div></div>
+<div class="example-header mat-elevation-z8">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+  </mat-form-field>
+</div>
+<br>
+<div class="example-container mat-elevation-z8">
+  <mat-table [dataSource]="dataSource" matSort>
+    <!--Columna ID-->
+    <ng-container matColumnDef="Id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+      <mat-cell *matCellDef="let row"   > {{row.idProveedor}} </mat-cell>
+	  
+    </ng-container>
+
+    <!-- Columna Documento -->
+    <ng-container matColumnDef="Nit">
+		<mat-header-cell *matHeaderCellDef mat-sort-header> Nit </mat-header-cell>
+		<mat-cell *matCellDef="let row"> {{row.nitProveedor}} </mat-cell>
+	  </ng-container>
+
+    <!-- Columna Nombre-->
+    <ng-container matColumnDef="Nombre">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
+    </ng-container>
+
+	<!-- Columna Nombre Empresa-->
+    <ng-container matColumnDef="Nombre Empresa">
+		<mat-header-cell *matHeaderCellDef mat-sort-header> Nombre Empresa </mat-header-cell>
+		<mat-cell *matCellDef="let row"> {{row.nombreEmpresa}} </mat-cell>
+	  </ng-container>
+	  
+
+	<!-- Columna Razón Social-->
+    <ng-container matColumnDef="Razón Social">
+		<mat-header-cell *matHeaderCellDef mat-sort-header> Razón Social </mat-header-cell>
+		<mat-cell *matCellDef="let row"> {{row.razonSocial}} </mat-cell>
+	  </ng-container>
+	
+	<!-- Name Column -->
+    <ng-container matColumnDef="Seleccionar">
+  <mat-header-cell  *matHeaderCellDef > Seleccionar </mat-header-cell>
+  <mat-cell *matCellDef="let row" >
+       <!--button mat-button (click)="seleccionar(row.idProveedor,row.nombre)">Seleccionar</button-->
+	   <button [mat-dialog-close]="proveedorToInsert" style="margin-left: 5%" type="button" (click)="seleccionar(row, row.idProveedor,row.nombre,row.nitProveedor)">Seleccionar</button>
+  </mat-cell>
+</ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]="true"></mat-paginator>
+</div>
+</form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <!--button type="button" class="btn btn-light" >Close</button-->
+  <button [mat-dialog-close]="courseToInsert" style="margin-left: 5%" type="button" class="btn btn-dark">Cerrar</button>
+  <!--button  style="margin-left: 5%" type="button" class="btn btn-dark">Cerrar</button-->
+</mat-dialog-actions>

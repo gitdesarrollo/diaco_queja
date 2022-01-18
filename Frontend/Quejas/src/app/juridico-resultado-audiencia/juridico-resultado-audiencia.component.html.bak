@@ -1,0 +1,283 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Resultado de Audiencia ({{data.quejanumero}})
+			</td>
+			<td width="10%" align="right" class="modaltitltdb">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 4; else NoForm">
+	
+	<form (ngSubmit)="onSubmit()" [formGroup]="ProgramarForm" >
+	<div class="container" >
+	<!---<ng-container *ngIf="!flag_Resultado">--->
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<ng-container *ngIf="flagEditable">
+		
+		<div class="row">
+			<div class="col-lg-2">
+			  <label><b>Tipo:</b></label>
+			 </div>
+			<div class="col-lg-7">
+				<select class="form-control" formControlName="tipo" >
+					<option *ngFor="let x of cmb_resultado" [value]="x.id_catalogo">{{x.descripcion_catalogo}}</option>
+				</select>
+			</div>
+			<div *ngIf="tipoCtrl.invalid && (tipoCtrl.dirty && tipoCtrl.touched)" class="col-lg-12">
+			  <div *ngIf="tipoCtrl.errors.required" class="alert alert-danger col-lg-12">
+					Debe seleccionar un tipo
+			  </div>
+			</div>
+		</div>
+		<div class="row">
+			 <div class="col-lg-2">
+			  <label><b>Fecha:</b></label>
+			 </div>
+			 <div class="col-lg-4">
+					<input type="date" class="form-control" formControlName="fecha" id="fecha" name="fecha" placeholder="dd/mm/yyyy" >
+			 </div>
+			 <div *ngIf="fechaCtrl.invalid && (fechaCtrl.dirty && fechaCtrl.touched)" class="col-lg-12">
+			  <div *ngIf="fechaCtrl.errors.required" class="alert alert-danger col-lg-12">
+				Debe ingresar información en la sección fecha
+			  </div>
+			</div>
+			<div *ngIf="fechaCtrl.invalid && (fechaCtrl.dirty && fechaCtrl.touched)" class="col-lg-12">
+			  <div *ngIf="fechaCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+				Revise el formato ingresado en fecha
+			  </div>
+			</div>
+			 <div class="col-lg-2">
+			  <label><b>Hora:</b></label>
+			 </div>
+			 <div class="col-lg-4">
+				<input type="time" class="form-control" formControlName="hora" id="hora" name="hora" placeholder="08:00" >
+			 </div>
+			 <div *ngIf="horaCtrl.invalid && (horaCtrl.dirty && horaCtrl.touched)" class="col-lg-12">
+			  <div *ngIf="horaCtrl.errors.required" class="alert alert-danger col-lg-12">
+				Debe ingresar información en la sección hora
+			  </div>
+			</div>
+			<div *ngIf="horaCtrl.invalid && (horaCtrl.dirty && horaCtrl.touched)" class="col-lg-12">
+			  <div *ngIf="horaCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+				Revise el formato ingresado en hora
+			  </div>
+			</div>
+		</div>
+		<div class="row">
+			 <div class="col-lg-2">
+			  <label><b>Fecha Notif.:</b></label>
+			 </div>
+			 <div class="col-lg-4">
+					<input type="date" class="form-control" formControlName="fechanotif" id="fechanotif" name="fechanotif" placeholder="dd/mm/yyyy" >
+			 </div>
+			<div *ngIf="fechanotifCtrl.invalid && (fechanotifCtrl.dirty && fechanotifCtrl.touched)" class="col-lg-12">
+			  <div *ngIf="fechanotifCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+					Revise el formato ingresado en fecha de notificación
+			  </div>
+			</div>
+			 <div class="col-lg-2">
+			  <label><b>C. Citación:</b></label>
+			 </div>
+			 <div class="col-lg-4">
+				<input type="text" class="form-control" formControlName="ccitacion" (change)="txtTrim(1)" ng-maxlength="50" pattern="[A-Za-z áéíóúÁÉÍÓÚÑñ1234567890_+*.()]*">
+			 </div>
+			 <div *ngIf="ccitacionCtrl.invalid && (ccitacionCtrl.dirty && ccitacionCtrl.touched)" class="col-lg-12">
+			  <div *ngIf="ccitacionCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+				Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( )
+			  </div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-4">
+				<ng-container *ngIf="flagBoton; else NoButton">
+					<button class="btn btn-primary" type="button" [disabled]="!ProgramarForm.valid" (click)="SaveEdit()">Guardar Resultado de Audiencia</button>
+				</ng-container>
+				<ng-template #NoButton>
+					<span><i class="icon"></i></span>&nbsp;
+				</ng-template>		
+			</div>
+			<ng-container *ngIf="flagEdit">
+				<div class="col-lg-4">
+					<button class="btn btn-primary" type="button" (click)="CancelEdit()">Cancelar Edición</button>
+				</div>
+			</ng-container>
+		</div>
+				
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		
+		</ng-container>
+		<ng-container *ngIf="!flagEditable">
+			<div class="row">
+				<div class="col-lg-12">
+					(Edici&oacute;n Deshabilitada)
+				</div>
+			</div>
+			<div class="row">
+			 <div class="col-lg-1">
+				&nbsp;
+			 </div>
+			</div>
+		</ng-container>
+		
+	<!---<ng-container *ngIf="flagValidadorRegistros">-->
+	
+	<ng-container *ngIf="!flagValidadorRegistros">
+		<div class="row">
+		 <div class="col-lg-12">
+			<b>{{msg_deshabilitado}}</b>
+		 </div>
+		</div>
+	</ng-container>	
+	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+				
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div *ngIf="flagInsertInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+			Se guardo la información exitosamente.
+		</div>
+		<div *ngIf="flagDeleteInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+			Se eliminó la información exitosamente.
+		</div>
+		<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+			Hubo un error al procesar esta acción, por favor intente de nuevo.
+		</div>
+		<div *ngIf="flagRegError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+			No fué posible generar el registro, revise la información asociada a la queja.
+		</div>
+	</div>
+	</form>
+	<div class="container" style="overflow: auto; max-height: 433px;">
+	<div class="row" >
+	  <div class="col-lg-12">
+
+		<div class="bs-component">
+		  <table class="table table-striped" >
+			<thead>
+			  <tr>
+				<th scope="col" width="20%">Tipo</th>
+				<th scope="col" width="15%">Fecha/Hora</th>
+				<th scope="col" width="10%">Fecha Notificación</th>
+				<th scope="col" width="20%">C. Citación</th>
+				<th scope="col" width="15%">Acción</th>
+				<th scope="col" width="20%">Registro</th>
+			  </tr>
+			</thead>
+			<tbody>
+			<ng-container *ngIf="listresaudiencia?.length > 0; else EmptyList">
+				<ng-container *ngFor="let thisItem of listresaudiencia; let ii = index">
+				   <tr [class.activetr]="thisItem.id == currentEditid">
+						<td>{{thisItem.tipo_str}}</td>
+						<td>{{thisItem.fechahora | date: "dd/MM/yyyy h:mm:ss a"}}</td>
+						<td>{{thisItem.fechanotificacion | date: "dd/MM/yyyy"}}</td>
+						<td>{{thisItem.ccitacion}}</td>
+						<td>
+						<ng-container *ngIf="flagEditable">
+							<ng-container *ngIf="!flagEdit">
+								<button title="Editar" class="btn btn-primary btn-image edit" type="button" (click)="GetResAudiencia(thisItem.id,ii);"></button>&nbsp;
+								<button title="Borrar" class="btn btn-primary btn-image delete" type="button" (click)="DelResAudiencia(thisItem.id);"></button>
+							</ng-container>
+						</ng-container>
+						</td>
+						<td>
+							<!--<ng-container *ngIf="!flagEdit">
+							<ng-container *ngIf="flagValidadorRegistros">	-->
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-lg-4">
+											<button title="Resolución" class="btn btn-primary btn-image printer" type="button" (click)="reportclick(ii,0);" [disabled]="flagEdit || !flagValidadorRegistros"></button>
+										</div>
+										<div class="col-lg-4">
+											<button title="Notificación Proveedor" class="btn btn-primary btn-image printer" type="button" (click)="reportclick(ii,1);" [disabled]="flagEdit || !flagValidadorRegistros"></button>
+										</div>
+										<div class="col-lg-4">
+											<button title="Notificación Consumidor" class="btn btn-primary btn-image printer" type="button" (click)="reportclick(ii,2);" [disabled]="flagEdit || !flagValidadorRegistros"></button>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-4">
+											<div class="text-center">
+												<a (click)="Nothing()" [routerLink]="">{{linkgrid[ii][0]}}</a>
+											</div>
+										</div>
+										<div class="col-lg-4 text-center">
+											<a (click)="Nothing()" [routerLink]="">{{linkgrid[ii][1]}}</a>
+										</div>
+										<div class="col-lg-4 text-center">
+											<a (click)="Nothing()" [routerLink]="">{{linkgrid[ii][2]}}</a>
+										</div>
+									</div>
+								</div>
+							<!--</ng-container>
+							</ng-container>-->
+						</td>
+					 </tr>
+				</ng-container>
+			 </ng-container>
+			 <ng-template #EmptyList>
+				<tr><td colspan="6">Aún no se han ingresado datos </td></tr>
+			 </ng-template>
+			</tbody>
+		  </table> 
+		</div><!-- /example -->
+	  </div>
+	</div>
+	</div>
+
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10">
+			Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+		 </div>
+		</div>
+	</div>	
+</ng-container>
+</body>
+</html>

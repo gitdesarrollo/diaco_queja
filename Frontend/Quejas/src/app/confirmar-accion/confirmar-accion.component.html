@@ -1,0 +1,129 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Confirmar Acción 
+			</td>
+			<td width="10%" align="right" class="modaltitltd">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 1; else NoForm">
+	<div class="container" >
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+			<div class="col-lg-10">
+				<b>Listado de Quejas Pendientes de Confirmar:</b>
+			</div>
+		</div>
+		<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+		<div class="row" >
+		  <div class="col-lg-12">
+
+			<div class="bs-component">
+			  
+			  <table class="table table-striped" >
+				<thead>
+				  <tr>
+					<th scope="col" width="20%">Queja</th>
+					<th scope="col" width="20%">Fecha</th>
+					<th scope="col" width="30%">Consumidor</th>
+					<th scope="col" width="30%">Proveedor</th>
+				  </tr>
+				</thead>
+				<tbody>
+				<ng-container *ngIf="tabledata; else EmptyList">
+					<ng-container formArrayName="confacc_list" *ngFor="let thisItem of myForm.controls.confacc_list.controls; let i = index">
+					   <tr>
+							<td><input type="checkbox" [formControlName]="i">{{confacc_list[i].quejanumero}}</td>
+							<td>{{confacc_list[i].fecha_creacion | date: "dd/MM/yyyy hh:mm:ss aa"}}</td>
+							<td>{{confacc_list[i].consumidor}}</td>
+							<td>{{confacc_list[i].proveedor}}</td>
+						 </tr>
+					</ng-container>
+				 </ng-container>
+				 <ng-template #EmptyList>
+					<tr><td colspan="5">Actualmente no hay ninguna queja pendiente de acción. </td></tr>
+				 </ng-template>
+				</tbody>
+			  </table>
+			</div><!-- /example -->
+		  </div>
+		</div>
+		<div class="row" *ngIf="tabledata">
+			<div class="col-lg-12">
+				<ng-container *ngIf="flagBoton; else NoButton">
+					<button class="btn btn-primary" type="button" (click)="GuardarConfirmar()">Confirmar Quejas Seleccionadas</button> 
+				</ng-container>
+				<ng-template #NoButton>
+					<span><i class="icon"></i></span>&nbsp;
+				</ng-template>
+			</div>
+		</div>
+		</form>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-12">
+			<button class="btn btn-primary" type="button" (click)="closeDialog()">Cerrar Ventana</button>
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+	</div>
+	<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+		Hubo un error al procesar esta acción, por favor intente de nuevo.
+	</div>
+	<div *ngIf="flagNoSelection" class="alert alert-warning col-lg-12" [@EnterLeave]="'flyIn'">
+		Debe seleccionar al menos un elemento antes de continuar.
+	</div>
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>	
+	<div class="row">
+	 <div class="col-lg-10">
+		Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+	 </div>
+	</div>
+	</div>	
+</ng-container>		
+</body>
+</html>

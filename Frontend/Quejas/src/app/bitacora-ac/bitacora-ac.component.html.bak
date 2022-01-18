@@ -1,0 +1,204 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Bitácora (Queja: {{data.quejanumero}}) 
+			</td>
+			<td width="10%" align="right" class="modaltitltd">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 2; else NoForm">
+	<div class="container-fluid" style="overflow: auto; max-height: 433px;">
+	<div class="row" >
+	  <div class="col-lg-12">
+
+		<div class="bs-component">
+		  <table class="table table-striped" >
+			<thead>
+			  <tr>
+				<th scope="col" width="5%">No.</th>
+				<th scope="col" width="15%">Fecha</th>
+				<th scope="col" width="30%">Bitácora</th>
+				<th scope="col" width="30%">Consumidor</th>
+				<th scope="col" width="20%">Acción</th>
+			  </tr>
+			</thead>
+			<tbody>
+			<ng-container *ngIf="ListBitacora?.length > 0; else EmptyList">
+				<ng-container *ngFor="let thisItem of ListBitacora">
+				   <tr [class.activetr]="thisItem.id == currentEditid">
+					
+						<td>{{thisItem.correlativo}}</td>
+						<td>{{thisItem.fecha | date: "dd/MM/yyyy hh:mm:ss aa"}}</td>
+						<td>{{thisItem.bitacora}}</td>
+						<td>{{thisItem.consumidor}}</td>
+						<td>
+						<ng-container *ngIf="flagEditable">
+							<ng-container *ngIf="!flagEdit">
+								<ng-container *ngIf="flagesAdmin || thisItem.usuario == usuarioid">
+									<button title="Editar" class="btn btn-primary btn-image edit" (click)="EnableEdit(thisItem.id, thisItem.bitacora, thisItem.consumidor);"></button>&nbsp;
+									<button title="Borrar" class="btn btn-primary btn-image trash" (click)="DeleteBitacora(thisItem.id);"></button>
+								</ng-container>
+							</ng-container>
+						</ng-container>
+						</td>
+					 </tr>
+				</ng-container>
+			 </ng-container>
+			 <ng-template #EmptyList>
+				<tr><td colspan="5">Aún no se han ingresado datos en la bitácora </td></tr>
+			 </ng-template>
+			</tbody>
+		  </table> 
+		</div><!-- /example -->
+	  </div>
+	</div>
+	</div>
+
+
+	<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+			 <div class="col-lg-2">
+				<ng-container *ngIf="flagEditable">
+					<label><b>Bitácora:</b></label>
+				</ng-container>	
+			 </div>
+			 <div style="display: block;" id="rulesformitem" class="col-lg-10">
+				<ng-container *ngIf="flagEditable; else ReadOnly1">
+					<textarea rows='4' name='bitacora' ng-maxlength='1000' class="form-control" formControlName="bitacora" (keyup)="UpdateConsumidor($event)" (change)="UpdateConsumidor($event)" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),]*"></textarea>
+				</ng-container>
+				<ng-template #ReadOnly1>
+					{{BitacoraCtrl.value}}
+				</ng-template>
+			 </div>	
+			<div *ngIf="BitacoraCtrl.invalid && (BitacoraCtrl.dirty && BitacoraCtrl.touched)" class="col-lg-12">
+
+				  <div *ngIf="BitacoraCtrl.errors.required" class="alert alert-danger col-lg-12">
+					Debe ingresar información en la sección Bitácora
+				  </div>
+			 </div>
+			 <div *ngIf="BitacoraCtrl.invalid && (BitacoraCtrl.dirty && BitacoraCtrl.touched)" class="col-lg-12">
+
+				  <div *ngIf="BitacoraCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+					Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) ,
+				  </div>
+			 </div>
+		</div>
+		<div class="row">
+			 <div class="col-lg-2">
+				<ng-container *ngIf="flagEditable">
+					<label><b>Consumidor:</b></label>
+				</ng-container>
+			 </div>
+			 <div style="display: block;" id="rulesformitem" class="col-lg-10">
+				<ng-container *ngIf="flagEditable; else ReadOnly2">	
+					<textarea rows='4' name='consumidor' ng-maxlength='1000' class="form-control" formControlName="consumidor" (keyup)="ConsumidorTouched()" (blur)="CheckConsumidor()" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),]*"></textarea>
+				</ng-container>
+				<ng-template #ReadOnly2>
+					{{ConsumidorCtrl.value}}
+				</ng-template>
+			 </div>
+			<div *ngIf="ConsumidorCtrl.invalid && (ConsumidorCtrl.dirty && ConsumidorCtrl.touched)" class="col-lg-12">
+
+				  <div *ngIf="ConsumidorCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+					Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) ,
+				  </div>
+			 </div>		 
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		
+		<div *ngIf="flagInsertInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+			Se agregó la información exitosamente.
+		</div>
+		<div *ngIf="flagUpdateInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+			Se actualizó la información exitosamente.
+		</div>
+		<div *ngIf="flagDeleteInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+			Se eliminó la información exitosamente.
+		</div>
+		<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+			Hubo un error al procesar esta acción, por favor intente de nuevo.
+		</div>
+		
+		<ng-container *ngIf="flagEditable">
+			<ng-container *ngIf="!flagEdit; else flagtrue">
+			<div class="row">
+				  <div class="col-lg-3">
+					<button class="btn btn-primary" [disabled]="!myForm.valid" >Agregar a Bitácora</button>
+				  </div>
+			</div> 
+			</ng-container>
+			<ng-template #flagtrue>
+			<div class="row">
+				  <div class="col-lg-3">
+					<button class="btn btn-primary" [disabled]="!myForm.valid" (click)="UpdateBitacora()">Actualizar Dato</button>
+				  </div>
+				  <div class="col-lg-3">
+					<button class="btn btn-primary" (click)="CancelEdit()">Cancelar Edición</button>
+				  </div>
+			</div> 
+			</ng-template>
+		</ng-container>
+		
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+	</div>
+	</form>
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10">
+			Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+		 </div>
+		</div>
+	</div>	
+</ng-container>
+
+</body>
+</html>
+
+
+

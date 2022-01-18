@@ -1,0 +1,399 @@
+import { Component, OnInit } from '@angular/core';
+import { LSTCMB_PRIMERAAUDIENCIA, BaseCmbClass, FrmProgramaAudiencia, FrmAudiencia, CmbCatalogo, FrmDetalle_Queja, CmbResultadoAudiencia, Frm4Registros } from '../atencion-consumidor-const'
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { timer } from 'rxjs';
+import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Inject } from '@angular/core';
+import { AudienciaService } from '../shared/audiencia.service';
+import { QuejaService } from '../shared/queja.service';
+import { CatalogoService } from '../shared/catalogo.service';
+import { RegistrosService } from '../shared/registros.service';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+
+@Component({
+  selector: 'app-segunda-audiencia',
+  templateUrl: './segunda-audiencia.component.html',
+  styleUrls: ['./segunda-audiencia.component.css'],
+  animations: [
+		trigger('EnterLeave', [
+	  state('flyIn', style({ transform: 'translateX(0)' })),
+	  transition(':enter', [
+		style({ transform: 'translateX(-100%)' }),
+		animate('100ms 150ms ease-in')
+	  ]),
+	  transition(':leave', [
+		animate('300ms ease-out', style({ transform: 'translateX(-100%)' }))
+	  ])
+	])]
+})
+export class SegundaAudienciaComponent implements OnInit {
+	ProgramarForm: FormGroup;
+	FechaCtrl: FormControl;
+	HoraCtrl: FormControl;
+	CerrarForm: FormGroup;
+	ResultadoCtrl: FormControl;
+	ConclusionCtrl: FormControl;
+	ComentarioCtrl: FormControl;
+	list_filtro:BaseCmbClass[];
+	flagInsertInfo:boolean;
+	flagInfoError:boolean;
+	lst_audiencia:FrmAudiencia[];
+	lst_programado:FrmProgramaAudiencia[];
+	lbl_dpto;lbl_muni;lbl_sede;id_audiencia;
+	cmb_resultado:CmbResultadoAudiencia[];
+	flag_Programado:boolean;
+	flag_Resultado:boolean;
+	lst_queja:FrmDetalle_Queja[];
+	registros:Frm4Registros[];
+    routerlink1;
+	linkdescription1;
+    routerlink2;
+	linkdescription2;
+    routerlink3;
+	linkdescription3;
+    routerlink4;
+	linkdescription4;
+	lbl_resultado;lbl_conclusion;lbl_comentario;
+	
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private _audienciaService:AudienciaService, private _quejaService: QuejaService, private _catalogoService: CatalogoService, public dialogRef: MatDialogRef<SegundaAudienciaComponent>, private _registrosservice:RegistrosService) { }
+
+  ngOnInit() {
+	this.list_filtro = LSTCMB_PRIMERAAUDIENCIA;
+	this.FechaCtrl =  new FormControl('',Validators.required);
+	this.HoraCtrl =  new FormControl('',Validators.required);
+	this.ProgramarForm = new FormGroup({
+		fecha: this.FechaCtrl,
+		hora: this.HoraCtrl,
+	});
+	this.ResultadoCtrl =  new FormControl('',Validators.required);
+	this.ConclusionCtrl =  new FormControl('',Validators.required);
+	this.ComentarioCtrl =  new FormControl('',Validators.required);
+	this.CerrarForm = new FormGroup({
+		resultado: this.ResultadoCtrl,
+		conclusion: this.ConclusionCtrl,
+		comentario: this.ComentarioCtrl,
+	});
+	this.id_audiencia=0;
+	this.registros=[];
+	this.Leer4Registros(true);
+	this.LoadCmb();
+	this.flagInsertInfo=false;
+	this.flagInfoError=false;
+	this.GetAudienciaList();
+	this.lbl_dpto='';
+	this.lbl_muni='';
+	this.lbl_sede='';
+	this.flag_Programado=false;
+	this.flag_Resultado=false;
+	console.log(this.data);
+	this.GetQuejaList();
+  }
+
+  Save_ReProgramarAudiencia(){
+		if(confirm("¿Está seguro que desea reprogramar esta audiencia?, ya existe otra cita previamente creada.")) {
+			this.SaveProgramarAudiencia();
+		}
+  }
+
+  Save_Audiencia(){
+		if(this.flag_Resultado){
+			if(confirm("¿Está seguro que desea actualizar el resultado de esta audiencia?")) {
+				this.SaveAudiencia();
+			}
+		}else{
+			this.SaveAudiencia();
+		}
+  }	
+
+  LoadFrmDataQueja(isBlank:boolean){
+	  if(isBlank){
+			this.lbl_dpto='';
+			this.lbl_muni='';
+			this.lbl_sede='';
+	  }else{
+			this.lbl_dpto=this.lst_queja[0].nombre_departamento;
+			this.lbl_muni=this.lst_queja[0].nombre_municipio;
+			this.lbl_sede=this.lst_queja[0].nombre_sede;
+			console.log(this.lst_queja[0]);
+	  }
+  }
+
+  LoadCmb(){
+		let tempstr='';
+		this._catalogoService.getResultadoAudiencia(2).subscribe((Data)=>{
+			if(Data['reason'] == 'OK'){
+				tempstr=Data['value'];
+				if(tempstr != null)	{
+					this.cmb_resultado=JSON.parse('['+tempstr.slice(0, -1) +']');
+					//this.MoverHaciaCtrl.setValue(this.cmb_hacia[0].id_catalogo);
+				}else{
+					this.cmb_resultado=[];
+				}
+				console.log(this.cmb_resultado);
+				this.flagInfoError=false;
+			}else{
+				console.log('Rest service response ERROR.');
+				this.flagInfoError=true;
+				this.SetSecTimerInfoError();
+			}
+		},(error)=>{
+			console.log(error);
+			this.flagInfoError=true;
+			this.SetSecTimerInfoError();
+		});
+  }
+
+	GetQuejaList(){
+	  let tempstr='';
+	  this._quejaService.getDataQueja(this.data.NoQueja).subscribe((retvalue)=>{
+			if(retvalue["reason"] == 'OK'){
+				tempstr=retvalue['value'];
+				if(tempstr != null)	{
+					this.lst_queja=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
+					console.log(this.lst_queja);
+					this.LoadFrmDataQueja(false);
+				}else{
+					console.log('InformaciÃ³n de queja no pudo ser obtenida.');
+					this.flagInfoError=true;
+					this.SetSecTimerInfoError();
+					this.LoadFrmDataQueja(true);
+				}				
+			}else{
+				console.log('Rest service response ERROR.');
+				this.flagInfoError=true;
+				this.SetSecTimerInfoError();
+				this.LoadFrmDataQueja(true);
+			}		
+		},(error)=>{
+			console.log(error);
+			this.flagInfoError=true;
+			this.SetSecTimerInfoError();
+		});
+	}
+
+	LoadFrmData(isBlank:boolean){
+		if(this.cmb_resultado!=null)
+			this.ResultadoCtrl.setValue(this.cmb_resultado[0].id_resultado_audiencia);
+		else
+			this.ResultadoCtrl.setValue('');			
+		this.ConclusionCtrl.setValue('');
+		this.ComentarioCtrl.setValue('');
+		if(!isBlank){
+			if(typeof this.lst_audiencia["0"] === 'undefined'){
+				this.lst_programado=[];
+			}else{
+				this.id_audiencia=this.lst_audiencia["0"].id_audiencia;
+				if(this.lst_audiencia["0"].ProgramaAudiencia == null){
+					this.lst_programado=[];
+				}else{
+					this.lst_programado=this.lst_audiencia["0"].ProgramaAudiencia;
+					this.flag_Programado=true;
+					let lastindex=this.lst_programado.length-1;
+					//ObjectsArr[ObjectsArr.length - 1]
+					console.log(this.lst_programado[lastindex]);
+					if(this.lst_programado[lastindex].id_resultado_audiencia != null){
+						this.ResultadoCtrl.setValue(this.lst_programado[lastindex].id_resultado_audiencia);
+						this.flag_Resultado=true;
+						this.lbl_resultado=this.Getresultado(this.ResultadoCtrl.value);
+					}
+					if(this.lst_programado[lastindex].conclusion != null && this.lst_programado[lastindex].conclusion != ''){
+						this.ConclusionCtrl.setValue(this.lst_programado[lastindex].conclusion);
+						this.lbl_conclusion=this.ConclusionCtrl.value;
+					}
+					if(this.lst_programado[lastindex].comentario != null && this.lst_programado[lastindex].comentario != ''){
+						this.ComentarioCtrl.setValue(this.lst_programado[lastindex].comentario);
+						this.lbl_comentario=this.ComentarioCtrl.value;
+					}
+				}		
+			}
+		}else{
+			this.lst_programado=[];
+		}
+		console.log(this.lst_audiencia);
+		this.GetRegistro();
+	}
+
+	GetAudienciaList(){
+	  let tempstr='';
+	  this._audienciaService.getData(this.data.NoQueja,2).subscribe((retvalue)=>{
+			if(retvalue["reason"] == 'OK'){
+				tempstr=retvalue['value'];
+				if(tempstr != null)	{
+					this.lst_audiencia=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
+					console.log(this.lst_audiencia);
+					this.LoadFrmData(false);
+				}else{
+					this.LoadFrmData(true);
+					/*console.log('InformaciÃ³n de queja no pudo ser obtenida.');
+					this.flagInfoError=true;
+					this.SetSecTimerInfoError();*/
+				}				
+			}else{
+				this.LoadFrmData(true);
+				console.log('Rest service response ERROR.');
+				this.flagInfoError=true;
+				this.SetSecTimerInfoError();
+			}		
+		},(error)=>{
+			console.log(error);
+			this.flagInfoError=true;
+			this.SetSecTimerInfoError();
+		});
+	}
+
+	SaveProgramarAudiencia(){
+	  if (this.ProgramarForm.valid) {	
+			this._audienciaService.ProgramarAudiencia(this.FechaCtrl.value,this.HoraCtrl.value,this.data.NoQueja,2).subscribe((retvalue)=>{
+				if(retvalue["reason"] == 'OK'){
+					console.log(retvalue);
+					this.SetSecTimerUpdateList();
+					this.flagInsertInfo=true;
+					this.SetSecTimerInsert();
+					this.ProgramarForm.reset();
+				}else{
+					console.log('Rest service response ERROR.');
+					this.flagInfoError=true;
+					this.SetSecTimerInfoError();
+				}	
+			},(error)=>{
+				console.log(error);
+				this.flagInfoError=true;
+			});
+	  }
+	}
+
+	SaveAudiencia(){
+	  if (this.CerrarForm.valid) {	
+			this._audienciaService.Audiencia(this.ResultadoCtrl.value,this.ConclusionCtrl.value,this.ComentarioCtrl.value,this.data.NoQueja,2).subscribe((retvalue)=>{
+				if(retvalue["reason"] == 'OK'){
+					console.log(retvalue);
+					this.SetSecTimerUpdateList();
+					this.flagInsertInfo=true;
+					this.SetSecTimerInsert();
+					this.flag_Resultado=true;
+				}else{
+					console.log('Rest service response ERROR.');
+					this.flagInfoError=true;
+					this.SetSecTimerInfoError();
+				}	
+			},(error)=>{
+				console.log(error);
+				this.flagInfoError=true;
+			});
+	  }
+	}
+
+	SetSecTimerInsert(){
+		const source = timer(5000);
+		const subscribe = source.subscribe(val => this.flagInsertInfo=false);
+	}
+	SetSecTimerInfoError(){
+		const source = timer(5000);
+		const subscribe = source.subscribe(val => this.flagInfoError=false);
+	}
+	SetSecTimerUpdateList(){
+		const source = timer(3000);
+		const subscribe = source.subscribe(val => this.GetAudienciaList());
+	}
+	SetSecTimerUpdateRegistro(){
+		const source = timer(3000);
+		const subscribe = source.subscribe(val => this.GetRegistro());
+	}
+	closeDialog(){
+		this.dialogRef.close();
+	}
+
+	Generar4Registros(){
+		if(this.id_audiencia!=0){
+			var approved=false;
+			if(this.linkdescription1 != ''){
+				if(confirm("¿Está seguro que quiere actualizar este registro con la información mas reciente?")) {
+					approved=true;
+				}
+			}else{
+				approved=true;
+			}
+			if(approved){
+				this._registrosservice.add_4Registros(this.data.NoQueja, this.id_audiencia).subscribe((retvalue)=>{
+					if(retvalue["reason"] == 'OK'){
+						console.log(retvalue);
+						//this.SetSecTimerUpdateList();
+						this.flagInfoError=false;
+						this.GetRegistro();
+					}else{
+						console.log('Rest service response ERROR.');
+						this.flagInfoError=true;
+						this.SetSecTimerInfoError();
+					}				
+				},(error)=>{
+					console.log(error);
+					this.flagInfoError=true;
+					this.SetSecTimerInfoError();
+				});  
+			}
+		}
+	}
+
+	GetRegistro(){
+		if(this.id_audiencia!=0){
+			this._registrosservice.read_4Registros(this.id_audiencia).subscribe((retvalue)=>{
+				if(retvalue["reason"] == 'OK'){
+					var tempstr=retvalue['value'];
+					if(tempstr != null)	{
+						//console.log(retvalue);
+						this.registros=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
+						console.log(this.registros);
+						this.Leer4Registros(false);
+					}else{
+						this.Leer4Registros(true);
+					}
+				}else{
+					console.log('Rest service response ERROR.');
+					this.flagInfoError=true;
+					this.SetSecTimerInfoError();
+				}		
+			},(error)=>{
+				console.log(error);
+				this.flagInfoError=true;
+				this.SetSecTimerInfoError();
+			});
+		}
+	}
+
+	Leer4Registros(blank:boolean ){
+		let empty=false;
+		if(blank){
+			this.routerlink1='';
+			this.linkdescription1='';
+			this.routerlink2='';
+			this.linkdescription2='';
+			this.routerlink3='';
+			this.linkdescription3='';
+			this.routerlink4='';
+			this.linkdescription4='';
+		}else{
+			if(typeof this.registros["0"] === 'undefined')
+				empty=true;
+			if(!empty){
+				if(this.registros[0]['cedula_citacion_con_id'] != null){
+					this.routerlink1='MuestraRegistro/3/'+this.registros[0]['cedula_citacion_con_id'];
+					this.linkdescription1=this.registros[0]['cedula_citacion_con_codigo'];
+				}
+				if(this.registros[0]['cedula_citacion_pro_id'] != null){
+					this.routerlink2='MuestraRegistro/4/'+this.registros[0]['cedula_citacion_pro_id'];
+					this.linkdescription2=this.registros[0]['cedula_citacion_pro_codigo'];
+				}
+				if(this.registros[0]['cedula_notificacion_con_id'] != null){
+					this.routerlink3='MuestraRegistro/5/'+this.registros[0]['cedula_notificacion_con_id'];
+					this.linkdescription3=this.registros[0]['cedula_notificacion_con_codigo'];
+				}
+				if(this.registros[0]['cedula_notificacion_pro_id'] != null){
+					this.routerlink4='MuestraRegistro/6/'+this.registros[0]['cedula_notificacion_pro_id'];
+					this.linkdescription4=this.registros[0]['cedula_notificacion_pro_codigo'];
+				}
+			}
+			
+		}
+	}
+
+}

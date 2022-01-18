@@ -1,0 +1,154 @@
+<html>
+<head>
+</head>
+<body>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Asignación Queja ({{data.quejanumero}})
+			</td>
+			<td width="10%" align="right" class="modaltitltdb">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 4; else NoForm">
+<div class="container">	
+	<div class="row">
+		 <div class="col-lg-12">
+			&nbsp;
+		 </div>
+	</div>
+</div>
+	<ng-container *ngIf="flagEditable && flagEdit; else NoEdit">
+	<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+			 <div class="col-lg-4">
+			  <label><b>Enviar Queja a Cola:</b></label>
+			 </div>
+			 <div class="col-lg-8">
+				<select class="form-control" formControlName="cola" >
+					<option *ngFor="let x of list_colas" [value]="x.id_tipo_cola">{{x.nombre}}</option>
+				</select>
+			 </div>
+			<div *ngIf="colaCtrl.invalid && (colaCtrl.dirty && colaCtrl.touched)" class="col-lg-10">
+				  <div *ngIf="colaCtrl.errors.required" class="alert alert-danger">
+					Debe seleccionar una cola para asignar la queja.
+				  </div>
+			 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+			  <div class="col-lg-3">
+				<ng-container *ngIf="flagBoton; else NoButton">
+					<button class="btn btn-primary" type="button" [disabled]="!myForm.valid" (click)="Save()" >Guardar Cambios</button>
+				</ng-container>
+				<ng-template #NoButton>
+					<span><i class="icon"></i></span>&nbsp;
+				</ng-template>
+			  </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div *ngIf="flagDBError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+			Hubo un error al realizar esta acción, por favor revise que la cola que esta asignando tenga usuarios activos.
+		</div>
+		<div *ngIf="flagRegError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+			No fué posible generar el registro, revise la información asociada a la queja.
+		</div>
+	</div>
+	</form>
+	</ng-container>
+	<ng-template #NoEdit>
+		<div class="container">
+			<div class="row">
+			 <div class="col-lg-1">
+				&nbsp;
+			 </div>
+			</div>	
+			<div class="row">
+				 <div class="col-lg-12">
+					<label><b>{{lbl_mensaje}}</b></label>
+				 </div>
+			</div>
+			<div class="row">
+			 <div class="col-lg-1">
+				&nbsp;
+			 </div>
+			</div>
+			<ng-container *ngIf="flagValidadorRegistros">	
+				<div class="row">
+					  <div class="col-lg-4">
+							<button class="btn btn-info btn-block" type="button" (click)="GenerarRegistro()">Generar Registro</button>
+					  </div>
+					  <div class="col-lg-4">
+						<a #replink [routerLink]="" (click)="openFichaQueja()" class="formlink"> {{linkdescription}}</a>
+					  </div>
+				</div>
+			</ng-container>
+			<div *ngIf="flagRegErrorFicha" class="mt-2 alert alert-danger">
+				&nbsp;
+				No se pudo realizar el proceso debido a que la queja no ha sido finalizada.
+			</div>
+			<ng-container *ngIf="!flagValidadorRegistros">
+				<div class="row">
+				 <div class="col-lg-12">
+					<b>{{msg_deshabilitado}}</b>
+				 </div>
+				</div>
+			</ng-container>
+		</div>
+	</ng-template>
+</ng-container>
+<ng-template #NoForm>
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>
+</ng-template>
+<ng-container *ngIf="loaderror">
+	<div class="container">
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>	
+	<div class="row">
+	 <div class="col-lg-10">
+		Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+	 </div>
+	</div>
+	</div>	
+</ng-container>
+</body>
+</html>
+
+
+
+

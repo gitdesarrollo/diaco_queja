@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import 'datatables.net-dt/css/jquery.dataTables.min.css';
+@import '@swimlane/ngx-datatable/release/index.css';
+@import '@swimlane/ngx-datatable/release/themes/material.css';
+@import '@swimlane/ngx-datatable/release/assets/icons.css';
+
+* {
+	font-size: 100%;
+	font-family: 'Open Sans', sans-serif;
+}
+
+h2 {
+	color:#23ACC7;
+	font-size:150%;
+}

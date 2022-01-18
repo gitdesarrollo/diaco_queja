@@ -1,0 +1,130 @@
+<html>
+<head>
+</head>
+<body>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Movimiento Expediente Confirmar
+			</td>
+			<td width="10%" align="right" class="modaltitltdb">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 2; else NoForm">
+		<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+		<div class="container">
+			<div class="row">
+			 <div class="col-lg-1">
+				&nbsp;
+			 </div>
+			</div>
+				<div class="row">
+					 <div class="col-lg-2">
+					  <label><b>Mover Hacia:</b></label>
+					 </div>
+					<div class="col-lg-8">
+							<!---<ng-container *ngIf="data.Editable; else ReadOnly1">--->
+								<select class="form-control" formControlName="moverhacia" (change)="MoverHaciaUpdate()">
+									<option *ngFor="let x of cmb_hacia" [value]="x.id_departamento_interno">{{x.nombre}}</option>
+								</select>
+							<!---</ng-container>--->
+					</div>
+					<div *ngIf="MoverHaciaCtrl.invalid && (MoverHaciaCtrl.dirty && MoverHaciaCtrl.touched)" class="col-lg-12">
+						<div *ngIf="MoverHaciaCtrl.errors.required" class="alert alert-danger col-lg-12">
+							El campo 'Mover Hacia' es obligatorio
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+				 <div class="col-lg-1">
+					&nbsp;
+				 </div>
+				</div>
+				<div class="row" style="border-style: ridge  ">
+				<ng-container formArrayName="lst_quejasimple" *ngFor="let thisitem of myForm.controls.lst_quejasimple.controls; let i = index">
+					<div class="col-lg-3" >
+						<input type="checkbox" [formControlName]="i">
+						Queja {{lst_quejasimple[i].quejanumero}}
+					</div>			
+				</ng-container>		
+				<ng-container *ngIf="flagemtpyList">
+					No hay ninguna queja pendiente de realizar este movimiento.
+				</ng-container>
+				</div>
+				<div class="row">
+				 <div class="col-lg-1">
+					&nbsp;
+				 </div>
+				</div>
+				<div class="row">
+					  <div class="col-lg-3" *ngIf="!flagemtpyList">
+						
+						<ng-container *ngIf="btnvisible; else nobutton">
+							<button class="btn btn-primary" type="button" (click)="GuardarMovimiento()">Confirmar Movimiento</button>
+						</ng-container>
+						<ng-template #nobutton>
+							...
+						</ng-template>
+					  </div>
+				</div>
+				<div class="row">
+				 <div class="col-lg-1">
+					&nbsp;
+				 </div>
+				</div>
+			<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+				Hubo un error al procesar esta acción, por favor intente de nuevo.
+			</div>
+			<div *ngIf="flagNinguno" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+				Debe existir al menos un elemento escogido.
+			</div>
+			<div *ngIf="flagUpdate" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+				El movimiento fué completado.
+			</div>
+		</div>
+		</form>
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10">
+			Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+		 </div>
+		</div>
+	</div>	
+</ng-container>
+
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,41 @@
+@font-face {
+  font-family: LatoBold;
+  src: url('../../../assets/fonts/Lato-Bold.ttf') format('truetype');
+}
+
+.btn-image:before {
+    content: "";
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    margin-right: 0px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position : center center;
+    background-repeat:no-repeat;
+}
+
+table thead th{ font-family: LatoBold, sans-serif !important; }
+
+table tbody tr td div.hoverbtns { display:none; }
+
+table tbody tr:hover td div.hoverbtns { display:inline-block; }
+
+table tbody tr.popupline:hover  { background-color: #4d4d4d !important; color: white; font-size:125%;}
+
+.VerifyN:before{
+     background-image : url("icons/ok-w.png");
+}
+
+.FileN:before{
+     background-image : url("icons/details-w.png");
+}
+
+.LogN:before{
+     background-image : url("icons/book-w.png");
+}
+
+.Phone:before{
+	background-image : url("icons/phone2-w.png");
+}
+

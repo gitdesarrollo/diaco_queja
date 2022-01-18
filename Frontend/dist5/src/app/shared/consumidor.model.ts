@@ -1,0 +1,33 @@
+export class Consumidor {
+  idConsumidor: number;
+	nacionalidad: number;
+	nitConsumidor: string;
+	documentoIdentificacion: string;
+	genero: string;
+	direccionCalle: string;
+	direccionAvenida: string;
+	direccionZona: string;
+  direccionDetalle: string;
+	codigoMunicipio: number;
+	codigoDepartamento: number;
+	sedeDiacoCercana: number;
+	habilitadoNotificacionElectronica: string;
+	fechaAdicion: Date;
+	usuarioAdiciono: string;
+	usuarioModifico: string;
+	nombre1: string;
+	nombre2: string;
+	nombre3: string;
+	apellido1: string;
+	apellido2: string;
+	apellidoCasada: string;
+	tipoConsumidor: number;
+  tipoDocumento: number;
+	idPais: number;
+	idEtnia: number;
+	telefono: string;
+	domicilio: string;
+	referencia: string;
+	correoElectronico1: string;
+	correoElectronico2: string;
+}

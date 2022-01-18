@@ -1,0 +1,55 @@
+<html>
+
+<head>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <span class="navbar-text whitefont">DIACO - Confirmación proveedor</span>
+ 
+  </nav>
+
+  <div class="container">
+    <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="success">
+      <!--h4 class="alert-heading">Solicitud registrada!</h4-->
+      <p>Su solicitud ha sido registrada exitosamente. </p>
+      
+    </div>
+    <div class="row">
+      &nbsp;
+    </div>
+    <div class="row">
+      <div class="col-sm-12" *ngIf="!success">
+        <form >
+          <div class="form-group row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="form-group row">
+                    <label for="" class="col-sm-12 col-form-label">Favor de confirmar su correo dando clic en el botón
+                      confirmar.</label>
+                    <div class="col-sm-1">
+                      <div class="col-lg-12 text-center">
+                        <button class="btn btn-primary row" type="button" [disabled]="completado"
+                          (click)="confirmarCorreo()" matTooltipPosition="after" matTooltip="Buscar proveedor."
+                          matTooltipClass="custom-tooltip-blue">Confirmar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+  </div>
+
+
+
+
+</body>
+
+</html>

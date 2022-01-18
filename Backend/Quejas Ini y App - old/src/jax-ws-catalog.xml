@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="https://prefarm3.sat.gob.gt/sat/rtu_siaf/contribuyente/serviciosWeb/ConsultaSiaf" uri="wsdl/prefarm3.sat.gob.gt/sat/rtu_siaf/contribuyente/serviciosweb/consultasiaf"/>
+</catalog>

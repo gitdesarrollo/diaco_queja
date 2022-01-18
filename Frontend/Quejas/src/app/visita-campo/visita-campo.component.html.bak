@@ -1,0 +1,237 @@
+<html>
+<head>
+</head>
+<body>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Visita Campo (Queja: {{data.quejanumero}}) 
+			</td>
+			<td width="10%" align="right" class="modaltitltd">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 5; else NoForm">
+	<ng-container *ngIf="flagEditable">
+	<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+			 <div class="col-lg-2">
+			  <label><b>Visita Hecha Por:</b></label>
+			 </div>
+			 <div class="col-lg-8">
+				<select class="form-control" formControlName="hecha_por">
+					<option *ngFor="let x of lst_visitapor" [value]="x.id_usuario">{{x.nombre}}</option>
+				</select>
+			</div>
+			<div *ngIf="Hecha_porCtrl.invalid && (Hecha_porCtrl.dirty && Hecha_porCtrl.touched)" class="col-lg-12">
+
+				  <div *ngIf="Hecha_porCtrl.errors.required" class="alert alert-danger col-lg-12">
+					Debe ingresar información en la sección Visita Hecha Por
+				  </div>
+			 </div>
+		</div>
+		<div class="row">
+			 <div class="col-lg-2">
+			  <label><b>Fecha:</b></label>
+			 </div>
+			 <div class="col-lg-3">
+					<input type="date" class="form-control" formControlName="fecha" id="fecha" name="fecha" placeholder="dd/mm/yyyy" >
+			 </div>
+			 <div *ngIf="FechaCtrl.invalid && (FechaCtrl.dirty && FechaCtrl.touched)" class="col-lg-12">
+
+				  <div *ngIf="FechaCtrl.errors.required" class="alert alert-danger col-lg-12">
+					Debe ingresar información en la sección Fecha
+				  </div>
+			 </div>
+		</div>
+		<div class="row">
+			 <div class="col-lg-2">
+			  <label><b>Observaciones:</b></label>
+			 </div>
+			 <div style="display: block;" id="rulesformitem" class="col-lg-10">
+				<textarea rows='4' name='observaciones' ng-maxlength='500' class="form-control" formControlName="observaciones" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),]*"></textarea>
+			 </div>
+			 <div *ngIf="ObservacionesCtrl.invalid && (ObservacionesCtrl.dirty && ObservacionesCtrl.touched)" class="col-lg-12">
+
+				  <div *ngIf="ObservacionesCtrl.errors.required" class="alert alert-danger col-lg-12">
+					Debe ingresar información en la sección Observaciones
+				  </div>
+			 </div>
+			 <div *ngIf="ObservacionesCtrl.invalid && (ObservacionesCtrl.dirty && ObservacionesCtrl.touched)" class="col-lg-12">
+
+				  <div *ngIf="ObservacionesCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+					Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) ,
+				  </div>
+			 </div>
+		</div>	
+		<ng-container *ngIf="flagEditable">
+			<ng-container *ngIf="!flagEdit; else flagtrue">
+			<div class="row">
+				  <div class="col-lg-3">
+					<button class="btn btn-primary" type="button" [disabled]="!myForm.valid" (click)="SaveVisitaCampo()">Guardar Visita</button>
+				  </div>
+				  <ng-container *ngIf="flagValidadorRegistros">
+				  <div class="col-lg-4">
+					<button type="button" class="btn btn-info" (click)="GenerarRegistro()" >Generar Resolución</button>
+				  </div>
+				  </ng-container>
+			</div> 
+			</ng-container>
+			<ng-template #flagtrue>
+			<div class="row">
+				  <div class="col-lg-3">
+					<button class="btn btn-primary" type="button" [disabled]="!myForm.valid" (click)="UpdateVisitaCampo()">Actualizar Visita</button>
+				  </div>
+				  <div class="col-lg-3">
+					<button class="btn btn-primary" type="button" (click)="CancelEdit()">Cancelar Edición</button>
+				  </div>
+				  <ng-container *ngIf="flagValidadorRegistros">
+				  <div class="col-lg-4">
+					<button type="button" class="btn btn-info" (click)="GenerarRegistro()" >Generar Resolución</button>
+				  </div>
+				  </ng-container>
+			</div> 
+			</ng-template>
+		</ng-container>
+		<div class="row">
+			<ng-container *ngIf="flagEditable">
+			  <div class="col-lg-3">
+				&nbsp;
+			  </div>
+			  <ng-container *ngIf="flagEdit">
+			  <div class="col-lg-3">
+				&nbsp;
+			  </div>
+			  </ng-container>
+			</ng-container>
+			<ng-container *ngIf="flagValidadorRegistros">
+			  <div class="col-lg-4">
+				<a #replink [routerLink]="" (click)="openResArchivoVisitaCampo()" class="formlink"> {{linkdescription}}</a>
+			  </div>
+			</ng-container>
+		</div>	
+		<ng-container *ngIf="!flagValidadorRegistros">
+			<div class="row">
+			 <div class="col-lg-12">
+				<b>{{msg_deshabilitado}}</b>
+			 </div>
+			</div>
+		</ng-container>			
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+	</div>
+	</form>
+
+		<div *ngIf="flagInsertInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+			Se agregó la información exitosamente.
+		</div>
+		<div *ngIf="flagUpdateInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+			Se actualizó la información exitosamente.
+		</div>
+		<div *ngIf="flagDeleteInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+			Se eliminó la información exitosamente.
+		</div>
+		<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+			Hubo un error al procesar esta acción, por favor intente de nuevo.
+		</div>
+		<div *ngIf="flagRegError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+			No fué posible generar el registro, revise la información asociada a la queja.
+		</div>
+	</ng-container>
+	<div class="container" style="overflow: auto; max-height: 433px;">
+	<div class="row" >
+	  <div class="col-lg-12">
+
+		<div class="bs-component">
+		  <table class="table table-striped" >
+			<thead>
+			  <tr>
+				<th scope="col" width="5%">No.</th>
+				<th scope="col" width="15%">Fecha</th>
+				<th scope="col" width="30%">Hecho Por</th>
+				<th scope="col" width="30%">Observaciones</th>
+				<th scope="col" width="20%">Acción</th>
+			  </tr>
+			</thead>
+			<tbody>
+			<ng-container *ngIf="ListVisitaCampo?.length > 0; else EmptyList">
+				<ng-container *ngFor="let thisItem of ListVisitaCampo">
+				   <tr [class.activetr]="thisItem.id_visita_campo == currentEditid">
+						<td>{{thisItem.correlativo}}</td>
+						<td>{{thisItem.fecha_visita | date: "dd/MM/yyyy"}}</td>
+						<td>{{thisItem.hecha_por_nombre}}</td>
+						<td>{{thisItem.observaciones}}</td>
+						<td>
+						<ng-container *ngIf="flagEditable">
+							<ng-container *ngIf="!flagEdit">
+								<button title="Editar" class="btn btn-primary btn-image edit" type="button" (click)="EnableEdit(thisItem.id_visita_campo, thisItem.fecha_visita, thisItem.hecha_por, thisItem.observaciones);"></button>&nbsp;
+								<button title="Borrar" class="btn btn-primary btn-image delete" type="button" (click)="DeleteVisitaCampo(thisItem.id_visita_campo);"></button>
+							</ng-container>
+						</ng-container>
+						</td>
+					 </tr>
+				</ng-container>
+			 </ng-container>
+			 <ng-template #EmptyList>
+				<tr><td colspan="5">Aún no se han ingresado datos </td></tr>
+			 </ng-template>
+			</tbody>
+		  </table> 
+		</div><!-- /example -->
+	  </div>
+	</div>
+	</div>
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10">
+			Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+		 </div>
+		</div>
+	</div>	
+</ng-container>
+
+
+
+</body>
+</html>
+
+
+
+

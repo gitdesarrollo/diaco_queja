@@ -1,0 +1,153 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Resolver Queja {{data.quejanumero}}
+			</td>
+			<td width="10%" align="right" class="modaltitltd">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 3; else NoForm">
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<ng-container *ngIf="flagEditable === true && flagNoInfo === true; else EditOnly">
+		<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+		<div class="row"> 
+			<div class="col-lg-2">
+				<label><b>Notas:</b></label>
+			</div>
+			<div class="col-lg-9">
+				<div style="display: block;" id="rulesformitem" class="col-lg-12">
+					<textarea rows='4' name='notas' ng-maxlength='1000' class="form-control" formControlName="notas" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),]*"></textarea>
+				</div>
+			</div>
+		</div>
+		<div *ngIf="NotasCtrl.invalid && (NotasCtrl.dirty && NotasCtrl.touched)" class="col-lg-12">
+			  <div *ngIf="NotasCtrl.errors.required" class="alert alert-danger col-lg-12">
+				Debe ingresar información en la sección Notas
+			  </div>
+		 </div>
+		 <div *ngIf="NotasCtrl.invalid && (NotasCtrl.dirty && NotasCtrl.touched)" class="col-lg-12">
+			  <div *ngIf="NotasCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+				Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) ,
+			  </div>
+		 </div>
+		<div class="row"> 
+			<div class="col-lg-2">
+				<label><b>Resolución:</b></label>
+			</div>
+			<div class="col-lg-6">
+				<select class="form-control" formControlName="resolucion" >
+					<option *ngFor="let x of cmbResolucion" [value]="x.id_catalogo">{{x.descripcion_catalogo}}</option>
+				</select>
+			</div>	
+			<div class="col-lg-4">
+				<div class="form-group"> 
+					<ng-container *ngIf="flagSaveBtn; else NoButton">
+						<button class="btn btn-primary" type="submit" [disabled]="!myForm.valid">Guardar Informaci&oacute;n</button>	
+					</ng-container>
+					<ng-template #NoButton>
+						<span><i class="icon"></i></span>&nbsp;
+					</ng-template>
+				</div>
+			</div>
+		</div>
+		<div *ngIf="ResolucionCtrl.invalid && (ResolucionCtrl.dirty && ResolucionCtrl.touched)" class="col-lg-12">
+			  <div *ngIf="ResolucionCtrl.errors.required" class="alert alert-danger col-lg-12">
+				Debe ingresar información en la sección Notas
+			  </div>
+		 </div>
+		</form>
+		</ng-container>
+		<ng-template #EditOnly>
+			<div class="row"> 
+				<div class="col-lg-2">
+					<label><b>Notas:</b></label>
+				</div>
+				<div class="col-lg-9">
+					{{NotasCtrl.value}}
+				</div>
+			</div>
+			<div class="row"> 
+				<div class="col-lg-2">
+					<label><b>Resolución:</b></label>
+				</div>
+				<div class="col-lg-6">
+					{{resolucion_str}}
+				</div>				
+			</div>
+		</ng-template>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<ng-container *ngIf="flagEditable">
+		<ng-container *ngIf="ResolucionCtrl.value === '9'">
+		<div class="row"> 
+			<div class="col-lg-10">
+				<div class="alert alert-warning col-lg-12" >
+					Para Quejas Resueltas recuerde que debe adjuntar documento de resolución con el consumidor. ENTIENDASE finiquito, desistimiento u otro documento que evidencie el arreglo.
+				</div>
+			</div>
+		</div>
+		</ng-container>
+		</ng-container>
+		
+		<app-file-read-upload [id_queja]="data.NoQueja" [delete_button]="flagEditable"  [upload_button]="flagEditable"></app-file-read-upload>
+
+		<div *ngIf="flagUpdateInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+			Se guardo la información exitosamente.
+		</div>
+		<div *ngIf="flagDBError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+			Hubo un error al procesar esta acción, por favor intente de nuevo.
+		</div>
+
+	</div>
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>	
+	<div class="row">
+	 <div class="col-lg-10">
+		Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+	 </div>
+	</div>
+	</div>	
+</ng-container>
+</body>
+</html>
+
+

@@ -1,0 +1,204 @@
+<html>
+<head>
+</head>
+<body>
+
+	<div class="container">
+	<!--img src="imagen-grd2.png" class="center"/-->
+		<div class="row">
+			<div class="col-lg-4 text-center">
+				&nbsp;
+			</div>
+			<div class="col-lg-4 text-center">
+				<img class="headerimg" />
+			</div>
+			<div class="col-lg-4 text-center">
+				&nbsp;
+			</div>
+		</div>
+	</div>
+
+<div class="container">
+
+ 
+  
+  <!--div class="row">
+    <h2></h2>
+  </div-->
+  <div class="row">
+    <div class="col-lg-12">
+      <form [formGroup]="quejaForm" (ngSubmit)="onSubmit()" novalidate>
+		<div class="form-group row">
+          <label for="" class="col-lg-2 col-form-label">Datos Consumidor</label>
+		<div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+			  
+				<div class="form-group row">
+				
+				<label for="dpiPasaporte" class="col-lg-2 col-form-label"> DPI o pasaporte </label>
+          <div class="col-lg-4 form-control">
+            {{_vDpiPasaporte}}
+          </div>
+				
+				  <label for="nombre" class="col-lg-2 col-form-label"> Nombre</label>
+				  <div class="col-lg-4 form-control">
+					{{_vNombre}}
+				  </div>
+				</div>
+					<div class="form-group row">
+          <label for="telefono" class="col-lg-2 col-form-label"> telefono</label>
+          <div class="col-lg-4 form-control" >
+			{{_vTelefono}}
+          </div>
+		  
+		  <label for="correo" class="col-lg-2 col-form-label"> Correo Electronico</label>
+          <div class="col-lg-4 form-control">
+		  {{_vCorreo}}
+          </div>
+        </div>
+				
+		<div class="form-group row">
+          <label for="detalleQueja"  class="col-lg-12 col-form-label" [ngStyle]="{color: 'blue'}"> Detalle Queja</label>
+          <div class="col-lg">
+			{{_vDetalleQueja}}
+          </div>
+		</div>  
+        <div class="form-group row">
+          <label for="solicitaQue" class="col-lg-12 col-form-label" [ngStyle]="{color: 'blue'}"> Petición Queja</label>
+          <div class="col-lg">
+		  {{_vSolicitaQue}}
+          </div>
+        </div>
+				
+			  </div>
+			</div>
+		</div>
+		</div>
+		<div class="form-group row">
+          <label for="" class="col-lg-2 col-form-label">Datos Proveedor</label>
+		<div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+			  
+			  <div class="form-group row">
+				  <label for="nitProveedor" class="col-lg-2 col-form-label"> NIT</label>
+				  <div class="col-lg-4 form-control">
+				  {{_vNitProveedor}}
+				  </div>
+				  <label for="ubicacion" class="col-lg-2 col-form-label">Ubicacion</label>
+				  <div class="col-lg-4 form-control">
+				  {{_vUbicacion}}
+				</div>
+			</div>
+			
+			<div class="form-group row">
+			<label for="nitProveedor" class="col-lg-10 col-form-label">{{nproveedor}}</label>
+				
+			</div>
+			
+			  </div>
+			</div>
+		</div>
+		</div>
+
+		
+        <div class="form-group row" >
+          <label for="" class="col-lg-2 col-form-label">Datos Adjuntos</label>
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="form-group row">
+				<label for="et9" [ngStyle]="{color: 'red'}">(*)</label>
+                  <label for="filFactura" class="col-lg-2 col-form-label">Factura o Contrato</label>
+                  <div class="col-lg-10">
+                    <input
+                      #filFactura
+                      id="filFactura"
+	                      type="file"
+                      ng2FileSelect
+                      [uploader]="uploader"
+                      class="form-control"
+					  matTooltipPosition="above"
+					  matTooltip="Agrege copia de su documento."
+					  matTooltipClass="custom-tooltip-blue"
+                      (change)="onFileChanged('FAC')"
+					  required>
+                  </div>
+                </div>
+                <div class="form-group row">
+				<label for="et9" [ngStyle]="{color: 'red'}">(*)</label>
+                  <label for="filDpi" class="col-lg-2 col-form-label">DPI o Pasaporte</label>
+                  <div class="col-lg-10">
+                    <input
+                      #filDpi
+                      id="filDpi"
+                      type="file"
+                      ng2FileSelect
+                      [uploader]="uploader"
+                      class="form-control"
+					  matTooltipPosition="above"
+					  matTooltip="Agrege su copia de DPI o Pasaporte"
+					  matTooltipClass="custom-tooltip-blue"
+                      (change)="onFileChanged('DPI')"
+					  required>
+                  </div>
+                </div>
+                <div class="row">
+                  <p>Estos documentos deben ir completos, por ejemplo el DPI debe ser escaneado a ambos lados.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+		  <label class="col-form-label" >(Los campos marcados </label>
+		  <label class="col-form-label" [ngStyle]="{color: 'red'}">  (*)  </label>
+		  <label class="col-form-label" > son obligatorios.)</label>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-12 text-center">
+            <button
+              class="btn btn-primary"
+              type="submit"
+			  matTooltipPosition="after"
+					  matTooltip="Grabe su queja."
+					  matTooltipClass="custom-tooltip-blue"
+			  [disabled]="successFile"
+	              >Guardar Queja </button>
+          </div>
+        </div>
+      </form>
+	  
+  
+    </div>
+  </div>
+  
+  <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="success">
+    <strong>Queja actualizada!</strong> Su queja ha sido actualizada exitosamente. {{vsecanio}}-{{vanio}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="onDismissClicked()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+  
+</div>
+
+    <!--img src="diaco-grd.jpg" class="center"/-->
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 text-center">
+				&nbsp;
+			</div>
+			<div class="col-lg-4 text-center">
+				<img class="footerimg" />
+			</div>
+			<div class="col-lg-4 text-center">
+				&nbsp;
+			</div>
+		</div>
+	</div><!--
+	<div *ngIf="flagInfoError" class="alert alert-alert col-lg-12" [@EnterLeave]="'flyIn'">
+		Hubo un error al procesar esta acción, por favor intente de nuevo.
+	</div>
+-->
+</body>
+</html>

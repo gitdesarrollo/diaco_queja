@@ -1,0 +1,166 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Verificación Conciliación Virtual
+			</td>
+			<td width="10%" align="right" class="modaltitltdb">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 4; else NoForm">
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-11">
+		  <label><b>No. Queja:</b> {{sing_queja.quejanumero}}, <b>Fecha Ingreso:</b> {{sing_queja.fecha_queja |date: "dd/MM/yyyy"}}	  </label>
+		</div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-11">
+		  <label><b>Motivo Queja:</b> {{sing_queja.motivo}}	  </label>
+		</div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-11">
+		  <label><b>Detalle Queja:</b> {{sing_queja.detalle_queja }}	  </label>
+		</div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-11">
+		  <label><b>Solicito que:</b> {{sing_queja.solicita_que}}	 	  </label>
+		</div>
+		</div>
+		<mat-divider></mat-divider>
+		<app-file-read-upload [id_queja]="data.NoQueja" [delete_button]="flagEditable" [upload_button]="flagEditable" [id_flujo]="1" ></app-file-read-upload>
+		<mat-divider></mat-divider>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-11">
+		  <label><b>Resolución Proveedor:</b> {{sing_concvirt.resolucion_str}}	 	  </label>
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-11">
+		  <label><b>Notas Proveedor:</b> {{sing_concvirt.notas}}  </label>
+		 </div>
+		</div>
+		<ng-container *ngIf="div_aceptar_rechazar">
+		<div class="row">
+		 <div class="col-lg-11">
+		  <label><b>Confirmación Resolución Consumidor:</b> {{sing_concvirt.respuesta_con}}  </label>
+		 </div>
+		</div>
+		</ng-container>
+		<ng-container *ngIf="flagEditable  && flagNoInfo; else ReadOnly">
+		<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >	
+			<div class="row">
+				<div class="col-lg-1">
+					<label><b>Razón:</b></label>
+				</div>
+				
+				<div style="display: block;" id="rulesformitem" class="col-lg-11">
+					<textarea rows='4' name='razon' ng-maxlength='1000' class="form-control" formControlName="razon" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),]*"></textarea>
+				</div>
+				<div *ngIf="RazonCtrl.invalid && (RazonCtrl.dirty && RazonCtrl.touched)" class="col-lg-12">
+
+					  <div *ngIf="RazonCtrl.errors.required" class="alert alert-danger col-lg-12">
+						Debe ingresar información en la sección Razon
+					  </div>
+				 </div>
+				 <div *ngIf="RazonCtrl.invalid && (RazonCtrl.dirty || RazonCtrl.touched)" class="col-lg-12">
+
+					  <div *ngIf="RazonCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+						Ingresó un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) ,
+					  </div>
+				 </div>
+			</div>
+		 </form>	
+		 </ng-container>
+		 <ng-template #ReadOnly>
+			<div class="row">
+				<div class="col-lg-1" >
+					<label align="left"><b>Razón:</b></label>
+				</div>			
+				<div style="display: block;" id="rulesformitem" class="col-lg-11">
+					{{RazonCtrl.value}}
+				</div>
+			</div>
+		 </ng-template>
+		
+		<ng-container *ngIf="flagEditable && flagNoInfo">
+			<ng-container *ngIf="flagSaveBtn; else NoButton">
+				<ng-container *ngIf="div_aceptar_rechazar">
+					<div class="form-group"> 
+					  <button class="btn btn-danger" type="button" [disabled]="!myForm.valid" (click)="Btn_Rechazar()">Rechazar Solución y Continuar Trámite</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-apgreen" type="button" [disabled]="!myForm.valid" (click)="Btn_Validar_Conciliacion()">Validar Conciliación</button>	
+					</div>
+				</ng-container>	
+				<ng-container *ngIf="div_continuar">
+					<div class="form-group"> 
+					  <button class="btn btn-primary" type="button" [disabled]="!myForm.valid" (click)="Btn_Continuar()">Continuar Trámite</button>	
+					</div>
+				</ng-container>	
+			</ng-container>
+			<ng-template #NoButton>
+					<span><i class="icon"></i></span>&nbsp;
+			</ng-template>
+		  </ng-container>
+		  <div class="form-group"> 
+			  <button class="btn btn-secondary" (click)="closeMoveDialog1()" type="button">Ir a finalizar queja (no procede)</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-secondary" (click)="closeMoveDialog2()"  type="button" >Ir a Verificación de Datos</button>
+		  </div>
+		<div *ngIf="flagInsertInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+			Se guardó la información exitosamente.
+		</div>
+		<div *ngIf="flagDBError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+			Hubo un error al procesar esta acción, por favor intente de nuevo.
+		</div>
+	</div>
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10">
+			Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+		 </div>
+		</div>
+	</div>	
+</ng-container>
+</body>
+</html>
+

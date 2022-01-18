@@ -1,0 +1,101 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12 modaltitl">
+      <table width="100%">
+      <tr><td width="90%" class="modaltitltd">
+        Catalogo Sucursales
+      </td>
+      <td width="10%" align="right" class="modaltitltd">
+        <button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+      </td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="container">
+<div class="row">          
+  <div class="col-md-8 mt-4">
+      <select>
+          <option *ngFor="let proveedor of proveedorArray"
+          (click)="openForEditProveedor(proveedor)"
+     >
+        <span class="badge badge.primary">{{proveedor.id_proveedor}}</span> {{proveedor.nombre}}  {{proveedor.nit_proveedor}}
+            </option>
+        </select>    
+    <ul>
+      <li 
+      *ngFor="let sucursal of sucursalArray"
+      class="list-group-item list-group-item-action"
+      (click)="openForEdit(sucursal)"
+      [class.active]="sucursal == selectedSucursal"
+      >
+      <span class="badgeadge.primary">{{sucursal.id_sucursal}}</span> {{sucursal.direccion}}
+     {{sucursal.zona}} {{sucursal.nombre_municipio}} {{sucursal.nombre_departamento}}
+      </li>
+    </ul>
+    <div class="card mt-4">
+      <div class="card-body">
+        <div class="card-title">
+         Ingresa una nueva sucursal				 
+        </div>
+      <div class="form-group">
+        <table>
+          <tr>
+            <td>
+              Selecciona Departamento
+            </td>
+            <td>
+                <select>
+                    <option selected >{{selectedSucursal.codigo_departamento}} {{selectedSucursal.nombre_departamento}}</option>
+                      <option *ngFor="let departamento of departamentoArray"
+                      (click)="openForEditDepartamento(departamento)"
+                      (changed)="getDepartamentoList()"
+                      >
+                      <span class="badge badge.primary">{{departamento.codigo_departamento}}</span> {{departamento.nombre_departamento}}
+                        </option>
+              
+                  </select>
+              
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Selecciona Municipio
+            </td>
+            <td>
+                <select>
+                    <option selected > {{selectedSucursal.codigo_municipio}} {{selectedSucursal.nombre_municipio}} </option>
+                  
+                        <option 
+                        *ngFor="let municipio of municipioArray"
+                        (click)="openForEditMunicipio(municipio)"
+                        (changed)="getMunicipioList()"
+                        >
+                              <span class="badge badge.primary">{{municipio.codigo_municipio}}</span> {{municipio.nombre_municipio}}
+                          </option>
+      
+              </select>
+            </td>
+          </tr>
+        </table>
+            
+        <input type="text" [(ngModel)]="selectedSucursal.direccion"  placeholder="agregar direccion" class="form-control">
+        <input type="text" [(ngModel)]="selectedSucursal.zona"  placeholder="agregar zona" class="form-control">
+        <input type="text" [(ngModel)]="selectedSucursal.telefono"  placeholder="agregar telefono" class="form-control">
+         
+      </div>  
+      <button (click)="addOrEdit()" class="btn btn-primary">
+          Guardar cambios
+      </button>
+      <button
+      *ngIf="selectedSucursal.id_sucursal !== 0"
+      class="btn btn-danger"
+      (click)="delete()">
+        Borrar
+      </button>
+      </div>
+    </div>
+  </div>
+  
+</div>
+</div>

@@ -1,0 +1,381 @@
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { Inject } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FrmComPermanente } from '../fakedata';
+import { CmbCatalogo, FrmRegComCon, FormResponse } from "../atencion-consumidor-const"
+import { CatalogoService } from '../shared/catalogo.service'
+import { RegistrosService } from '../shared/registros.service'
+import { CompermanenteService } from './compermanente.service'
+import { QuejaService } from '../shared/queja.service'
+import { timer } from 'rxjs';
+import { trigger, state, style, animate, transition } from '@angular/animations';
+
+@Component({
+  selector: 'app-comunicacion-permanente',
+  templateUrl: './comunicacion-permanente.component.html',
+  styleUrls: ['./comunicacion-permanente.component.css'],
+  animations: [
+		trigger('EnterLeave', [
+	  state('flyIn', style({ transform: 'translateX(0)' })),
+	  transition(':enter', [
+		style({ transform: 'translateX(-100%)' }),
+		animate('100ms 150ms ease-in')
+	  ]),
+	  transition(':leave', [
+		animate('300ms ease-out', style({ transform: 'translateX(-100%)' }))
+	  ])
+	])]
+})
+export class ComunicacionPermanenteComponent implements OnInit {
+
+	/*FormData:	FrmComPermanente={
+	  via : 1,
+	  estatus : 'La Empresa XXX no me ha enviado el producto que pedi en línea.',
+	  observaciones : 'Compre producto 1, prodcuto 2 y producto 3 en XXX en su pagina web, pero aun no me han enviado mis productos'
+  };*/
+  @ViewChild('replink') replink: ElementRef;
+  cmbvia:CmbCatalogo[];
+  LocalForm;
+  myForm: FormGroup;
+  estatusCtrl: FormControl;
+  observacionesCtrl: FormControl;
+  viaCtrl: FormControl;
+  flagDBError: boolean;
+  flagUpdateInfo: boolean;
+  ReadOnlyVia;
+  routerlink;
+  linkdescription;
+  flagReportDisponible: boolean;
+  registrodata:FrmRegComCon[];
+  flagformvisible;lst_queja;
+  flagEditable:boolean;
+  loaderror:boolean;
+  flagMainUpdate:boolean;
+  loc_pagina;
+
+  constructor( @Inject(MAT_DIALOG_DATA) public data: any, private _catalogoservice:CatalogoService, private _compermservice:CompermanenteService, public dialogRef: MatDialogRef<ComunicacionPermanenteComponent>, private _registrosservice:RegistrosService, private _quejaService: QuejaService ) { 
+		this.flagDBError = false;
+		this.flagUpdateInfo = false;
+		this.flagReportDisponible=false;
+		this.flagEditable=false;
+		this.loaderror=false;
+		this.flagformvisible=0;
+		this.flagMainUpdate=false;
+		this.loc_pagina=0;
+  }
+
+  ngOnInit() {
+	this.estatusCtrl =  new FormControl('',Validators.required);
+	this.observacionesCtrl =  new FormControl('',Validators.required);
+	this.viaCtrl = new FormControl('',Validators.required);
+
+	this.myForm = new FormGroup({
+      estatus: this.estatusCtrl,
+      observaciones: this.observacionesCtrl,
+	  via: this.viaCtrl
+    });
+	this.LoadCmbVia();
+	console.log(this.data);	
+	 this.LocalForm=[];
+	 this.routerlink='MuestraRegistro/1/1';
+	 this.GetRegistro(false);
+	 this.GetQuejaList(this.data.NoQueja);
+	 this.SetSecTimerForm();
+  }
+   
+   GetQuejaList(idqueja){
+	  let tempstr='';
+	  this._quejaService.getDataQueja(idqueja).subscribe((retvalue)=>{
+			if(retvalue["reason"] == 'OK'){
+				tempstr=retvalue['value'];
+				if(tempstr != null)	{
+					this.lst_queja=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
+					console.log(this.lst_queja);
+					this.flagformvisible++;
+					//verificar estado para permitir edicion en formulario
+					if(this.lst_queja[0]['id_estado_queja']>=101 && this.lst_queja[0]['id_estado_queja']<=106)
+						//si es rol 3 administrador, puede editar
+						if(this.data.Rol == 3)
+							this.flagEditable=true;
+						else{
+							//si es otro rol, revisar si la queja esta asignada a este usuario
+							if(this.lst_queja[0]['usuario_asignado'] == this.data.Usuario)
+								this.flagEditable=true;
+							else
+								this.flagEditable=false;
+						}
+					else
+						this.flagEditable=false;
+				}else{
+					console.log('Información de queja no pudo ser obtenida.');
+					this.flagDBError=true;
+					this.SetSecTimerInfoError();
+				}				
+			}else{
+				console.log('Rest service response ERROR.');
+				this.flagDBError=true;
+				this.SetSecTimerInfoError();
+			}		
+		},(error)=>{
+			console.log(error);
+			this.flagDBError=true;
+			this.SetSecTimerInfoError();
+		});
+	}
+   
+   ngAfterViewInit(){
+		this.GetFormData(this.data.NoQueja);		
+   }
+   
+  onSubmit() {
+	  if (this.myForm.valid) {
+		console.log(this.myForm.value);
+		this.SaveData();
+	  }
+  }
+
+  LoadFrmData(isempty:boolean){
+		//this.myForm.get('estatus').setValue(this.FormData.estatus);
+		//this.myForm.controls['observaciones'].setValue(this.FormData.observaciones);
+		//this.myForm.controls['via'].setValue(this.FormData.via);
+	console.log(this.LocalForm);
+	//if(typeof this.LocalForm["0"] === 'undefined'){
+	if(isempty){
+		this.estatusCtrl.setValue('');
+		this.observacionesCtrl.setValue('');
+		this.ReadOnlyVia='';
+		this.flagReportDisponible=false;
+	}else{
+		this.estatusCtrl.setValue(this.LocalForm["0"].estatus);
+		this.observacionesCtrl.setValue(this.LocalForm["0"].observaciones);
+		this.viaCtrl.setValue(this.LocalForm["0"].via);
+		this.ReadOnlyVia= this.Getdescripcionvia(this.LocalForm["0"].via);
+		this.flagReportDisponible=true;
+	}
+	
+	//if("0" in this.LocalForm){
+		
+  }
+
+  LoadCmbVia(){
+		let tempstr='';
+		this._catalogoservice.getData('diaco_comunicacion_consumidor').subscribe((Data)=>{
+			if(Data['reason'] == 'OK'){
+				tempstr=Data['value'];
+				if(tempstr != null)	{
+					this.cmbvia=JSON.parse('['+tempstr.slice(0, -1) +']');
+					this.flagformvisible++;
+				}else{
+					this.cmbvia=[];
+				}
+				this.flagDBError=false;
+			}else{
+				console.log('Rest service response ERROR.');
+				this.flagDBError=true;
+				this.SetSecTimerInfoError();
+			}
+		},(error)=>{
+			console.log(error);
+			this.flagDBError=true;
+			this.SetSecTimerInfoError();
+		});
+  }
+  
+  GetFormData(noqueja){
+		let tempstr='';
+		this._compermservice.getData(noqueja).subscribe((Data)=>{
+			if(Data['reason'] == 'OK'){
+				tempstr=Data['value'];
+				if(tempstr != null)	{
+					this.LocalForm=JSON.parse('['+tempstr.replace(/¬/g, '"').slice(0, -1) +']');
+					console.log(this.LocalForm);
+					this.LoadFrmData(false);
+				}else{
+					this.LocalForm=[];
+					this.LoadFrmData(true);
+				}
+				this.flagformvisible++;
+				this.flagDBError=false;
+			}else{
+				this.flagDBError=true;
+				this.SetSecTimerInfoError();
+			}
+		},(error)=>{
+			console.log(error);
+			this.flagDBError=true;
+			this.SetSecTimerInfoError();
+		});
+  }
+  
+  SaveData(){
+	  this._compermservice.addData(this.estatusCtrl.value,this.observacionesCtrl.value,this.viaCtrl.value, this.data.NoQueja).subscribe((retvalue)=>{
+			if(retvalue['reason'] == 'OK'){
+				console.log(retvalue);
+				this.flagUpdateInfo=true;
+				this.flagReportDisponible=true;
+				this.SetSecTimerUpdate();
+				this.flagMainUpdate=true;
+			}else{
+				console.log('Rest service response ERROR.');
+				this.flagDBError=true;
+				this.SetSecTimerInfoError();
+			}
+		},(error)=>{
+			console.log(error);
+			this.flagDBError=true;
+			this.SetSecTimerInfoError();
+		});
+  }
+  /*
+  openFichaRegistro(){
+		console.log('entro a openFichaRegistro');
+		this._compermservice.getFichaRegistro().subscribe((Data)=>{
+		console.log('entro a openRegisto');
+			this._compermservice.FileDownLoadChoose(Data,1);
+			this.flagDBError=false;
+		},(error)=>{
+			console.log(error);
+			this.flagDBError=true;
+			this.SetSecTimerInfoError();
+		});
+	}*/ 
+	openComunicacionPerm(){
+		console.log('entro a openComunicacionPerm con id reporte: '+this.routerlink);
+		this._registrosservice.getComPermanente(this.routerlink).subscribe((Data)=>{
+		console.log('entro a openRegisto');
+			this._registrosservice.FileDownLoadChoose(Data,1);
+			this.flagDBError=false;
+		},(error)=>{
+			console.log(error);
+			this.flagDBError=true;
+			this.SetSecTimerInfoError();
+		});
+	}
+  
+  closeDialog() {
+		this.loc_pagina=0;
+		this.ngOnDestroy();
+	}
+	
+  SubmitandGo(){
+	  //console.log('we got here');
+	  if (this.myForm.valid) {
+		console.log(this.myForm.value);
+		this.SaveData();
+		this.loc_pagina=1;
+		this.ngOnDestroy();
+	  }
+  }
+  
+  ngOnDestroy() {
+		let localresp: FormResponse= new FormResponse();
+		localresp.NoQueja = this.data.NoQueja;
+		localresp.quejanumero = this.data.quejanumero;
+		localresp.pagina = this.loc_pagina;
+		localresp.changes = this.flagMainUpdate;
+		this.dialogRef.close(localresp);
+	}	
+  
+	SetSecTimerUpdate(){
+		const source = timer(5000);
+		const subscribe = source.subscribe(val => this.flagUpdateInfo=false);
+	}
+	SetSecTimerInfoError(){
+		const source = timer(5000);
+		const subscribe = source.subscribe(val => this.flagDBError=false);
+	}
+	ClickAfter3sec(){
+		const source = timer(3000);
+		const subscribe = source.subscribe(val => this.replink.nativeElement.click());
+	}
+	SetSecTimerForm(){
+		const source = timer(15000);
+		const subscribe = source.subscribe(val => this.TimerForm() );
+	}
+	TimerForm(){
+		if(this.flagformvisible<4){
+			this.loaderror=true;	
+			this.flagformvisible=-1;
+		}
+	}
+	
+  	Getdescripcionvia(idd:number){
+  	  var id=+idd;
+	  if (id === null)
+		  return null;
+	  var found=null;
+	  for (var me of this.cmbvia) {
+		  if (me['id_catalogo'] === id) { 
+				found=me['descripcion_catalogo'];
+		  }
+   	  }	  
+	  if (found != null){
+		  return found;
+	  }else{
+		  return null;
+	  }
+	}
+	
+	GenerarRegistro(){
+		var approved=false;
+		if(this.linkdescription != ''){
+			if(confirm("¿Está seguro que quiere actualizar este registro con la información mas reciente?")) {
+				approved=true;
+			}
+		}else{
+			approved=true;
+		}
+		if(approved){
+			this._registrosservice.add_ComCon(this.data.NoQueja).subscribe((retvalue)=>{
+				if(retvalue["reason"] == 'OK'){
+					console.log(retvalue);
+					//this.SetSecTimerUpdateList();
+					this.flagDBError=false;
+					this.GetRegistro(true);
+				}else{
+					console.log('Rest service response ERROR.');
+					this.flagDBError=true;
+					this.SetSecTimerInfoError();
+				}				
+			},(error)=>{
+				console.log(error);
+				this.flagDBError=true;
+				this.SetSecTimerInfoError();
+			});  
+		}
+	}
+	
+	  GetRegistro(click:boolean){
+		  console.log('noQuejaa '+this.data.NoQueja);
+	  this._registrosservice.read_ComCon(this.data.NoQueja).subscribe((retvalue)=>{
+			if(retvalue["reason"] == 'OK'){
+				var tempstr=retvalue['value'];
+				if(tempstr != null)	{
+					//console.log(retvalue);
+					this.registrodata=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
+					//this.routerlink='MuestraRegistro/1/'+this.registrodata[0]['id'];
+					this.routerlink=this.registrodata[0]['id'];
+					this.linkdescription=this.registrodata[0]['codigo'];
+					console.log('registrodata ',this.registrodata);
+					if(click){
+						this.ClickAfter3sec();}
+				}else{
+					this.routerlink='';
+					this.linkdescription='';
+				}
+				this.flagformvisible++;
+			}else{
+				console.log('Rest service response ERROR.');
+				this.flagDBError=true;
+				this.SetSecTimerInfoError();
+			}		
+		},(error)=>{
+			console.log(error);
+			this.flagDBError=true;
+			this.SetSecTimerInfoError();
+		});
+  }
+
+	
+  }

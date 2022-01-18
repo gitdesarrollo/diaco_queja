@@ -1,0 +1,125 @@
+<html>
+<head>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <span class="navbar-text whitefont">DIACO - Revisar queja</span>
+  <!--span class="navbar-text whitefont">&nbsp;&nbsp;&nbsp;Proveedor: {{nombre_proveedor}}</span-->
+  <!---- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>--->
+  <div class="collapse navbar-collapse" id="navbarText">
+  <ul class="navbar-nav mr-auto">
+   <!----     <li class="nav-item active">
+        <a class="nav-link whitelink" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link whitelink" href="#">Features</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link whitelink" href="#">Pricing</a>
+      </li>--->
+    </ul>  
+  </div>
+  <!--span class="navbar-text whitefont">
+   Usuario: {{str_usuario}}  
+  </span>
+  <span class="navbar-text whitefont">
+    <a class="nav-link whitelink" [routerLink]="['/Login']">Cerrar Sesi&oacute;n</a>
+  </span-->
+    <span class="navbar-text whitefont">
+    <!--a class="nav-link whitelink" [routerLink]="['/Login']">Cerrar Sesi&oacute;n</a-->
+	<button class="btn btn-primary row" (click)="onDismissClicked()">Cancelar</button>
+  </span>
+</nav>
+<div class="container">
+
+ 
+  
+  <!--div class="row">
+    <h2></h2>
+  </div-->
+  <div class="row">
+    <div class="col-lg-12">
+      <form [formGroup]="revisionQuejaForm" (ngSubmit)="onSubmit()" novalidate>
+		<div class="form-group row">
+          <label for="" class="col-lg-13 col-form-label">Seguimiento de queja para consumidor</label>
+		   
+		<div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+			  
+				<div class="form-group row">
+				
+					<label for="et1" [ngStyle]="{color: 'red'}">(*)</label>
+					<label for="noQueja" class="col-lg-3 col-form-label" >Número de queja</label>
+					<div class="col-lg-4">
+					<input
+					  id="noQueja"
+					  type="text"
+					  class="form-control"
+					  matTooltipPosition="after"
+							  matTooltip="Ingrese su número de queja"
+							  matTooltipClass="custom-tooltip-blue"
+					  formControlName="noQueja"
+		  			  placeholder="No. queja"
+					  pattern="^[0-9]+-[0-9]{4}$"
+					  (change)="onDocumentoChanged()"
+					  required
+					  >
+					</div>
+				   <div class="form-group row">
+					  <div class="col-lg-12 text-center">
+						<button
+						  class="btn btn-primary"
+						  matTooltipPosition="after"
+								  matTooltip="Buscar queja."
+								  matTooltipClass="custom-tooltip-blue"
+						  >Buscar</button>
+					  </div>
+					</div>
+					
+					<div *ngIf="revisionQuejaForm.get('noQueja').errors && revisionQuejaForm.get('noQueja').dirty" class="col-lg-12">
+					  <p *ngIf="revisionQuejaForm.get('noQueja').hasError('pattern')"  class="highlight">Debe ingresar un número de queja válido (correlativo-año).</p>
+					</div>
+					
+					<div class="container" *ngIf="revisionQuejaForm.valid">
+					<label for="" class="col-lg-3 col-form-label" >Queja no. {{pnoQueja}}</label>
+					<div class="reglist">
+                        <table class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th>Fecha</th>
+                              <th>descripción</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let queja of quejas">
+                              <th scope="row">{{ queja[0] }}</th>
+                              <td>{{ queja[1] }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+					  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	</form>
+	</div>
+		
+ 
+    </div>
+  </div>
+  
+ 
+	<!--div *ngIf="flagInfoError" class="alert alert-alert col-lg-12" [@EnterLeave]="'flyIn'">
+		Hubo un error al procesar esta acción, por favor intente de nuevo.
+	</div-->
+
+	
+</body>
+</html>

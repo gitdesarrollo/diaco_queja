@@ -1,0 +1,762 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://www.sat.gob.gt" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://www.sat.gob.gt" xmlns:intf="http://www.sat.gob.gt" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+
+   <wsdl:message name="buscarRazonDenominacionSocialRequest">
+
+      <wsdl:part name="pUsuario" type="soapenc:string"/>
+
+      <wsdl:part name="pClave" type="soapenc:string"/>
+
+      <wsdl:part name="pNombre" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyentesByFechaRequest">
+
+      <wsdl:part name="Usuario" type="soapenc:string"/>
+
+      <wsdl:part name="Clave" type="soapenc:string"/>
+
+      <wsdl:part name="Fecha" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyentesByFechaResponse">
+
+      <wsdl:part name="listContribuyentesByFechaReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyentesByNitRequest">
+
+      <wsdl:part name="Usuario" type="soapenc:string"/>
+
+      <wsdl:part name="Clave" type="soapenc:string"/>
+
+      <wsdl:part name="Nit" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="buscarNombreComercialRequest">
+
+      <wsdl:part name="pUsuario" type="soapenc:string"/>
+
+      <wsdl:part name="pClave" type="soapenc:string"/>
+
+      <wsdl:part name="pNombreComercial" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findContribuyenteByNitGCRequest">
+
+      <wsdl:part name="pUsuario" type="soapenc:string"/>
+
+      <wsdl:part name="pContrasenia" type="soapenc:string"/>
+
+      <wsdl:part name="pNit" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="catalogo_erroresResponse">
+
+      <wsdl:part name="catalogo_erroresReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findContribuyentesByFechaModificacionResponse">
+
+      <wsdl:part name="findContribuyentesByFechaModificacionReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findContribuyentesByFechaAdicionRequest">
+
+      <wsdl:part name="Usuario" type="soapenc:string"/>
+
+      <wsdl:part name="Clave" type="soapenc:string"/>
+
+      <wsdl:part name="Fecha" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="isAValidFacturaResponse">
+
+      <wsdl:part name="isAValidFacturaReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyentesByFechaAdicionDicabiRequest">
+
+      <wsdl:part name="pUsuario" type="soapenc:string"/>
+
+      <wsdl:part name="pClave" type="soapenc:string"/>
+
+      <wsdl:part name="pFecha" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findContribuyenteByNitGCResponse">
+
+      <wsdl:part name="findContribuyenteByNitGCReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findContribuyenteByNitMFPRequest">
+
+      <wsdl:part name="usuario" type="soapenc:string"/>
+
+      <wsdl:part name="clave" type="soapenc:string"/>
+
+      <wsdl:part name="nit" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyentesByNitResponse">
+
+      <wsdl:part name="listContribuyentesByNitReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findContribuyenteByNitMFPResponse">
+
+      <wsdl:part name="findContribuyenteByNitMFPReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyentesByFechaAdicionDicabiResponse">
+
+      <wsdl:part name="listContribuyentesByFechaAdicionDicabiReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getNitResponse">
+
+      <wsdl:part name="getNitReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findContribuyentesByFechaModificacionRequest">
+
+      <wsdl:part name="usuario" type="soapenc:string"/>
+
+      <wsdl:part name="clave" type="soapenc:string"/>
+
+      <wsdl:part name="Fecha" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyenteByNombreDicabiRequest">
+
+      <wsdl:part name="pUsuario" type="soapenc:string"/>
+
+      <wsdl:part name="pClave" type="soapenc:string"/>
+
+      <wsdl:part name="pPrimerApellido" type="soapenc:string"/>
+
+      <wsdl:part name="pSegundoApellido" type="soapenc:string"/>
+
+      <wsdl:part name="pApellidoCasada" type="soapenc:string"/>
+
+      <wsdl:part name="pPrimerNombre" type="soapenc:string"/>
+
+      <wsdl:part name="pSegundoNombre" type="soapenc:string"/>
+
+      <wsdl:part name="pFechaNacimiento" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="buscarNombreComercialResponse">
+
+      <wsdl:part name="buscarNombreComercialReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyentesByFechaModificacionDicabiResponse">
+
+      <wsdl:part name="listContribuyentesByFechaModificacionDicabiReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyentesByNitDicabiResponse">
+
+      <wsdl:part name="listContribuyentesByNitDicabiReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findContribuyenteByNombresRequest">
+
+      <wsdl:part name="usuario" type="soapenc:string"/>
+
+      <wsdl:part name="clave" type="soapenc:string"/>
+
+      <wsdl:part name="primer_apellido" type="soapenc:string"/>
+
+      <wsdl:part name="segundo_apellido" type="soapenc:string"/>
+
+      <wsdl:part name="apellido_casada" type="soapenc:string"/>
+
+      <wsdl:part name="primer_nombre" type="soapenc:string"/>
+
+      <wsdl:part name="segundo_nombre" type="soapenc:string"/>
+
+      <wsdl:part name="fecha_Nacimiento" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyentesByFechaModificacionResponse">
+
+      <wsdl:part name="listContribuyentesByFechaModificacionReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="catalogo_erroresRequest">
+
+      <wsdl:part name="pUsuario" type="soapenc:string"/>
+
+      <wsdl:part name="pClave" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyentesByNitDicabiRequest">
+
+      <wsdl:part name="pUsuario" type="soapenc:string"/>
+
+      <wsdl:part name="pClave" type="soapenc:string"/>
+
+      <wsdl:part name="Pnit" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findContribuyenteByNombresResponse">
+
+      <wsdl:part name="findContribuyenteByNombresReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="buscarRazonDenominacionSocialResponse">
+
+      <wsdl:part name="buscarRazonDenominacionSocialReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyentesByFechaModificacionDicabiRequest">
+
+      <wsdl:part name="pUsuario" type="soapenc:string"/>
+
+      <wsdl:part name="pClave" type="soapenc:string"/>
+
+      <wsdl:part name="pFecha" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="isAValidFacturaRequest">
+
+      <wsdl:part name="usuario" type="soapenc:string"/>
+
+      <wsdl:part name="clave" type="soapenc:string"/>
+
+      <wsdl:part name="nit" type="soapenc:string"/>
+
+      <wsdl:part name="numeroSerie" type="soapenc:string"/>
+
+      <wsdl:part name="noDocumento" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getNitRequest">
+
+      <wsdl:part name="pUsuario" type="soapenc:string"/>
+
+      <wsdl:part name="pContrasenia" type="soapenc:string"/>
+
+      <wsdl:part name="pCui" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyenteByNombreDicabiResponse">
+
+      <wsdl:part name="listContribuyenteByNombreDicabiReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="listContribuyentesByFechaModificacionRequest">
+
+      <wsdl:part name="Usuario" type="soapenc:string"/>
+
+      <wsdl:part name="Clave" type="soapenc:string"/>
+
+      <wsdl:part name="Fecha" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findContribuyentesByFechaAdicionResponse">
+
+      <wsdl:part name="findContribuyentesByFechaAdicionReturn" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="ContribuyenteWsEp">
+
+      <wsdl:operation name="findContribuyenteByNitMFP" parameterOrder="usuario clave nit">
+
+         <wsdl:input message="impl:findContribuyenteByNitMFPRequest" name="findContribuyenteByNitMFPRequest"/>
+
+         <wsdl:output message="impl:findContribuyenteByNitMFPResponse" name="findContribuyenteByNitMFPResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyenteByNombreDicabi" parameterOrder="pUsuario pClave pPrimerApellido pSegundoApellido pApellidoCasada pPrimerNombre pSegundoNombre pFechaNacimiento">
+
+         <wsdl:input message="impl:listContribuyenteByNombreDicabiRequest" name="listContribuyenteByNombreDicabiRequest"/>
+
+         <wsdl:output message="impl:listContribuyenteByNombreDicabiResponse" name="listContribuyenteByNombreDicabiResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyentesByFechaAdicionDicabi" parameterOrder="pUsuario pClave pFecha">
+
+         <wsdl:input message="impl:listContribuyentesByFechaAdicionDicabiRequest" name="listContribuyentesByFechaAdicionDicabiRequest"/>
+
+         <wsdl:output message="impl:listContribuyentesByFechaAdicionDicabiResponse" name="listContribuyentesByFechaAdicionDicabiResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyentesByFechaModificacionDicabi" parameterOrder="pUsuario pClave pFecha">
+
+         <wsdl:input message="impl:listContribuyentesByFechaModificacionDicabiRequest" name="listContribuyentesByFechaModificacionDicabiRequest"/>
+
+         <wsdl:output message="impl:listContribuyentesByFechaModificacionDicabiResponse" name="listContribuyentesByFechaModificacionDicabiResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyentesByNitDicabi" parameterOrder="pUsuario pClave Pnit">
+
+         <wsdl:input message="impl:listContribuyentesByNitDicabiRequest" name="listContribuyentesByNitDicabiRequest"/>
+
+         <wsdl:output message="impl:listContribuyentesByNitDicabiResponse" name="listContribuyentesByNitDicabiResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="catalogo_errores" parameterOrder="pUsuario pClave">
+
+         <wsdl:input message="impl:catalogo_erroresRequest" name="catalogo_erroresRequest"/>
+
+         <wsdl:output message="impl:catalogo_erroresResponse" name="catalogo_erroresResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="buscarRazonDenominacionSocial" parameterOrder="pUsuario pClave pNombre">
+
+         <wsdl:input message="impl:buscarRazonDenominacionSocialRequest" name="buscarRazonDenominacionSocialRequest"/>
+
+         <wsdl:output message="impl:buscarRazonDenominacionSocialResponse" name="buscarRazonDenominacionSocialResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="buscarNombreComercial" parameterOrder="pUsuario pClave pNombreComercial">
+
+         <wsdl:input message="impl:buscarNombreComercialRequest" name="buscarNombreComercialRequest"/>
+
+         <wsdl:output message="impl:buscarNombreComercialResponse" name="buscarNombreComercialResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="isAValidFactura" parameterOrder="usuario clave nit numeroSerie noDocumento">
+
+         <wsdl:input message="impl:isAValidFacturaRequest" name="isAValidFacturaRequest"/>
+
+         <wsdl:output message="impl:isAValidFacturaResponse" name="isAValidFacturaResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findContribuyenteByNitGC" parameterOrder="pUsuario pContrasenia pNit">
+
+         <wsdl:input message="impl:findContribuyenteByNitGCRequest" name="findContribuyenteByNitGCRequest"/>
+
+         <wsdl:output message="impl:findContribuyenteByNitGCResponse" name="findContribuyenteByNitGCResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findContribuyentesByFechaAdicion" parameterOrder="Usuario Clave Fecha">
+
+         <wsdl:input message="impl:findContribuyentesByFechaAdicionRequest" name="findContribuyentesByFechaAdicionRequest"/>
+
+         <wsdl:output message="impl:findContribuyentesByFechaAdicionResponse" name="findContribuyentesByFechaAdicionResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findContribuyentesByFechaModificacion" parameterOrder="usuario clave Fecha">
+
+         <wsdl:input message="impl:findContribuyentesByFechaModificacionRequest" name="findContribuyentesByFechaModificacionRequest"/>
+
+         <wsdl:output message="impl:findContribuyentesByFechaModificacionResponse" name="findContribuyentesByFechaModificacionResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findContribuyenteByNombres" parameterOrder="usuario clave primer_apellido segundo_apellido apellido_casada primer_nombre segundo_nombre fecha_Nacimiento">
+
+         <wsdl:input message="impl:findContribuyenteByNombresRequest" name="findContribuyenteByNombresRequest"/>
+
+         <wsdl:output message="impl:findContribuyenteByNombresResponse" name="findContribuyenteByNombresResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyentesByFecha" parameterOrder="Usuario Clave Fecha">
+
+         <wsdl:input message="impl:listContribuyentesByFechaRequest" name="listContribuyentesByFechaRequest"/>
+
+         <wsdl:output message="impl:listContribuyentesByFechaResponse" name="listContribuyentesByFechaResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyentesByFechaModificacion" parameterOrder="Usuario Clave Fecha">
+
+         <wsdl:input message="impl:listContribuyentesByFechaModificacionRequest" name="listContribuyentesByFechaModificacionRequest"/>
+
+         <wsdl:output message="impl:listContribuyentesByFechaModificacionResponse" name="listContribuyentesByFechaModificacionResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyentesByNit" parameterOrder="Usuario Clave Nit">
+
+         <wsdl:input message="impl:listContribuyentesByNitRequest" name="listContribuyentesByNitRequest"/>
+
+         <wsdl:output message="impl:listContribuyentesByNitResponse" name="listContribuyentesByNitResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getNit" parameterOrder="pUsuario pContrasenia pCui">
+
+         <wsdl:input message="impl:getNitRequest" name="getNitRequest"/>
+
+         <wsdl:output message="impl:getNitResponse" name="getNitResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="ConsultasPublicasPortSoapBinding" type="impl:ContribuyenteWsEp">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="findContribuyenteByNitMFP">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findContribuyenteByNitMFPRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findContribuyenteByNitMFPResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyenteByNombreDicabi">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="listContribuyenteByNombreDicabiRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="listContribuyenteByNombreDicabiResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyentesByFechaAdicionDicabi">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="listContribuyentesByFechaAdicionDicabiRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="listContribuyentesByFechaAdicionDicabiResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyentesByFechaModificacionDicabi">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="listContribuyentesByFechaModificacionDicabiRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="listContribuyentesByFechaModificacionDicabiResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyentesByNitDicabi">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="listContribuyentesByNitDicabiRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="listContribuyentesByNitDicabiResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="catalogo_errores">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="catalogo_erroresRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="catalogo_erroresResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="buscarRazonDenominacionSocial">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="buscarRazonDenominacionSocialRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="buscarRazonDenominacionSocialResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="buscarNombreComercial">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="buscarNombreComercialRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="buscarNombreComercialResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="isAValidFactura">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="isAValidFacturaRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="isAValidFacturaResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findContribuyenteByNitGC">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findContribuyenteByNitGCRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findContribuyenteByNitGCResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findContribuyentesByFechaAdicion">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findContribuyentesByFechaAdicionRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findContribuyentesByFechaAdicionResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findContribuyentesByFechaModificacion">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findContribuyentesByFechaModificacionRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findContribuyentesByFechaModificacionResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findContribuyenteByNombres">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findContribuyenteByNombresRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findContribuyenteByNombresResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyentesByFecha">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="listContribuyentesByFechaRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="listContribuyentesByFechaResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyentesByFechaModificacion">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="listContribuyentesByFechaModificacionRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="listContribuyentesByFechaModificacionResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="listContribuyentesByNit">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="listContribuyentesByNitRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="listContribuyentesByNitResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getNit">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getNitRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://ws.contribuyente.rtu.sat.gob.gt" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getNitResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://www.sat.gob.gt" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="ConsultaSiaf">
+
+      <wsdl:port binding="impl:ConsultasPublicasPortSoapBinding" name="ConsultasPublicasPort">
+
+         <wsdlsoap:address location="https://farm2.sat.gob.gt/sat/rtu_siaf/contribuyente/serviciosWeb/ConsultaSiaf"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

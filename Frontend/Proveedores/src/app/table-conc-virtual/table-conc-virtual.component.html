@@ -1,0 +1,52 @@
+<div *ngIf="flaglimitError" class="alert alert-warning col-lg-12">
+	Su b&uacute;squeda ha regresado mas resultados del l&iacute;mite permitido, para ver m&aacute;s quejas revise los par&aacute;metros de b&uacute;squeda
+</div>
+<div *ngIf="flagDBError" class="alert alert-danger col-lg-12">
+	Hubo un error al comunicarse con la Base de Datos, Intente de nuevo en algunos minutos.
+</div>
+	
+<div class="container-fluid">
+<div class="row">
+  <div class="col-lg-3">	
+		<input type="text" (keyup)='filterDatatable($event)'>
+  </div>
+</div>
+</div>
+	
+<div class="container-fluid">
+	<div class="row">
+	<div class="col-lg-12">
+      <ngx-datatable #table class="material striped"
+        [rows]="rows"
+        [columns]="columns"
+		[limit]="10"
+		[footerHeight]="40"
+		[rowHeight]="'auto'"
+		[columnMode]="'flex'"
+		[selected]="selected"
+          [selectionType]="'single'"
+		  [selectCheck]="singleSelectCheck"
+          (select)='onSelect($event)'>
+			<ngx-datatable-column name="Id Queja" prop="quejanumero" [flexGrow]="2"></ngx-datatable-column>
+			<ngx-datatable-column name="Fecha Queja" prop="fecha_queja" [flexGrow]="2">
+				<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+				  {{value | date:'d/M/yy, h:mm a'}}
+				</ng-template>
+			</ngx-datatable-column>
+			<ngx-datatable-column name="DescripciÃ³n Queja" prop="detalle_queja" [flexGrow]="3"></ngx-datatable-column>
+			<ngx-datatable-column name="Solicito Que" prop="solicita_que" [flexGrow]="3"></ngx-datatable-column>
+			<ngx-datatable-column name="Acciones" sortable="false" prop="id_queja" [flexGrow]="2">
+				 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>						
+						<button title="Detalle Queja" class="btn btn-primary btn-image FileN" (click)="clickStopper($event);openDetalle(value, row.quejanumero);"></button>&nbsp;
+						<button title="Bitácora" class="btn btn-primary btn-image LogN" (click)="clickStopper($event);openBitacora(value, row.quejanumero);"></button>&nbsp;
+						<ng-container *ngIf="str_rol==2">
+						<button title="Resolver Queja" class="btn btn-primary btn-image VerifyN" (click)="clickStopper($event);openResolver(value, row.quejanumero);"></button>&nbsp;
+						</ng-container>
+						<button title="Interacción con Usuario" class="btn btn-primary btn-image Phone" (click)="clickStopper($event);openInteraccion(value, row.quejanumero);"></button>&nbsp;
+				</ng-template>
+			</ngx-datatable-column>
+		
+      </ngx-datatable>
+    </div>
+	</div>
+</div>	

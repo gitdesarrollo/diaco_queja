@@ -1,0 +1,238 @@
+<html>
+<body>
+<!------ Include the above in your HEAD tag ---------->
+<!------<div id="wrap">
+<div id="main" class="container clear-top">---------->
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 text-center">
+				&nbsp;
+			</div>
+			<div class="col-lg-4 text-center">
+				<img class="headerimg" />
+			</div>
+			<div class="col-lg-4 text-center">
+				&nbsp;
+			</div>
+		</div>
+	</div>
+	<div>&nbsp;</div>
+	<ng-container *ngIf="flagActiveScreen==1">
+	<div class="wrapper fadeInDown">
+	  <div id="formContent">
+		<!-- Tabs Titles -->
+		
+
+		<!-- Login Form -->
+		<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+			<div>&nbsp;</div>
+		  <input #Logintxt type="text" id="login" class="fadeIn first" name="login" formControlName="usrname" placeholder="Usuario">
+		  <input type="password" id="password" class="fadeIn second" name="login" formControlName="pssword" placeholder="Clave" (keyup.enter)="LogIn()">
+		  <input type="button" class="fadeIn third" (click)="LogIn()" value="Entrar">
+		  <ng-container *ngIf="flagErrorPassword"><label class="highlight">Datos incorrectos, intente de nuevo</label></ng-container>
+		  <ng-container *ngIf="flagErrorAccess"><label class="highlight">Su Usuario no tiene ning&uacute;n rol activo</label></ng-container>
+		  <ng-container *ngIf="flagDBError"><label class="highlight">Error de conexión</label></ng-container>
+		</form>
+
+		<!-- Remind Passowrd -->
+		<div id="formFooter">
+		  <a class="underlineHover" (click)="GotoAS2()" href="#">Olvido su clave?</a>
+		</div>
+
+	  </div>
+	</div>
+	</ng-container>
+	<ng-container *ngIf="flagActiveScreen==2">
+	<div class="wrapper">
+	  <div id="formContent">
+		<form (ngSubmit)="onSubmit()" [formGroup]="myForm2" >
+			<div>&nbsp;</div>
+				<input type="text" id="correo" formControlName="email" name="correo" placeholder="correo@correo.com" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+				<input type="button" (click)="ClaveCorreo()" value="Enviar Clave por Correo">
+				<input type="button" (click)="GotoAS1()" value="Volver a Ingreso de Usuario">
+			<ng-container *ngIf="flagErrorEmail"><label class="highlight">Datos incorrectos, intente de nuevo</label></ng-container>
+			<ng-container *ngIf="flagemailsent"><label class="highlight">Se le va a enviar un mensaje con su clave.</label></ng-container>
+			<div *ngIf="EmailCtrl.invalid && (EmailCtrl.dirty && EmailCtrl.touched)" class="col-lg-12">
+				<div *ngIf="EmailCtrl.errors.pattern" class="col-lg-12">
+					<label class="highlight">Debe ingresar un correo electrónico válido.</label>
+				</div>
+			</div>
+		</form>	
+	  </div>
+	</div>
+	</ng-container>
+	<div>&nbsp;</div>
+	<div>&nbsp;</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 text-center">
+				<img class="footerimg" />
+			</div>
+			<div class="col-lg-4 text-center">
+				&nbsp;
+			</div>
+			<div class="col-lg-4 text-center">
+				<img class="footerimg2" />
+			</div>
+		</div>
+	</div>
+
+<!------</div>
+</div>
+
+
+	<footer class="footer">
+      <div class="container">
+        <p class="text-muted">Place sticky footer content here.</p>
+      </div>
+    </footer>--->
+	
+	<div class="footer-margin">
+	  <footer class="footer-font-style footer-position page-footer">
+		<!-- Footer Links -->
+			<div class="container text-center text-md-left">
+
+			  <!-- Grid row -->
+			  <div class="row">
+				<ng-container *ngIf="flagPortalLinks">
+					<hr class="clearfix w-100 d-md-none">
+
+					<!-- Grid column -->
+					<div class="col-md-3 mx-auto">
+
+					  <ul class="list-unstyled">
+						<ng-container *ngIf="portallinkgrid[0]['activo']=='1'; else NoLink0">
+							<li>
+								<a href="{{portallinkgrid[0]['link']}}" target="_blank" class="footer-link">{{portallinkgrid[0]['nombre']}}</a>
+							</li>
+						</ng-container>
+						<ng-template NoLink0>
+							<li>
+								&nbsp;
+							</li>
+						</ng-template>
+						<ng-container *ngIf="portallinkgrid[1]['activo']=='1'; else NoLink1">
+							<li>
+								<a href="{{portallinkgrid[1]['link']}}" target="_blank" class="footer-link">{{portallinkgrid[1]['nombre']}}</a>
+							</li>
+						</ng-container>
+						<ng-template NoLink1>
+							<li>
+								&nbsp;
+							</li>
+						</ng-template>
+					  </ul>
+
+					</div>
+					<!-- Grid column -->
+
+					<hr class="clearfix w-100 d-md-none">
+
+					<!-- Grid column -->
+					<div class="col-md-3 mx-auto">
+
+					  <ul class="list-unstyled">
+						<ng-container *ngIf="portallinkgrid[2]['activo']=='1'; else NoLink2">
+							<li>
+								<a href="{{portallinkgrid[2]['link']}}" target="_blank" class="footer-link">{{portallinkgrid[2]['nombre']}}</a>
+							</li>
+						</ng-container>
+						<ng-template NoLink2>
+							<li>
+								&nbsp;
+							</li>
+						</ng-template>
+						<ng-container *ngIf="portallinkgrid[3]['activo']=='1'; else NoLink3">
+							<li>
+								<a href="{{portallinkgrid[3]['link']}}" target="_blank" class="footer-link">{{portallinkgrid[3]['nombre']}}</a>
+							</li>
+						</ng-container>
+						<ng-template NoLink3>
+							<li>
+								&nbsp;
+							</li>
+						</ng-template>
+					  </ul>
+
+					</div>
+					<!-- Grid column -->
+
+					<hr class="clearfix w-100 d-md-none">
+
+					<!-- Grid column -->
+					<div class="col-md-3 mx-auto">
+
+					  <ul class="list-unstyled">
+						<ng-container *ngIf="portallinkgrid[4]['activo']=='1'; else NoLink4">
+							<li>
+								<a href="{{portallinkgrid[4]['link']}}" target="_blank" class="footer-link">{{portallinkgrid[4]['nombre']}}</a>
+							</li>
+						</ng-container>
+						<ng-template NoLink4>
+							<li>
+								&nbsp;
+							</li>
+						</ng-template>
+						<ng-container *ngIf="portallinkgrid[5]['activo']=='1'; else NoLink5">
+							<li>
+								<a href="{{portallinkgrid[5]['link']}}" target="_blank" class="footer-link">{{portallinkgrid[5]['nombre']}}</a>
+							</li>
+						</ng-container>
+						<ng-template NoLink5>
+							<li>
+								&nbsp;
+							</li>
+						</ng-template>
+					  </ul>
+
+					</div>
+					<!-- Grid column -->
+
+					<hr class="clearfix w-100 d-md-none">
+
+					<!-- Grid column -->
+					<div class="col-md-3 mx-auto">
+
+					  <ul class="list-unstyled">
+						<ng-container *ngIf="portallinkgrid[6]['activo']=='1'; else NoLink6">
+							<li>
+								<a href="{{portallinkgrid[6]['link']}}" target="_blank" class="footer-link">{{portallinkgrid[6]['nombre']}}</a>
+							</li>
+						</ng-container>
+						<ng-template NoLink6>
+							<li>
+								&nbsp;
+							</li>
+						</ng-template>
+						<ng-container *ngIf="portallinkgrid[7]['activo']=='1'; else NoLink7">
+							<li>
+								<a href="{{portallinkgrid[7]['link']}}" target="_blank" class="footer-link">{{portallinkgrid[7]['nombre']}}</a>
+							</li>
+						</ng-container>
+						<ng-template NoLink7>
+							<li>
+								&nbsp;
+							</li>
+						</ng-template>
+					  </ul>
+
+					</div>
+					<!-- Grid column -->
+				</ng-container>
+			  </div>
+			  <!-- Grid row -->
+
+			</div>
+			<!-- Footer Links -->
+
+			<!-- Copyright -->
+			<div class="text-center">© 2019 Derechos Reservados:
+				<a href="https://www.mineco.gob.gt/" class="footer-link" target="_blank"> Ministerio de Economia</a> -
+				<a href="https://www.diaco.gob.gt/site/" class="footer-link" target="_blank"> DIACO</a>			  
+			</div>
+			<div class="text-center">&nbsp;</div>
+	  </footer>
+	</div>
+	
+</body>
+</html>

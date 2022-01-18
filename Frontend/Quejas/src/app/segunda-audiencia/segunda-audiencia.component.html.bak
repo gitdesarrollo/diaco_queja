@@ -1,0 +1,236 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Audiencia de Ofrecimiento de Medio Prueba ({{data.quejanumero}})
+			</td>
+			<td width="10%" align="right" class="modaltitltdb">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="container" >
+<!---<ng-container *ngIf="!flag_Resultado">--->
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>
+	<form (ngSubmit)="onSubmit()" [formGroup]="ProgramarForm" >
+	<div class="row">
+		 <div class="col-lg-1">
+		  <label><b>Fecha:</b></label>
+		 </div>
+		 <div class="col-lg-3">
+				<input type="date" class="form-control" formControlName="fecha" id="fecha" name="fecha" placeholder="dd/mm/yyyy" min="01/01/2019" max="01/01/2020" >
+		 </div>
+		 <div *ngIf="FechaCtrl.invalid && (FechaCtrl.dirty && FechaCtrl.touched)" class="col-lg-12">
+		  <div *ngIf="FechaCtrl.errors.required" class="alert alert-danger col-lg-12">
+			Debe ingresar información en la sección fecha
+		  </div>
+		</div>
+		<div *ngIf="FechaCtrl.invalid && (FechaCtrl.dirty && FechaCtrl.touched)" class="col-lg-12">
+		  <div *ngIf="FechaCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+			Revise el formato ingresado en fecha
+		  </div>
+		</div>
+		 <div class="col-lg-1">
+		  <label><b>Hora:</b></label>
+		 </div>
+		 <div class="col-lg-2">
+			<input type="time" class="form-control" formControlName="hora" id="hora" name="hora" min="7:00" max="18:00" placeholder="08:00" >
+		 </div>
+		 <div *ngIf="HoraCtrl.invalid && (HoraCtrl.dirty && HoraCtrl.touched)" class="col-lg-12">
+		  <div *ngIf="HoraCtrl.errors.required" class="alert alert-danger col-lg-12">
+			Debe ingresar información en la sección hora
+		  </div>
+		</div>
+		<div *ngIf="HoraCtrl.invalid && (HoraCtrl.dirty && HoraCtrl.touched)" class="col-lg-12">
+		  <div *ngIf="HoraCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+			Revise el formato ingresado en hora
+		  </div>
+		</div>
+		<div class="col-lg-2">
+			<ng-container *ngIf="flag_Programado; else noprogramado">
+				<button class="btn btn-primary" type="button" [disabled]="!ProgramarForm.valid" (click)="Save_ReProgramarAudiencia()">Re-Programar</button>
+			</ng-container>
+			<ng-template #noprogramado>
+				<button class="btn btn-primary" type="button" [disabled]="!ProgramarForm.valid" (click)="SaveProgramarAudiencia()">Programar</button>
+			</ng-template>
+			
+		</div>
+	</div>
+	</form>
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>
+	<mat-divider></mat-divider>
+<!---</ng-container>--->
+	
+<ng-container *ngIf="flag_Programado">	
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<label><b>Dpto:</b> {{lbl_dpto}}, <b>Municipio:</b> {{lbl_muni}}, <b>Sede DIACO:</b> {{lbl_sede}}  </label>
+		</div>
+	</div>
+	<div class="row">
+	<ng-container *ngFor="let thisItem of lst_programado">
+		<ng-container *ngIf="thisItem.activo === false; else Bold">
+			<div class="col-lg-6">
+				<label>Fecha: {{thisItem.fecha_programada | date: 'dd/MM/yyyy'}}, Hora: {{thisItem.fecha_programada | date: 'h:mm a'}} (reprogramado)</label>
+			</div>
+		</ng-container>
+		<ng-template #Bold>
+			<div class="col-lg-6">
+				<label><b>Fecha: {{thisItem.fecha_programada | date: 'dd/MM/yyyy'}}, </b><b>Hora: {{thisItem.fecha_programada | date: 'h:mm a'}}</b></label>
+			</div>		
+		</ng-template>
+	</ng-container>	
+	</div>
+	<ng-container *ngIf="id_audiencia != 0">
+	<div class="row">
+		<div class="col-lg-4">
+			<button class="btn btn-primary btn-block" type="button" (click)="Generar4Registros()" >Generar los 4 registros</button>
+		</div>
+	</div>
+</ng-container>
+	<div class="row">
+	 <div class="col-lg-1" style="height:10px;">
+		&nbsp;
+	 </div>
+	</div>
+	<ng-container *ngIf="routerlink1 != ''">
+	<div class="row">
+		<div class="col-lg-6">
+			<label>Citación Consumidor: <a #replink routerLink="{{routerlink1}}" target="_blank" class="formlink"> {{linkdescription1}}</a></label>
+		</div>
+		<div class="col-lg-6">
+			<label>Citación Proveedor: <a #replink routerLink="{{routerlink2}}" target="_blank" class="formlink"> {{linkdescription2}}</a></label>
+		</div>
+
+	</div>
+	<div class="row">
+		<div class="col-lg-6">
+			<label>Notificación Consumidor:<a #replink routerLink="{{routerlink3}}" target="_blank" class="formlink"> {{linkdescription3}}</a></label>
+		</div>
+		<div class="col-lg-6">
+			<label>Notificación Proveedor: <a #replink routerLink="{{routerlink4}}" target="_blank" class="formlink"> {{linkdescription4}}</a></label>
+		</div>
+	</div>
+	</ng-container>
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>
+	<mat-divider></mat-divider>
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>
+	<form (ngSubmit)="onSubmit2()" [formGroup]="CerrarForm" >
+	<div class="row">
+		<div class="col-lg-2">
+		  <label><b>Resultado:</b></label>
+		 </div>
+		<div class="col-lg-7">
+			<select class="form-control" formControlName="resultado" >
+				<option *ngFor="let x of cmb_resultado" [value]="x.id_resultado_audiencia">{{x.descripcion}}</option>
+			</select>
+		</div>
+		<div *ngIf="ResultadoCtrl.invalid && (ResultadoCtrl.dirty && ResultadoCtrl.touched)" class="col-lg-12">
+		  <div *ngIf="ResultadoCtrl.errors.required" class="alert alert-danger col-lg-12">
+			Debe seleccionar un resultado
+		  </div>
+		</div>
+	</div>
+	<div class="row">
+		 <div class="col-lg-2">
+		  <label><b>Conclusión:</b></label>
+		 </div>
+		 <div style="display: block;" id="rulesformitem" class="col-lg-10">
+			<textarea rows='4' name="conclusion" formControlName="conclusion" ng-maxlength='1000' class="form-control" pattern="[A-Za-z áéíóúÁÉÍÓÚÑñ1234567890_+*.()]*"></textarea>
+		 </div>
+		 <div *ngIf="ConclusionCtrl.invalid && (ConclusionCtrl.dirty && ConclusionCtrl.touched)" class="col-lg-12">
+		  <div *ngIf="ConclusionCtrl.errors.required" class="alert alert-danger col-lg-12">
+			Debe ingresar información en la sección conclusión
+		  </div>
+		</div>
+		<div *ngIf="ConclusionCtrl.invalid && (ConclusionCtrl.dirty || ConclusionCtrl.touched)" class="col-lg-12">
+		  <div *ngIf="ConclusionCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+			Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( )
+		  </div>
+		</div>
+	</div>
+	<div class="row">
+		 <div class="col-lg-2">
+		  <label><b>Comentario:</b></label>
+		 </div>
+		 <div style="display: block;" id="rulesformitem" class="col-lg-10">
+			<textarea rows='4' name="comentario" formControlName="comentario" ng-maxlength='1000' class="form-control" pattern="[A-Za-z áéíóúÁÉÍÓÚÑñ1234567890_+*.()]*"></textarea>
+		 </div>
+		 <div *ngIf="ComentarioCtrl.invalid && (ComentarioCtrl.dirty && ComentarioCtrl.touched)" class="col-lg-12">
+		  <div *ngIf="ComentarioCtrl.errors.required" class="alert alert-danger col-lg-12">
+			Debe ingresar información en la sección comentario
+		  </div>
+		</div>
+		<div *ngIf="ComentarioCtrl.invalid && (ComentarioCtrl.dirty || ComentarioCtrl.touched)" class="col-lg-12">
+		  <div *ngIf="ComentarioCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+			Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( )
+		  </div>
+		</div>
+	</div>
+	</form>
+	<div class="row">
+		<div class="col-lg-4">
+			<button class="btn btn-primary btn-block" type="button" [disabled]="!CerrarForm.valid" (click)="Save_Audiencia()">Guardar Resultado de Audiencia</button>
+		</div>
+		<div class="col-lg-4">
+			<button class="btn btn-secondary btn-block" type="button" >Ir a Movimiento de Expediente</button>
+		</div>
+		<div class="col-lg-4">
+			<button class="btn btn-secondary btn-block" type="button" >Ir a Finalizar</button>
+		</div>
+	</div>
+		<div class="row">
+	 <div class="col-lg-1" style="height:5px;">
+		&nbsp;
+	 </div>
+	</div>
+	<div class="row">
+		<div class="col-lg-4">
+			<button class="btn btn-secondary btn-block" type="button" >Ir a Conciliación</button>
+		</div>
+		<div class="col-lg-4">
+			<button class="btn btn-secondary btn-block" type="button" >Ir a Archivar</button>
+		</div>
+		<div class="col-lg-4">
+			<button class="btn btn-secondary btn-block" type="button" >Ir a Incomparecencia</button>
+		</div>
+	</div>
+</ng-container>
+	<div *ngIf="flagInsertInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+		Se guardo la información exitosamente.
+	</div>
+	<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+		Hubo un error al procesar esta acción, por favor intente de nuevo.
+	</div>
+
+</div>
+</body>
+</html>

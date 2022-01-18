@@ -1,0 +1,91 @@
+package gt.gob.mineco.diaco.model;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import java.io.Serializable;
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+import gt.gob.mineco.diaco.util.CheckNull;
+import gt.gob.mineco.diaco.model.TipoPasoQueja;
+import gt.gob.mineco.diaco.model.TipoProgramaAudiencia;
+
+/**
+ * The persistent class for the diaco_queja_asignacion database table.
+ * 
+ */
+@Entity
+@Table(name="diaco_queja_asignacion")
+@NamedQueries({
+    @NamedQuery(
+        name = "TipoQuejaAsignacion.findXIDqueja",
+        query = "SELECT t FROM TipoQuejaAsignacion t where t.id_queja = :id_queja") 
+})
+
+public class TipoQuejaAsignacion implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+        @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id", precision=0)
+        private Integer id;
+        @Column(name="id_queja")
+        private Integer id_queja;
+        @Column(name="atencion_consumidor")
+        private Integer atencion_consumidor;
+        @Column(name="juridico")
+        private Integer juridico;
+        @Column(name="verificacion_vigilancia")
+        private Integer verificacion_vigilancia;
+        
+	public TipoQuejaAsignacion() {
+	}
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId_queja() {
+        return id_queja;
+    }
+
+    public void setId_queja(Integer id_queja) {
+        this.id_queja = id_queja;
+    }
+
+    public Integer getAtencion_consumidor() {
+        return atencion_consumidor;
+    }
+
+    public void setAtencion_consumidor(Integer atencion_consumidor) {
+        this.atencion_consumidor = atencion_consumidor;
+    }
+
+    public Integer getJuridico() {
+        return juridico;
+    }
+
+    public void setJuridico(Integer juridico) {
+        this.juridico = juridico;
+    }
+
+    public Integer getVerificacion_vigilancia() {
+        return verificacion_vigilancia;
+    }
+
+    public void setVerificacion_vigilancia(Integer verificacion_vigilancia) {
+        this.verificacion_vigilancia = verificacion_vigilancia;
+    }
+        
+        @Override
+        public String toString() {
+            JsonObject temp = new JsonObject();
+            temp.addProperty("id",this.id);
+            return temp.toString()+",";
+        }
+                
+}

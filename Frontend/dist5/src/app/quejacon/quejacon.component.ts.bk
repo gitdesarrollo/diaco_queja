@@ -1,0 +1,15 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-quejacon',
+  templateUrl: './quejacon.component.html',
+  styleUrls: ['./quejacon.component.css']
+})
+export class QuejaconComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}

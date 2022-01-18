@@ -1,0 +1,244 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Resolución Final (Queja: {{data.quejanumero}}) 
+			</td>
+			<td width="10%" align="right" class="modaltitltd">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 4; else NoForm">
+	<form (ngSubmit)="onSubmit()" [formGroup]="MyForm" >
+	<div class="container" >
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<ng-container *ngIf="flagEditable && (flagEdit || flagHabilitado)">
+			<div class="row">
+				<div class="col-lg-2">
+				  <label><b>Tipo:</b></label>
+				 </div>
+				<div class="col-lg-7">
+					<select class="form-control" formControlName="tipo" >
+						<option *ngFor="let x of cmb_resultado" [value]="x.id_catalogo">{{x.descripcion_catalogo}}</option>
+					</select>
+				</div>
+				<div *ngIf="tipoCtrl.invalid && (tipoCtrl.dirty && tipoCtrl.touched)" class="col-lg-12">
+				  <div *ngIf="tipoCtrl.errors.required" class="alert alert-danger col-lg-12">
+						Debe seleccionar un tipo
+				  </div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-4">
+					&nbsp;
+				</div>
+			</div>
+			<ng-container *ngIf="flagEdit && flagNoesArchivo">
+			<div class="row">
+				<div class="col-lg-5">
+					<b>Adjunar Acta No.: <i>{{lbl_actanumero}}</i></b>
+				</div>	
+				
+				<div class="col-lg-4">
+					<ng-container *ngIf="UploadFinished; else LoadProgress">
+						<input #attachmentCtrl type="file" name="attachmentCtrl" accept=".docx">
+					</ng-container>
+					<ng-template #LoadProgress>
+						<mat-progress-bar
+						  class="example-margin"
+						  [value]="progressperc"
+						  [color]="progressaccent">
+						</mat-progress-bar>
+					</ng-template>
+				</div>	
+				<div class="col-lg-3">
+					<button type="button" class="btn btn-primary" (click)="UploadFile();">Adjuntar Acta</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-4">
+					&nbsp;
+				</div>
+			</div>
+			</ng-container>
+			<div class="row">
+				<div class="col-lg-4">
+					<ng-container *ngIf="flagBoton; else NoButton">
+						<button class="btn btn-primary" type="button" [disabled]="!MyForm.valid" (click)="SaveEdit()">Guardar Resolución</button>
+					</ng-container>
+					<ng-template #NoButton>
+						<span><i class="icon"></i></span>&nbsp;
+					</ng-template>					
+				</div>
+				<ng-container *ngIf="flagEdit">
+					<div class="col-lg-4">
+						<button class="btn btn-primary" type="button" (click)="CancelEdit()">Cancelar Edición</button>
+					</div>
+				</ng-container>
+			</div>
+		</ng-container>
+		<ng-container *ngIf="!flagEditable">
+			<div class="row">
+				<div class="col-lg-12">
+					(Edici&oacute;n Deshabilitada)
+				</div>
+			</div>
+			<div class="row">
+			 <div class="col-lg-1">
+				&nbsp;
+			 </div>
+			</div>
+		</ng-container>
+		<ng-container *ngIf="flagEditable && !flagEdit && !flagHabilitado">
+			<div class="row">
+				<div class="col-lg-12">
+					Ya no se pueden agregar más elementos.
+				</div>
+			</div>
+			<div class="row">
+			 <div class="col-lg-1">
+				&nbsp;
+			 </div>
+			</div>
+		</ng-container>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+	</div>
+	</form>
+	<div *ngIf="flagInsertInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+		Se guardo la información exitosamente.
+	</div>
+	<div *ngIf="flagDeleteInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+		Se eliminó la información exitosamente.
+	</div>
+	<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+		Hubo un error al procesar esta acción, por favor intente de nuevo.
+	</div>
+	<div *ngIf="flagRegError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+		No fué posible generar el registro, revise la información asociada a la queja.
+	</div>
+	
+		<div class="container" style="overflow: auto; max-height: 433px;">
+	<div class="row" >
+	  <div class="col-lg-12">
+
+		<div class="bs-component">
+		  <table class="table table-striped" >
+			<thead>
+			  <tr>
+				<th scope="col" width="20%">Tipo</th>
+				<th scope="col" width="15%">Acción</th>
+				<th scope="col" width="20%">Registro</th>
+			  </tr>
+			</thead>
+			<tbody>
+			<ng-container *ngIf="listresaudiencia?.length > 0; else EmptyList">
+				<ng-container *ngFor="let thisItem of listresaudiencia; let ii = index">
+				   <tr [class.activetr]="thisItem.id == currentEditid">
+						<td>{{thisItem.tipo_str}}</td>
+						<td>
+						<ng-container *ngIf="flagEditable">
+							<ng-container *ngIf="!flagEdit">
+								<button title="Editar" class="btn btn-primary btn-image edit" type="button" (click)="GetResAudiencia(thisItem.id,ii);"></button>&nbsp;
+								<button title="Borrar" class="btn btn-primary btn-image delete" type="button" (click)="DelResFinal(thisItem.id);"></button>
+							</ng-container>
+						</ng-container>
+						</td>
+						<td>
+							<!--<ng-container *ngIf="!flagEdit">
+							<ng-container *ngIf="flagValidadorRegistros">	-->
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-lg-4">
+											<button title="Resolución" class="btn btn-primary btn-image printer" type="button" (click)="ResolucionClick(thisItem.tipo, thisItem.id, thisItem.id_imagen_acta);" [disabled]="flagEdit || !flagValidadorRegistros || (thisItem.id_imagen_acta == '')"></button>
+										</div>
+										<div class="col-lg-4">
+											<button title="Notificación Proveedor" class="btn btn-primary btn-image printer" type="button" (click)="reportclick(ii,1);" [disabled]="flagEdit || !flagValidadorRegistros"></button>
+										</div>
+										<div class="col-lg-4">
+											<button title="Notificación Consumidor" class="btn btn-primary btn-image printer" type="button" (click)="reportclick(ii,2);" [disabled]="flagEdit || !flagValidadorRegistros"></button>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-4">
+											<div class="text-center">
+												{{thisItem['correlativo']}}
+											</div>
+										</div>
+										<div class="col-lg-4 text-center">
+											{{thisItem['corr_notif_cons']}}
+										</div>
+										<div class="col-lg-4 text-center">
+											{{thisItem['corr_notif_prov']}}
+										</div>
+									</div>
+								</div>
+							<!--</ng-container>
+							</ng-container>-->
+						</td>
+					 </tr>
+				</ng-container>
+			 </ng-container>
+			 <ng-template #EmptyList>
+				<tr><td colspan="6">Aún no se han ingresado datos </td></tr>
+			 </ng-template>
+			</tbody>
+		  </table> 
+		</div><!-- /example -->
+	  </div>
+	</div>
+	</div>
+
+	
+</ng-container>
+<ng-template #NoForm>
+	<div class="container">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>	
+	<div class="row">
+	 <div class="col-lg-10">
+		Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+	 </div>
+	</div>
+	</div>	
+</ng-container>		
+</body>
+</html>

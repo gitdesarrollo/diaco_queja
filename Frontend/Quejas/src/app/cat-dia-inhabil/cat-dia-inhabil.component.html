@@ -1,0 +1,101 @@
+<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12 modaltitl">
+				<table width="100%">
+				<tr><td width="90%" class="modaltitltd">
+					Catalogo Dias Inhabiles
+				</td>
+				<td width="10%" align="right" class="modaltitltd">
+					<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+				</td></tr>
+				</table>
+			</div>
+		</div>
+	</div>
+<div class="container">
+	<div class="row">          
+		<div class="col-md-8 mt-4">
+        <select>
+            <option *ngFor="let departamento of departamentoArray"
+            (click)="openForEditDepartamento(departamento)"
+            >
+          <span class="badge badge.primary">{{departamento.codigo_departamento}}</span> {{departamento.nombre_departamento}}
+              </option>
+          </select>    
+      <ul>
+				<li 
+				*ngFor="let diainhabil of diainhabilArray"
+				class="list-group-item list-group-item-action"
+				(click)="openForEdit(diainhabil)"
+				[class.active]="diainhabil == selectedDiainhabil"
+				>
+        <span class="badge badge.primary">{{diainhabil.id_dia_inhabil}}</span> {{diainhabil.descripcion}}
+        -- {{diainhabil.dia}} / {{diainhabil.mes}}
+				</li>
+		  </ul>
+		  <div class="card mt-4">
+			  <div class="card-body">
+				  <div class="card-title">
+					 Ingresa un nuevo dia inhabil 				 
+				  </div>
+				<div class="form-group">
+					<table>
+						<tr>
+							<td>
+								Selecciona mes 
+							</td>
+							<td>
+									<select>
+											<option selected >{{selectedDiainhabil.mes}}</option>
+												<option *ngFor="let mes of mesArray"
+												(click)="openForEditMes(mes)"
+												(changed)="getMesList()"
+												[ngValue]="selectedDiainhabil.mes"
+												>
+											  <span class="badge badge.primary">{{mes}}</span>
+												  </option>
+								
+										</select>
+								
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Selecciona dia
+							</td>
+							<td>
+									<select>
+											<option selected > {{selectedDiainhabil.dia}}</option>
+										
+													<option 
+													*ngFor="let dia of diaArray"
+													(click)="openForEditDia(dia)"
+													(changed)="getDiaList()"
+													[ngValue]="selectedDiainhabil.dia"
+													>
+															  <span class="badge badge.primary">{{dia}}</span>
+													  </option>
+				
+								</select>
+							</td>
+						</tr>
+					</table>
+							
+					<input type="text" [(ngModel)]="selectedDiainhabil.descripcion" (blur)="setAfterAuxiliar()" (focus)="setBeforeAuxiliar()" placeholder="agregar descripcion" class="form-control">
+		 	
+        </div>  
+				<button (click)="addOrEdit()" class="btn btn-primary">
+						Guardar cambios
+				</button>
+				<button
+				*ngIf="selectedDiainhabil.id_dia_inhabil !== 0"
+				class="btn btn-danger"
+				(click)="delete()">
+					Borrar
+				</button>
+			  </div>
+		  </div>
+		</div>
+		
+	</div>
+</div>

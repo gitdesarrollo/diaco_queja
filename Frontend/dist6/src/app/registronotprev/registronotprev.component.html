@@ -1,0 +1,580 @@
+<html>
+<head>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <span class="navbar-text whitefont">DIACO - Inscripción a notificación electrónica</span>
+  <!--span class="navbar-text whitefont">&nbsp;&nbsp;&nbsp;Proveedor: {{nombre_proveedor}}</span-->
+  <!---- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>--->
+  <div class="collapse navbar-collapse" id="navbarText">
+  <ul class="navbar-nav mr-auto">
+   <!----     <li class="nav-item active">
+        <a class="nav-link whitelink" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link whitelink" href="#">Features</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link whitelink" href="#">Pricing</a>
+      </li>--->
+    </ul>  
+  </div>
+  <!--span class="navbar-text whitefont">
+   Usuario: {{str_usuario}}  
+  </span-->
+  <!--span class="navbar-text whitefont">
+    <a class="nav-link whitelink" [routerLink]="['/Login']">Cerrar Sesion</a>
+  </span-->
+    <span class="navbar-text whitefont">
+    <!--a class="nav-link whitelink" [routerLink]="['/Login']">Cerrar Sesi&oacute;n</a-->
+	<button class="btn btn-primary row" (click)="onChangeconprov()">Cancelar</button>
+  </span>
+</nav>
+
+
+<div class="container">
+	<div class="row">
+	 <div class="col-lg-12">
+		&nbsp;
+	 </div>
+	</div>
+  <div class="row">
+    <div class="col-sm-12">
+      <form (ngSubmit)="onSubmit()" [formGroup]="registronotprev" >
+		<div class="form-group row">
+          <label for="tipoConsumidorProv" class="col-sm-2 col-form-label">(*) Tipo</label>
+          <div class="col-sm-10">
+            <select
+              id="tipoConsumidorProv"
+              class="form-control"
+              formControlName="tipoConsumidorProv"
+			  matTooltipPosition="after"
+					  matTooltip="Seleccion consumidor/proveedor"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="consumidor/proveedor"
+					  (change) = "onChangeconprov()"
+					  >
+              <option value="1">Consumidor</option>
+              <option value="2">Proveedor</option>
+            </select>
+          </div>
+        </div>
+	  
+	  
+        <div class="form-group row">
+          <label for="tipoConsumidor" class="col-sm-2 col-form-label">(*) Personeria</label>
+          <div class="col-sm-10">
+            <select
+              id="tipoConsumidor"
+              class="form-control"
+              formControlName="tipoConsumidor"
+			  matTooltipPosition="after"
+					  matTooltip="Ingrese tipo de consumidor"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Tipo consumidor"
+					  >
+              <option value="6">Individual</option>
+              <option value="7">Juridico</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row" *ngIf="registronotprev.value.tipoConsumidorProv=='1'" >
+          <div class="col-sm-4">
+            <div class="row">
+              <label for="nacionalidad" class="col-sm-6 col-form-label">(*) Nacionalidad</label>
+              <div class="col-sm-6">
+                <select
+                  id="nacionalidad"
+                  class="form-control"
+                  formControlName="nacionalidad"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese nacionalidad"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Nacionalidad"
+					  >
+                  <option value="G">Guatemalteco</option>
+                  <option value="E">Extranjero</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="row">
+              <label for="documentoIdentificacion" class="col-sm-6 col-form-label" *ngIf="registronotprev.value.nacionalidad == 'G' && registronotprev.value.tipoConsumidor == '6'">(*) DPI</label>
+			  <label for="documentoIdentificacion" class="col-sm-6 col-form-label" *ngIf="registronotprev.value.nacionalidad == 'G' && registronotprev.value.tipoConsumidor == '7'">(*) Representante Legal</label>
+              <label for="documentoIdentificacion" class="col-sm-6 col-form-label" *ngIf="registronotprev.value.nacionalidad == 'E'">(*) Pasaporte</label>
+
+              <div class="col-sm-6" *ngIf="registronotprev.value.tipoConsumidor == '6' || registronotprev.value.nacionalidad == 'E'">
+                <input
+                  id="documentoIdentificacion"
+                  type="text"
+                  class="form-control"
+                  formControlName="documentoIdentificacion"
+                  (change)="onDocumentoIdentificacionChanged('documento')"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese documento de identificacion"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Documento"
+					  >
+              </div>
+			  
+			   <div class="col-sm-6" *ngIf="registronotprev.value.nacionalidad == 'G' && registronotprev.value.tipoConsumidor == '7'">
+                <input
+                  id="representanteLegal"
+                  type="text"
+                  class="form-control"
+                  formControlName="representanteLegal"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese nombre de representante legal"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Nombre representante legal"
+					  >
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4" *ngIf="registronotprev.value.nacionalidad == 'E'">
+            <div class="row">
+              <label for="pais" class="col-sm-6 col-form-label">(*) Extendido en</label>
+              <div class="col-sm-6">
+                <select
+                  id="pais"
+                  class="form-control"
+                  formControlName="pais"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese pais donde se extendio  su documento"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Pais "
+					  >
+                  <option disabled selected>Escoger</option>
+                  <option value="{{pais.idPais}}" *ngFor="let pais of paises">{{pais.nombrePais}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="nitConsumidor" class="col-sm-2 col-form-label">(*) NIT</label>
+          <div class="col-sm-10">
+            <input
+              id="nitConsumidor"
+              type="text"
+              class="form-control"
+			  (change)="onDocumentoIdentificacionChanged('nit')"
+              formControlName="nitConsumidor"
+			  matTooltipPosition="after"
+					  matTooltip="Ingrese NIT"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="NIT"
+					  >
+          </div>
+        </div>
+		
+		
+		<div class="form-group row" *ngIf="_existe == '0'">
+          <div class="col-sm-12 text-center">
+            <button
+              class="btn btn-primary"
+              type="button"
+			  (click)="btnIdentificacionChanged()" 
+              >Buscar</button>
+          </div>
+        </div>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<div *ngIf="_existe == '1'">
+		<div  *ngIf="registronotprev.value.tipoConsumidor== '6'">
+			<div class="form-group row">
+			  <div class="col-sm-4">
+				<div class="row">
+				  <label for="nombre1" class="col-sm-6 col-form-label">(*) Primer Nombre</label>
+				  <div class="col-sm-6">
+					<input
+					  id="nombre1"
+					  type="text"
+					  class="form-control"
+					  formControlName="nombre1"
+					  matTooltipPosition="after"
+					  matTooltip="Ingrese primer nombre"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Primer nombre"
+					  >
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-sm-4">
+				<div class="row">
+				  <label for="nombre2" class="col-sm-6 col-form-label">Segundo Nombre</label>
+				  <div class="col-sm-6">
+					<input
+					  id="nombre2"
+					  type="text"
+					  class="form-control"
+					  formControlName="nombre2"
+					  matTooltipPosition="after"
+					  matTooltip="Ingrese segundo nombre"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Segundo nombre"
+					  >
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-sm-4">
+				<div class="row">
+				  <label for="nombre3" class="col-sm-6 col-form-label">Tercer Nombre</label>
+				  <div class="col-sm-6">
+					<input
+					  id="nombre3"
+					  type="text"
+					  class="form-control"
+					  formControlName="nombre3"
+					  matTooltipPosition="after"
+					  matTooltip="Ingrese tercer nombre"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Tercer nombre"
+					  >
+				  </div>
+				</div>
+			  </div>
+			</div>
+			<div class="form-group row">
+			  <div class="col-sm-4">
+				<div class="row">
+				  <label for="apellido1" class="col-sm-6 col-form-label">(*) Primer Apellido</label>
+				  <div class="col-sm-6">
+					<input
+					  id="apellido1"
+					  type="text"
+					  class="form-control"
+					  formControlName="apellido1"
+					  matTooltipPosition="after"
+					  matTooltip="Ingrese primer apellido"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Primer apellido"
+					  >
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-sm-4">
+				<div class="row">
+				  <label for="apellido2" class="col-sm-6 col-form-label">Segundo Apellido</label>
+				  <div class="col-sm-6">
+					<input
+					  id="apellido2"
+					  type="text"
+					  class="form-control"
+					  formControlName="apellido2"
+					  matTooltipPosition="after"
+					  matTooltip="Ingrese segundo apellido"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Segundo apellido"
+					  >
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-sm-4">
+				<div class="row">
+				  <label for="apellidoCasada" class="col-sm-6 col-form-label">Apellido Casada</label>
+				  <div class="col-sm-6">
+					<input
+					  id="apellidoCasada"
+					  type="text"
+					  class="form-control"
+					  formControlName="apellidoCasada"
+					  matTooltipPosition="after"
+					  matTooltip="Ingrese apellido de casada"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Apellido de casada"
+					  >
+				  </div>
+				</div>
+			  </div>
+			</div>
+		</div>	
+		
+		<div class="form-group row" *ngIf="registronotprev.value.tipoConsumidor == '7'">
+          <label for="nombreEmpresa" class="col-sm-2 col-form-label">(*) Nombre de la empresa</label>
+          <div class="col-sm-10">
+            <input
+              id="nombreEmpresa"
+              type="text"
+              class="form-control"
+              formControlName="nombreEmpresa"
+			  matTooltipPosition="after"
+					  matTooltip="Ingrese nombre de la empresa"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Nombre empresa"
+					  >
+          </div>
+        </div>
+        <div class="form-group row" *ngIf="registronotprev.value.tipoConsumidor == '7'">
+          <label for="razonSocial" class="col-sm-2 col-form-label">(*) Razón social</label>
+          <div class="col-sm-10">
+            <input
+              id="razonSocial"
+              type="text"
+              class="form-control"
+              formControlName="razonSocial"
+			  matTooltipPosition="after"
+					  matTooltip="Ingrese razon social"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Razon social"
+					  >
+          </div>
+        </div>
+		
+		<!------------------------------------------------------------------------------>
+		<div *ngIf="registronotprev.value.tipoConsumidorProv=='1'"> 
+			<div class="form-group row" *ngIf="registronotprev.value.tipoConsumidor == '6'">
+			  <div class="col-sm-4">
+					<div class="row">
+			  <label for="genero" class="col-sm-6 col-form-label">(*) Género</label>
+			  <div class="col-sm-6">
+				<select
+				  id="genero"
+				  class="form-control"
+				  formControlName="genero"
+				  matTooltipPosition="after"
+						  matTooltip="Ingrese genero"
+						  matTooltipClass="custom-tooltip-blue"
+						  placeholder="Genero"
+						  >
+				  <option disabled selected>Escoger</option>
+				  <option value="M">Masculino</option>
+				  <option value="F">Femenino</option>
+				</select>
+			  </div>
+			  </div>
+			</div>
+			
+			<div class="col-sm-4">
+					<div class="row">
+			  <label for="etnia" class="col-sm-6 col-form-label">(*) Etnia</label>
+			  <div class="col-sm-6">
+				<select
+				  id="etnia"
+				  class="form-control"
+				  formControlName="etnia"
+				  matTooltipPosition="after"
+						  matTooltip="Ingrese Etnia"
+						  matTooltipClass="custom-tooltip-blue"
+						  placeholder="Etnia"
+						  >
+				  <option disabled selected>Escoger</option>
+				  <option value="{{etnia.codigoEtnia}}" *ngFor="let etnia of etnias">{{etnia.descripcion}}</option>
+				</select>
+			  </div>
+			  </div>
+			</div>
+			
+			</div>
+		</div>
+		<!------------------------------------------------------------------------------>
+		
+
+
+        <div class="form-group row">
+          <label for="" class="col-sm-2 col-form-label">Telefono</label>
+          <div class="col-sm-10">
+            <div class="card">
+              <div class="card-body">
+                <div class="form-group row">
+                  <div class="col-sm-6">
+                    <div class="row">
+                      <label for="telefonoCelular" class="col-sm-4 col-form-label">(*) Personal (celular)</label>
+                      <div class="col-sm-8">
+                        <input
+                          id="telefonoCelular"
+                          type="text"
+                          class="form-control"
+                          formControlName="telefonoCelular"
+						  matTooltipPosition="after"
+					  matTooltip="Ingrese Telefono celular"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Telefono celular"
+					  >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6" *ngIf="registronotprev.value.tipoConsumidorProv=='2'">
+                    <div class="row">
+                      <label for="telefonoDomicilio" class="col-sm-4 col-form-label">Domicilio</label>
+                      <div class="col-sm-8">
+                        <input
+                          id="telefonoDomicilio"
+                          type="text"
+                          class="form-control"
+                          formControlName="telefonoDomicilio"
+						  matTooltipPosition="after"
+					  matTooltip="Ingrese telefono domiciliio"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Telefono domicilio"
+					  >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row" *ngIf="registronotprev.value.tipoConsumidorProv=='2'">
+                  <div class="col-sm-6">
+                    <div class="row">
+                      <label for="telefonoReferencia" class="col-sm-4 col-form-label">Referencia</label>
+                      <div class="col-sm-8">
+                        <input
+                          id="telefonoReferencia"
+                          type="text"
+                          class="form-control"
+                          formControlName="telefonoReferencia"
+						  matTooltipPosition="after"
+					  matTooltip="Ingrese telefono referencia"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Telefono referencia"
+					  >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-6">
+            <div class="row">
+              <label for="email" class="col-sm-4 col-form-label">(*) Email</label>
+              <div class="col-sm-8">
+                <input
+                  id="email"
+                  type="text"
+                  class="form-control"
+                  formControlName="email"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese correo electronico"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Correo electronico"
+					  >
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="row">
+              <label for="emailConfirmation" class="col-sm-4 col-form-label">(*) Confirmar Email</label>
+              <div class="col-sm-8">
+                <input
+                  id="emailConfirmation"
+                  type="text"
+                  class="form-control"
+                  formControlName="emailConfirmation"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese confirmacion de correo"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Confirmación de correo"
+					  >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-6">
+            <div class="row">
+              <label for="email2" class="col-sm-4 col-form-label">2ndo Email</label>
+              <div class="col-sm-8">
+                <input
+                  id="email2"
+                  type="text"
+                  class="form-control"
+                  formControlName="email2"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese correo electronico"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Correo electronico"
+					  >
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="row">
+              <label for="email2Confirmation" class="col-sm-4 col-form-label">Confirmar 2ndo Email</label>
+              <div class="col-sm-8">
+                <input
+                  id="email2Confirmation"
+                  type="text"
+                  class="form-control"
+                  formControlName="email2Confirmation"
+				  matTooltipPosition="after"
+					  matTooltip="Ingrese correo electronico"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Correo electronico"
+					  >
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+		<div class="form-group row">
+          <label for="" class="col-sm-2 col-form-label">Adjuntos Obligatorios</label>
+          <div class="col-sm-10">
+            <div class="card">
+              <div class="card-body">
+                <div class="form-group row">
+                  <label for="filFormulario" class="col-sm-4 col-form-label">(*) Declaración jurada</label>
+                  <div class="col-sm-5">
+                    <input
+                      #filFormulario
+                      id="filFormulario"
+                      type="file"
+                      ng2FileSelect
+                      [uploader]="uploader"
+                      class="form-control"
+                      (change)="onFileChanged('DECLA')"
+					  matTooltipPosition="after"
+					  matTooltip="Ingrese su formulario de registro"
+					  matTooltipClass="custom-tooltip-blue"
+					  placeholder="Formulario de registro"
+					  
+				>
+                  </div>
+                </div>
+               </div>
+            </div>
+          </div>
+        </div>
+
+<!--div nbRecaptcha key="public key" formControlName="captcha"></div-->
+
+        <div class="form-group row">
+          <div class="col-sm-12 text-center">
+            <button
+              class="btn btn-primary"
+              type="submit"
+			  
+              >Guardar</button>
+          </div>
+        </div>
+		</div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+ 
+	<!--div *ngIf="flagInfoError" class="alert alert-alert col-lg-12" [@EnterLeave]="'flyIn'">
+		Hubo un error al procesar esta acción, por favor intente de nuevo.
+	</div-->
+
+	
+</body>
+</html>

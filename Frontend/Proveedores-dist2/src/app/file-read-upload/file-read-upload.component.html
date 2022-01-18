@@ -1,0 +1,143 @@
+	<ng-container *ngIf="flagObligatorios">
+		<div class="row"> 
+			<div class="col-lg-12">
+				<label><b>Archivos Obligatorios:</b></label>
+			</div>
+		</div>	
+		<!---<div class="row"> 
+			<div class="col-lg-4">
+				<label>DPI o Pasaporte:</label>
+			</div>
+			<ng-container *ngIf="upload_button === true">
+				<ng-container *ngIf="ImageList['dpi'] == 0">
+					<div class="col-lg-6">
+						<ng-container *ngIf="UploadFinished_dpi; else LoadProgress_dpi">
+							<input #filedpi type="file" name="file_dpi" accept=".pdf, .jpg, .png, .gif, .jpeg">
+						</ng-container>
+						<ng-template #LoadProgress_dpi>
+							<mat-progress-bar
+							  class="example-margin"
+							  [value]="progressperc_dpi"
+							  [color]="progressaccent_dpi">
+							</mat-progress-bar>
+						</ng-template>
+					</div>
+					<div class="col-lg-2">
+						<button type="button" class="btn btn-primary" (click)="UploadFile_dpi();">Adjuntar</button>
+					</div>
+					<div class="col-lg-4">
+						&nbsp;
+					</div>
+				</ng-container>	
+			</ng-container>
+			<div class="col-lg-6">
+				<ng-container *ngIf="ImageList['dpi'] != 0">
+					<a #replinkdpi (click)="ImageLink(ImageList['dpi'],ImageList['dpi_tipo']);" [routerLink]=""> Descargar DPI o Pasaporte</a>
+				</ng-container>
+			</div>
+		</div>--->
+		<div class="row"> 
+			<div class="col-lg-4">
+				<label>Factura o Contrato:</label>
+			</div>
+			<ng-container *ngIf="upload_button === true">
+				<ng-container *ngIf="ImageList['factura'] == 0">
+					<div class="col-lg-6">
+						<ng-container *ngIf="UploadFinished_fac; else LoadProgress_fac">
+							<input #filefactura type="file" name="file_factura" accept=".pdf, .jpg, .png, .gif, .jpeg">
+						</ng-container>
+						<ng-template #LoadProgress_fac>
+							<mat-progress-bar
+							  class="example-margin"
+							  [value]="progressperc_fac"
+							  [color]="progressaccent_fac">
+							</mat-progress-bar>
+						</ng-template>
+					</div>
+					<div class="col-lg-2">
+						<button type="button" class="btn btn-primary" (click)="UploadFile_fac();">Adjuntar</button>
+					</div>
+					<div class="col-lg-4">
+						&nbsp;
+					</div>
+				</ng-container>	
+			</ng-container>
+			<div class="col-lg-6">
+				<ng-container *ngIf="ImageList['factura'] != 0">
+					<a #replinkfac (click)="ImageLink(ImageList['factura'],ImageList['factura_tipo']);" [routerLink]=""> Descargar Factura o Contrato</a>
+				</ng-container>
+			</div>
+		</div>
+	</ng-container>	
+	<ng-container *ngIf="upload_button === true">
+		<div class="row"> 
+			<div class="col-lg-3">
+				<label><b>Adjuntar Otros Documentos:</b></label>
+			</div>
+			<div class="col-lg-6">
+			<ng-container *ngIf="UploadFinished; else LoadProgress">
+				<input #attachmentCtrl type="file" name="attachmentCtrl" accept=".pdf, .jpg, .png, .gif, .jpeg">
+			</ng-container>
+			<ng-template #LoadProgress>
+				<mat-progress-bar
+				  class="example-margin"
+				  [value]="progressperc"
+				  [color]="progressaccent">
+				</mat-progress-bar>
+			</ng-template>
+			</div>
+			<div class="col-lg-3">
+				<button type="button" class="btn btn-primary" (click)="UploadFile();">Adjuntar</button>
+			</div>
+		</div>
+	</ng-container>
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>	
+	<div *ngIf="flagInsertInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+		Se agregó el archivo exitosamente.
+	</div>
+	<div *ngIf="flagDeleteInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+		Se eliminó el archivo exitosamente.
+	</div>
+	<div *ngIf="flagDBError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+		Hubo un error al procesar esta acción, por favor intente de nuevo.
+	</div>
+	
+	
+	
+	<div class="row"> 
+		<div class="col-lg-10">
+			<div class="bs-component">
+			  <table class="table table-condensed table-striped">
+			  <thead><tr><th width="90%">Documentos Adjuntos:</th><th width="10%">Acción:</th></tr></thead>
+			  <tbody>
+			  <ng-container *ngIf="ListImages?.length > 0; else EmptyList">
+				  <ng-container *ngFor="let thisItem of ListImages">
+					  <tr><td><a (click)="ReadFile(thisItem.id_imagen_queja, thisItem.id_tipo_imagen)" [routerLink]="" class="formlink">{{thisItem.descripcion_imagen_otros}}</a></td>
+							<ng-container *ngIf="thisItem.id_categoria_imagen===1 && delete_button === true; else noButton ">
+								<td><button class="btn btn-primary btn-image delete" (click)="DeleteFile(thisItem.id_imagen_queja);"></button></td>
+							</ng-container>
+							<ng-template #noButton>
+								<td>&nbsp;</td>
+							</ng-template  >
+					  </tr>
+				  </ng-container>
+			  </ng-container>
+			  <ng-template #EmptyList>
+				<tr><td colspan="2">No se ha agregado ningun archivo</td></tr>
+			  </ng-template>
+			  </tbody>
+			  </table>
+			</div>
+		</div>
+		<ng-container *ngIf="flagObligatorios">
+			<ng-container *ngIf="ImageList['dpi'] != 0 || ImageList['factura'] != 0 || ListImages?.length > 0">
+				<div class="col-lg-2">
+					<button id="data_uri" type="button" (click)="DownloadZip()" class="btn btn-primary btn-image2 zip"></button>
+				</div>
+			</ng-container>	
+		</ng-container>	
+	</div>

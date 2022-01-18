@@ -1,0 +1,100 @@
+<div *ngIf="flaglimitError" class="alert alert-warning col-lg-12">
+	Su b&uacute;squeda ha regresado mas resultados del l&iacute;mite permitido, para ver m&aacute;s quejas revise los par&aacute;metros de b&uacute;squeda
+</div>
+<div *ngIf="flagDBError" class="alert alert-danger col-lg-12">
+	Hubo un error al comunicarse con la Base de Datos, Intente de nuevo en algunos minutos.
+</div>
+<div *ngIf="flagdesdegthasta" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+	La "fecha desde" no puede ser mayor a la "fecha hasta".
+</div>
+<div *ngIf="flagmissingdatep" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+	Omitiendo filtro por fecha, debe ingresar ambos valores "fecha desde" y "fecha hasta" para filtrar por fecha.
+</div>
+
+<!-- <div class="container-fluid">
+<div class="row">
+  <div class="col-lg-3">
+		<input type="text" (keyup)='filterDatatable($event)'>
+  </div>
+</div>
+</div> -->
+
+
+<div class="container-fluid my-3">
+	<div class="row">
+		<div class="input-group mb-3 col-lg-2">
+			<div class="input-group-prepend">
+			<span class="input-group-text" id="basic-addon1"><i class="fa fa-search" aria-hidden="true"></i>
+			</span>
+			</div>
+			<!-- <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"> -->
+			<input type="text" class="form-control" (keyup)='filterDatatable($event)'  placeholder="Buscar">
+		  </div>
+	</div>
+</div>
+
+<div class="container-fluid">
+<div class="row">
+  <div class="col-lg-12">
+      <ngx-datatable #table class="material striped"
+        [rows]="rows"
+        [columns]="columns"
+		[limit]="10"
+		[footerHeight]="40"
+		[rowHeight]="'auto'"
+		[columnMode]="'flex'"
+		[selected]="selected"
+          [selectionType]="'single'"
+		  [selectCheck]="singleSelectCheck"
+          (select)='onSelect($event)'>
+			<ngx-datatable-column name="Id Queja" prop="quejanumero" [flexGrow]="2"></ngx-datatable-column>
+			<!-- <ngx-datatable-column name="Fuente" prop="fuente" [flexGrow]="2"></ngx-datatable-column> -->
+			<ngx-datatable-column name="Medio de Ingreso" prop="fuente" [flexGrow]="2" >
+				<ng-template ngx-datatable-cell-template let-value="value" let-row="row"  >
+					<ng-container *ngIf="row.fuente === 'webMobil'">
+						APP
+					</ng-container>
+					<ng-container *ngIf="row.fuente === 'Web user'">
+						Página Web
+					</ng-container>
+					<ng-container *ngIf="row.fuente === 'presentially'">
+						Presencial
+					</ng-container>
+					<ng-container *ngIf="row.fuente === 'Call Center'">
+						Call Center
+					</ng-container>
+				</ng-template>
+			</ngx-datatable-column>
+			<ngx-datatable-column name="Fecha Queja" prop="fecha_queja" [flexGrow]="2">
+				<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+				  {{value | date:'d/M/yy, h:mm a'}}
+				</ng-template>
+			</ngx-datatable-column>
+			<ngx-datatable-column name="Nombre Consumidor" prop="nombre_consumidor" [flexGrow]="3"></ngx-datatable-column>
+			<ngx-datatable-column name="Nombre Proveedor" prop="nombre_proveedor" [flexGrow]="3"></ngx-datatable-column>
+			<ngx-datatable-column name="Usuario Asignado" prop="asignado_nombre" [flexGrow]="2"></ngx-datatable-column>
+        <ngx-datatable-column name="Datos Completos" prop="completo_dato" [flexGrow]="2">
+          <ng-template ngx-datatable-cell-template let-value="value" let-row="row"  >
+            <ng-container *ngIf="row.completo_datos === 'Datos Completos'">
+              Datos Completos
+            </ng-container><ng-container *ngIf="row.completo_datos === 'Faltan Datos'">
+            Faltan Datos
+          </ng-container>
+          </ng-template>
+        </ngx-datatable-column>
+			<ngx-datatable-column name="actions" sortable="false" prop="id_queja" [flexGrow]="4">
+				 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+						<button title="Listado de Archivos" class="btn btn-primary btn-image Verify" (click)="clickStopper($event);openListadoArchivos(value, row.quejanumero, 6);"></button>&nbsp;
+						<button title="Movimiento de Expendiente" class="btn btn-primary btn-image Move" (click)="clickStopper($event);openMovimientoExpediente(value, row.quejanumero);"></button>&nbsp;
+						<button title="Archivar Queja" class="btn btn-primary btn-image File" (click)="clickStopper($event);openArchivarQueja(value, row.quejanumero);"></button>&nbsp;
+						<button title="Bit&aacute;cora" class="btn btn-primary btn-image Log" (click)="clickStopper($event);openBitacora(value, row.quejanumero, 6);"></button>
+				</ng-template>
+			</ngx-datatable-column>
+
+      </ngx-datatable>
+  </div>
+</div>
+</div>
+
+
+<!---<a routerLink="/DepartamentoTest/12233" target="_blank"><button class="btn btn-success pull-right" > Add Customer</button></a>--->

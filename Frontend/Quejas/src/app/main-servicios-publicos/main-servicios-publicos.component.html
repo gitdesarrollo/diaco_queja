@@ -1,0 +1,166 @@
+<html>
+<head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <span class="navbar-text whitefont"> DIACO - Flujo:
+	<span class="badge badge-secondary"> Servicios P&uacute;blicos</span> 
+</span>
+  <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+	<i class="fa fa-bars whitefont" aria-hidden="true"></i>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+  <ul class="navbar-nav mr-auto">
+		<li class="nav-item dropdown" >
+			<a class="nav-link dropdown-toggle whitefont" data-toggle="dropdown"><u>Opciones</u></a>
+			<div class="dropdown-menu">
+			  <ng-container *ngIf="flagAccesoAtCon">	
+				<a class="dropdown-item whitefont" (click)="GotoAtencionConsumidor()">Flujo: Atención al Consumidor</a>
+			  </ng-container>
+			  <ng-container *ngIf="flagAccesoVyv">
+				<a class="dropdown-item whitefont" (click)="GoToVerificacion()">Flujo: Verificación y Vigilancia</a>
+			  </ng-container>
+			  <ng-container *ngIf="flagAccesoJuridico">
+				<a class="dropdown-item whitefont" (click)="GoToJuridico()">Flujo: Legal</a>
+			  </ng-container>
+			  <ng-container *ngIf="flagisAdmin">
+				<a class="dropdown-item whitefont" (click)="openResumenQuejas()">Resumen Quejas</a>
+			  </ng-container>
+			  <a class="dropdown-item whitefont" (click)="openGuiaRegistro()">Guía de Registros</a>
+			  <a class="dropdown-item whitefont" (click)="openBusqueda()" >Búsqueda</a>
+			  <a class="dropdown-item whitefont" (click)="openCambiarPW()" >Cambiar mi clave</a>
+			</div>
+		 </li>
+		 <ng-container *ngIf="flagAccesoConf">
+			<li class="nav-item dropdown" >		
+				<a class="nav-link dropdown-toggle whitefont" data-toggle="dropdown"><u>Configuración</u></a>
+				<div class="dropdown-menu">
+					<ng-container *ngIf="flagParamGen">
+						<a class="dropdown-item whitefont" (click)="openConfParamGen()">Parámetros Generales</a>
+					</ng-container>	
+					<ng-container *ngIf="flagAdmUsuario">	
+						<a class="dropdown-item whitefont" (click)="openConfUsuario(0)">Administración Usuarios Internos</a>
+						<a class="dropdown-item whitefont" (click)="openConfUsuarioPP(0)">Administración Usuarios Portal Prov.</a>
+					</ng-container>
+					<ng-container *ngIf="flagConfSist">		
+						<a class="dropdown-item whitefont" (click)="openConfiguracion()">Configuración de Sistema</a>
+					</ng-container>
+					<ng-container *ngIf="flagAdmColas">	
+						<a class="dropdown-item whitefont" (click)="openAsignaCola()">Administración Colas</a>
+					</ng-container>
+					<ng-container *ngIf="flagAprobPP">		
+						<a class="dropdown-item whitefont" (click)="openAprobacionConcVirt()">Aprobación Portal Prov.</a>
+					</ng-container>
+				</div>
+			</li>
+		</ng-container>
+		<ng-container *ngIf="flagCatalogos">	
+			<li class="nav-item dropdown" >		
+				<a class="nav-link dropdown-toggle whitefont" data-toggle="dropdown"><u>Catalogos</u></a>
+				<div class="dropdown-menu">
+					<a class="dropdown-item whitefont" (click)="openCatalogos()">Departamentos</a>
+					<a class="dropdown-item whitefont" (click)="openCatPaises()">Paises</a>
+					<a class="dropdown-item whitefont" (click)="openDepartamentoInterno()">Departamentos Internos</a>
+					<a class="dropdown-item whitefont" (click)="openMotivoQueja()">Motivo Queja</a>
+					<a class="dropdown-item whitefont" (click)="openCatMunicipio()">Municipios</a>
+					<a class="dropdown-item whitefont" (click)="openCatSedes()">Sedes</a>
+					<a class="dropdown-item whitefont" (click)="openCatDiaInhabil()">Dias Inhabiles</a>
+					<a class="dropdown-item whitefont" (click)="openCatProveedor()">Proveedor</a>
+				</div>
+			</li>
+		</ng-container>
+		<ng-container>	
+			<li class="nav-item dropdown" >		
+				<a class="nav-link dropdown-toggle whitefont" data-toggle="dropdown"><u>Tablero</u></a>
+				<div class="dropdown-menu">
+					<a
+					href="http://bi.mineco.gob.gt/views/Diaco2021-diacoDB/Men?iframeSizedToWindow=true&:embed=y&:showAppBanner=false&:display_count=no&:showVizHome=no"
+					class="dropdown-item whitefont" target="_blank">Tablero</a>
+				</div>
+			</li>
+		</ng-container>
+    </ul>  
+  </div>
+  <span class="navbar-text whitefont">
+    Usuario: {{str_usuario}}
+  </span>
+  <span class="navbar-text whitefont">
+    <a class="nav-link whitelink" (click)="CerrarSesion()" [routerLink]="">Cerrar Sesi&oacute;n</a>
+  </span>
+</nav>
+
+<ng-container *ngIf="flagAccesoPagLocal">
+	<form (ngSubmit)="onSubmit()" [formGroup]="frmMain" >
+	<div class="container" >
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+		  <label><b>Filtro:</b></label>
+		 </div>
+		 <div class="col-lg-10">
+			<select class="form-control" formControlName="selectedFiltro" >
+				<option *ngFor="let x of list_filtro" [value]="x.id">{{x.nombre}}</option>
+			</select>
+		 </div>
+		</div>
+		<div class="row">
+			 <div class="col-lg-1">
+			  <label><b>Fecha:</b></label>
+			 </div>
+			 <div class="col-lg-3">
+					<input type="date" class="form-control" id="FechaDesde" name="FechaDesde" formControlName="SelectedFDesde" placeholder="dd/mm/yyyy" >
+			 </div>
+			 <div class="col-lg-0">
+					&nbsp;<b>-</b>&nbsp;
+			 </div>		
+			 <div class="col-lg-3">
+					<input type="date" class="form-control" id="FechaHasta" name="FechaHasta" formControlName="SelectedFHasta" placeholder="dd/mm/yyyy" >		
+			 </div>	
+		</div>		 
+		<div class="row">
+			<div class="col-lg-1">
+			  <label><b>Queja:</b></label>
+			 </div>
+			 <div class="col-lg-3">
+					<input class="form-control" formControlName="selectedNoqueja" ng-maxlength='100' class="form-control" pattern="[A-Za-z áéíóúÁÉÍÓÚÑñ1234567890-]*" >
+			 </div>
+			<div class="col-lg-3">
+				&nbsp;&nbsp;&nbsp;<button (click)="RefreshTable()" type="button" class="btn btn-primary">Actualizar B&uacute;squeda</button>
+			 </div>
+		</div>
+		<div class="row">
+				<div class="col-lg-12">		
+					<div *ngIf="selectedNoquejaCtrl.invalid && (selectedNoquejaCtrl.dirty && selectedNoquejaCtrl.touched)" class="col-lg-12">
+						  <div *ngIf="selectedNoquejaCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+							Ingreso un caracter inválido, solo puede ingresar letras, números y guión -
+						  </div>
+					</div>
+				</div>
+			</div>
+		<div class="row">	
+			<div class="col-lg-12 mt-3">	
+				<div *ngIf="flagAccionPendiente" class="alert alert-danger col-lg-12">
+					<span class="badge badge-danger mx-3">Importante </span>
+					<strong>Tiene Acciones Pendientes de Confirmar,</strong>
+					<a (click)="openConfirmarAccion()" [routerLink]="" class="formlink mx-2">Por
+						favor siga este Link</a>
+				</div>
+			</div>
+		</div>	
+	</div>
+	</form>
+		<app-tabla-main-serv-pub [inputfrmmain]="frmMain" ></app-tabla-main-serv-pub>
+</ng-container>
+<ng-container *ngIf="!flagAccesoPagLocal">
+	<b>Usted no tiene acceso al Flujo de Servicios P&uacute;blicos</b>
+</ng-container>
+</body>
+</html>
+
+

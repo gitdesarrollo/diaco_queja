@@ -1,0 +1,300 @@
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { LSTCMB_AREAS, LSTCMB_SEDES, BaseCmbClass, FrmDetalle_Queja, CmbDptoInterno, FrmSede, LstQuejaSimple, FrmMovimExp, FormResponse } from '../atencion-consumidor-const';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { CatalogoService } from '../shared/catalogo.service'
+import { SedeService } from '../shared/sede.service'
+import { QuejaService } from '../shared/queja.service'
+import { RegistrosService } from '../shared/registros.service'
+import { MovimExpService } from '../movimiento-expediente/movim-exp.service'
+import { CompermanenteService } from '../comunicacion-permanente/compermanente.service';
+import { MainTableService } from '../tabla-main-at-con/main-table.service'
+import { timer } from 'rxjs';
+import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Inject } from '@angular/core';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+
+@Component({
+  selector: 'app-movimiento-confirmar',
+  templateUrl: './movimiento-confirmar.component.html',
+  styleUrls: ['./movimiento-confirmar.component.css'],
+  animations: [
+		trigger('EnterLeave', [
+	  state('flyIn', style({ transform: 'translateX(0)' })),
+	  transition(':enter', [
+		style({ transform: 'translateX(-100%)' }),
+		animate('100ms 150ms ease-in')
+	  ]),
+	  transition(':leave', [
+		animate('300ms ease-out', style({ transform: 'translateX(-100%)' }))
+	  ])
+	])]
+})
+export class MovimientoConfirmarComponent implements OnInit {
+	lst_mhacia: BaseCmbClass[];
+	lst_queja:FrmDetalle_Queja[];
+	lst_sede:FrmSede[];
+	lst_mov:FrmMovimExp[];
+	//lst_quejasimple:LstQuejaSimple[];
+	cmb_hacia:CmbDptoInterno[];
+	flagInfoError:boolean;
+	flagsaved:boolean;
+	btnvisible:boolean;
+	flagUpdate:boolean;
+	flagNinguno:boolean;
+	flagMainUpdate:boolean;
+	htmlQuejaNo;flagemtpyList;
+	htmlLugarActual;htmlidflujo;
+	myForm: FormGroup;
+	MoverHaciaCtrl: FormControl;
+	lst_quejasimple=[];
+	flagformvisible;
+	flagEditable:boolean;
+	loaderror:boolean;
+  
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private _sedeservice:SedeService, private _catalogoservice:CatalogoService, public dialogRef: MatDialogRef<MovimientoConfirmarComponent>, private _quejaService: QuejaService, private _registrosservice:RegistrosService, private _mainTableService:MainTableService, private _movimExpService:MovimExpService, private _compermservice:CompermanenteService) { 
+		this.htmlQuejaNo='';
+		this.htmlLugarActual='';
+		this.htmlidflujo=0;
+		this.flagemtpyList=false;
+		this.flagInfoError=false;
+		this.flagsaved=false;
+		this.btnvisible=true;
+		this.flagEditable=false;
+		this.loaderror=false;
+		this.flagUpdate=false;
+		this.flagNinguno=false;
+		this.flagMainUpdate=false;
+		this.flagformvisible=0;
+  }
+
+  ngOnInit() {
+		this.MoverHaciaCtrl =  new FormControl('',Validators.required);
+		  
+		this.myForm = new FormGroup({
+			moverhacia: this.MoverHaciaCtrl,
+			lst_quejasimple: new FormArray([])
+		});
+		this.LoadCmbHacia();
+		this.GetQuejaListSimpleJuridico();
+		this.SetSecTimerForm();
+  }
+
+  private addCheckboxes() {
+		console.log(this.myForm.controls.lst_quejasimple);
+		this.myForm.get('lst_quejasimple')['controls']=[];
+		this.lst_quejasimple.map((o, i) => {
+			const control = new FormControl(i === 0); // if first item set to true, else false
+			(this.myForm.controls.lst_quejasimple as FormArray).push(control);
+		});
+  }
+
+  LoadCmbHacia(){
+		let tempstr='';
+		this._catalogoservice.getDptoInternoMovHacia().subscribe((Data)=>{
+			if(Data['reason'] == 'OK'){
+				tempstr=Data['value'];
+				if(tempstr != null)	{
+					this.cmb_hacia=JSON.parse('['+tempstr.slice(0, -1) +']');
+					this.MoverHaciaCtrl.setValue(this.cmb_hacia[0].id_departamento_interno);
+					this.flagformvisible++;
+				}else{
+					this.cmb_hacia=[];
+				}
+				console.log(this.cmb_hacia);
+				this.flagInfoError=false;
+			}else{
+				console.log('Rest service response ERROR.');
+				this.flagInfoError=true;
+				this.SetSecTimerInfoError();
+			}
+		},(error)=>{
+			console.log(error);
+			this.flagInfoError=true;
+			this.SetSecTimerInfoError();
+		});
+  }
+
+	GetQuejaListSimpleJuridico(){
+		let tempstr='';
+		this._mainTableService.getSimpleQuejaJuridico().subscribe((Data)=>{
+			if(Data['reason'] == 'OK'){
+				tempstr=Data['value'];
+				this.lst_quejasimple=JSON.parse('['+tempstr.slice(0, -1) +']');
+				if(tempstr != null && tempstr!='')	{
+					this.flagemtpyList=false;
+				}else{
+					this.flagemtpyList=true;
+				}
+				this.addCheckboxes();
+				this.flagformvisible++;
+				console.log(this.lst_quejasimple);
+				this.flagInfoError=false;
+			}else{
+				console.log('Rest service response ERROR.');
+				this.flagInfoError=true;
+				this.SetSecTimerInfoError();
+			}
+		},(error)=>{
+			console.log(error);
+			this.flagInfoError=true;
+			this.SetSecTimerInfoError();
+		});
+  }
+
+	GetQuejaListSimpleVyV(){
+		let tempstr='';
+		this._mainTableService.getSimpleQuejaVyV().subscribe((Data)=>{
+			if(Data['reason'] == 'OK'){
+				tempstr=Data['value'];
+				this.lst_quejasimple=JSON.parse('['+tempstr.slice(0, -1) +']');
+				if(tempstr != null && tempstr!='')	{
+					this.flagemtpyList=false;
+				}else{
+					this.flagemtpyList=true;
+				}
+				this.addCheckboxes();
+				console.log(this.lst_quejasimple);
+				this.flagInfoError=false;
+			}else{
+				console.log('Rest service response ERROR.');
+				this.flagInfoError=true;
+				this.SetSecTimerInfoError();
+			}
+		},(error)=>{
+			console.log(error);
+			this.flagInfoError=true;
+			this.SetSecTimerInfoError();
+		});
+  }
+
+	GetQuejaListSimpleArchivo(){
+		let tempstr='';
+		this._mainTableService.getSimpleQuejaArchivo().subscribe((Data)=>{
+			if(Data['reason'] == 'OK'){
+				tempstr=Data['value'];
+				console.log(tempstr);
+				this.lst_quejasimple=JSON.parse('['+tempstr.slice(0, -1) +']');
+				if(tempstr != null && tempstr!='')	{
+					this.flagemtpyList=false;
+				}else{
+					this.flagemtpyList=true;
+				}
+				this.addCheckboxes();
+				console.log(this.lst_quejasimple);
+				this.flagInfoError=false;
+			}else{
+				console.log('Rest service response ERROR.');
+				this.flagInfoError=true;
+				this.SetSecTimerInfoError();
+			}
+		},(error)=>{
+			console.log(error);
+			this.flagInfoError=true;
+			this.SetSecTimerInfoError();
+		});
+  }
+
+  MoverHaciaUpdate(){
+		if(this.MoverHaciaCtrl.value == 4)
+			this.GetQuejaListSimpleArchivo();
+		else if(this.MoverHaciaCtrl.value == 3)
+			this.GetQuejaListSimpleVyV();
+		else if(this.MoverHaciaCtrl.value == 2)
+			this.GetQuejaListSimpleJuridico();
+		console.log(this.flagemtpyList);
+  }
+
+	SetSecTimerInfoError(){
+		const source = timer(5000);
+		const subscribe = source.subscribe(val => this.flagInfoError=false);
+	}
+	SetSecTimerForm(){
+		const source = timer(15000);
+		const subscribe = source.subscribe(val => this.TimerForm() );
+	}
+	TimerForm(){
+		if(this.flagformvisible<2){
+			this.loaderror=true;	
+			this.flagformvisible=-1;
+		}
+	}
+	
+	closeDialog(){
+		this.ngOnDestroy();
+	}
+
+	ngOnDestroy() {
+		let localresp: FormResponse= new FormResponse();
+		localresp.NoQueja = this.data.NoQueja;
+		localresp.quejanumero = this.data.quejanumero;
+		localresp.changes = this.flagMainUpdate;
+		this.dialogRef.close(localresp);
+	}
+
+	GuardarMovimiento(){
+		let loc_str=this.GenerarListQueja();
+		console.log(loc_str.length);
+		if(loc_str.length >0){
+			this._movimExpService.addData(loc_str, this.MoverHaciaCtrl.value ).subscribe((retvalue)=>{
+				console.log(retvalue);
+				if(retvalue["reason"] == 'OK'){
+					this.flagInfoError=false;
+					this.flagsaved=true;
+					this.btnvisible=false;
+					this.BtnVisibleAfter5sec();
+					this.flagUpdate=true;
+					this.LabelUpdateView();
+					this.MoverHaciaUpdate();
+					this.flagMainUpdate=true;
+				}else{
+					console.log('Rest service response ERROR.');
+					this.flagInfoError=true;
+					this.SetSecTimerInfoError();
+				}				
+			},(error)=>{
+				console.log(error);
+				this.flagInfoError=true;
+				this.SetSecTimerInfoError();
+			});  
+		}else{
+			console.log('no hay elementos seleccionados');
+			this.flagNinguno=true;
+			this.NingunElementoTimer();
+		}
+	}
+	
+	GenerarListQueja(){
+		let str_queja_list='';
+		let i=0;
+		for (let thisitem of this.myForm.get('lst_quejasimple')['controls']){
+			//console.log(thisitem.value);
+			if(thisitem.value){
+				if(str_queja_list.length==0)
+					str_queja_list=''+this.lst_quejasimple[i].id_queja;
+				else
+					str_queja_list=str_queja_list+', '+this.lst_quejasimple[i].id_queja;
+			}
+			i++;
+		}
+		console.log(str_queja_list.length);
+		console.log(this.myForm.get('lst_quejasimple')['controls']);
+		return str_queja_list;
+	}
+		
+	BtnVisibleAfter5sec(){
+		const source = timer(5000);
+		const subscribe = source.subscribe(val => this.btnvisible=true);
+	}
+	LabelUpdateView(){
+		const source = timer(5000);
+		const subscribe = source.subscribe(val => this.flagUpdate=false);
+	}
+	NingunElementoTimer(){
+		const source = timer(5000);
+		const subscribe = source.subscribe(val => this.flagNinguno=false);
+	}
+	CheckVar(){
+		console.log(this.myForm.get('lst_quejasimple')['controls']);
+		console.log(this.lst_quejasimple);	
+	}
+}

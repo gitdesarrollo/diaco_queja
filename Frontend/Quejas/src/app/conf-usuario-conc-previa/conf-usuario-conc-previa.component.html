@@ -1,0 +1,164 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Configuraci&oacute;n de Usuario Portal de Proveedores
+			</td>
+			<td width="10%" align="right" class="modaltitltd">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 1; else NoForm">
+	<div class="container" >
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+			<div class="col-lg-10">
+				<b>B&uacute;squeda:</b>
+			</div>
+		</div>
+		<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+		<div class="row" >
+			<div class="col-lg-2">
+				Proveedor:
+			</div>
+			<div class="col-lg-6">
+				<select class="form-control" formControlName="proveedor">
+					<option value='0' selected>Todos</option>
+					<option *ngFor="let x of cmb_prov" [value]="x.id_proveedor">{{x.nombre}}</option>
+				</select>
+			</div>
+		</div>
+		<div class="row" >
+			<div class="col-lg-2">
+				Usuario:
+			</div>
+			<div class="col-lg-3">
+				<input type="text" class="form-control" formControlName="usuario" (change)="txtTrim(1)" ng-maxlength="50" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),]*">
+			</div>
+			<div *ngIf="usuarioCtrl.invalid && (usuarioCtrl.dirty && usuarioCtrl.touched)" class="col-lg-12">
+				  <div *ngIf="usuarioCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+					Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) ,
+				  </div>
+			</div>
+			<div class="col-lg-2">
+				Nombre:
+			</div>
+			<div class="col-lg-5">
+				<input type="text" class="form-control" formControlName="nombre" (change)="txtTrim(2)" ng-maxlength="100" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),]*">
+			</div>
+			<div *ngIf="nombreCtrl.invalid && (nombreCtrl.dirty && nombreCtrl.touched)" class="col-lg-12">
+				  <div *ngIf="nombreCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+					Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) ,
+				  </div>
+			</div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+			<div class="col-lg-8">
+				<button class="btn btn-primary" type="button" (click)="GetList()" [disabled]="!myForm.valid">Buscar Usuarios</button> 
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-primary" type="button" (click)="closeDialog()">Cerrar Ventana</button>
+			</div>
+			<div class="col-lg-4">
+				<button class="btn btn-primary" type="button" (click)="OpenDetalle(0)">Nuevo Usuario</button> 
+			</div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		</form>
+	</div>
+	<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+		Hubo un error al procesar esta acción, por favor intente de nuevo.
+	</div>
+	<ng-container *ngIf="ListUsuariosCount >= 0">
+	<div class="container-fluid" style="overflow: auto; max-height: 433px;">
+	<div class="row" >
+	  <div class="col-lg-12">
+
+		<div class="bs-component">
+		  <table class="table table-striped" >
+			<thead>
+			  <tr>
+				<th scope="col" width="25%">Usuario</th>
+				<th scope="col" width="50%">Nombre</th>
+				<th scope="col" width="25%">Estado</th>
+			  </tr>
+			</thead>
+			<tbody>
+			
+				<ng-container *ngFor="let thisItem of list_conf">
+				   <tr>					
+						<td><a (click)="OpenDetalle(thisItem['id_usuario'])" class="formlink" [routerLink]="">{{thisItem['login']}}</a></td>
+						<td>{{thisItem['nombre']}}</td>
+						<td>
+							<ng-container *ngIf="thisItem['habilitado'] == 1">
+								Activo
+							</ng-container>
+							<ng-container *ngIf="thisItem['habilitado'] != 1">
+								Inactivo
+							</ng-container>
+						</td>
+					 </tr>
+				</ng-container>
+			 
+			 <ng-container *ngIf="ListUsuariosCount == 0">
+				<tr><td colspan="5">No se encontraron datos para esta búsqueda </td></tr>
+			 </ng-container>
+			</tbody>
+		  </table> 
+		</div><!-- /example -->
+	  </div>
+	</div>
+	</div>
+	</ng-container>
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>	
+	<div class="row">
+	 <div class="col-lg-10">
+		Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+	 </div>
+	</div>
+	</div>	
+</ng-container>		
+</body>
+</html>

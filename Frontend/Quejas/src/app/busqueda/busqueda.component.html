@@ -1,0 +1,301 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Búsqueda
+			</td>
+			<td width="10%" align="right" class="modaltitltdb">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 0; else NoForm">
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row" >
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<form (ngSubmit)="onSubmit()" [formGroup]="frmConsumidor" >
+		<div class="container" style="border-style:groove">
+			<div class="row">
+				<div class="col-lg-12">
+					<b>Datos Consumidor:</b>
+				</div>
+			</div>
+			<ng-container *ngIf="ConsumidorResult <= 0">
+				<div class="row">
+					<div class="col-lg-1">
+						Nombre:
+					</div>
+					<div class="col-lg-5">
+						<input class="form-control" formControlName="con_nombre" ng-maxlength='100' class="form-control" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),'\n]*" >
+					</div>
+					<div *ngIf="con_nombreCtrl.invalid && (con_nombreCtrl.dirty && con_nombreCtrl.touched)" class="col-lg-12">
+						  <div *ngIf="con_nombreCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+							Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) , '
+						  </div>
+					</div>
+					<div class="col-lg-1">
+						Apellido:
+					</div>
+					<div class="col-lg-5">
+						<input class="form-control" formControlName="con_apellido" ng-maxlength='100' class="form-control" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),'\n]*" >
+					</div>
+					<div *ngIf="con_apellidoCtrl.invalid && (con_apellidoCtrl.dirty && con_apellidoCtrl.touched)" class="col-lg-12">
+						  <div *ngIf="con_apellidoCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+							Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) , '
+						  </div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-1">
+						DPI:
+					</div>
+					<div class="col-lg-5">
+						<input class="form-control" formControlName="con_dpi" ng-maxlength='13' class="form-control" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),'\n]*" >
+					</div>
+					<div *ngIf="con_dpiCtrl.invalid && (con_dpiCtrl.dirty && con_dpiCtrl.touched)" class="col-lg-12">
+						  <div *ngIf="con_dpiCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+							Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) , '
+						  </div>
+					</div>
+					<div class="col-lg-1">
+						NIT:
+					</div>
+					<div class="col-lg-5">
+						<input class="form-control" formControlName="con_nit" ng-maxlength='20' class="form-control" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),'\n]*" >
+					</div>
+					<div *ngIf="con_nitCtrl.invalid && (con_nitCtrl.dirty && con_nitCtrl.touched)" class="col-lg-12">
+						  <div *ngIf="con_nitCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+							Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) , '
+						  </div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6">
+						<button class="btn btn-primary" (click)="FilterConsumidor()" type="button">Buscar Consumidor</button>
+					</div>
+				</div>
+			</ng-container>
+			<ng-container *ngIf="ConsumidorResult == 0">
+				No se encontraron datos, revise los criterios de búsqueda.
+			</ng-container>
+			<ng-container *ngIf="ConsumidorResult > 0">
+				<div class="container-fluid" style="overflow: auto; max-height: 433px;">
+				<table>
+					<tr><td width="100%">Resultado de Búsqueda: <ng-container *ngIf="ConsumidorResult > 1">(debe seleccionar uno)</ng-container></td></tr>
+					
+					<ng-container *ngIf="ConsumidorResult == 1">
+						<b>{{lst_consumidor[0]['nombre_consumidor']}}, DPI: {{lst_consumidor[0]['doc_identificacion']}}, NIT: {{lst_consumidor[0]['nit']}}</b>
+					</ng-container>
+					<ng-container *ngIf="ConsumidorResult > 1">
+						<tr *ngFor="let thisItem of lst_consumidor; let i = index">
+							<td width="100%"><a (click)="ConsumidorClick(i)" class="formlink" [routerLink]="">{{thisItem['nombre_consumidor']}}, DPI: {{thisItem['doc_identificacion']}}, NIT: {{thisItem['nit']}}</a></td>
+						</tr>
+					</ng-container>
+					<tr>
+						<td width="100%"><button class="btn btn-primary" (click)="ResetConsumidor()" type="button">Cambiar Consumidor</button></td>
+					</tr>
+				</table>
+				</div>
+			</ng-container>
+		</div>
+		</form>
+		<form (ngSubmit)="onSubmit()" [formGroup]="frmProveedor" >
+		<div class="container" style="border-style:groove">
+			<div class="row">
+				<div class="col-lg-12">
+					<b>Datos Proveedor:</b>
+				</div>
+			</div>
+			<ng-container *ngIf="ProveedorResult <= 0">
+				<div class="row">
+					<div class="col-lg-1">
+						Nombre:
+					</div>
+					<div class="col-lg-5">
+						<input class="form-control" formControlName="pro_nombre" ng-maxlength='100' class="form-control" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),'\n]*" >
+					</div>
+					<div *ngIf="pro_nombreCtrl.invalid && (pro_nombreCtrl.dirty && pro_nombreCtrl.touched)" class="col-lg-12">
+						  <div *ngIf="pro_nombreCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+							Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) , '
+						  </div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-1">
+						NIT:
+					</div>
+					<div class="col-lg-5">
+						<input class="form-control" formControlName="pro_nit" ng-maxlength='20' class="form-control" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),'\n]*" >
+					</div>
+					<div *ngIf="pro_nitCtrl.invalid && (pro_nitCtrl.dirty && pro_nitCtrl.touched)" class="col-lg-12">
+						  <div *ngIf="pro_nitCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+							Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) , '
+						  </div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6">
+						<button class="btn btn-primary" (click)="FilterProveedor()" type="button">Buscar Proveedor</button>
+					</div>
+				</div>
+			</ng-container>
+			<ng-container *ngIf="ProveedorResult == 0">
+				No se encontraron datos, revise los criterios de búsqueda.
+			</ng-container>
+			<ng-container *ngIf="ProveedorResult > 0">
+				<div class="container-fluid" style="overflow: auto; max-height: 433px;">
+				<table>
+					<tr><td width="100%">Resultado de Búsqueda: <ng-container *ngIf="ProveedorResult > 1">(debe seleccionar uno)</ng-container></td></tr>
+					
+					<ng-container *ngIf="ProveedorResult == 1">
+						<b>{{lst_proveedor[0]['nombre']}}, NIT: {{lst_proveedor[0]['nit']}}</b>
+					</ng-container>
+					<ng-container *ngIf="ProveedorResult > 1">
+						<tr *ngFor="let thisItem of lst_proveedor; let i = index">
+							<td width="100%"><a (click)="ProveedorClick(i)" class="formlink" [routerLink]="">{{thisItem['nombre']}}, NIT: {{thisItem['nit']}}</a></td>
+						</tr>
+					</ng-container>
+					<tr>
+						<td width="100%"><button class="btn btn-primary" (click)="ResetProveedor()" type="button">Cambiar Proveedor</button></td>
+					</tr>
+				</table>
+				</div>
+			</ng-container>
+		</div>
+		</form>
+		<form (ngSubmit)="onSubmit()" [formGroup]="frmMain" >
+		<div class="row">
+			<div class="col-lg-12">
+				<b>Por número de queja:</b>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-1">
+				No.:
+			</div>
+			<div class="col-lg-5">
+				<input class="form-control" formControlName="noqueja" ng-maxlength='100' class="form-control" pattern="[A-Za-z áéíóúÁÉÍÓÚÑñ1234567890-]*" >
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">		
+				<div *ngIf="NoQuejaCtrl.invalid && (NoQuejaCtrl.dirty && NoQuejaCtrl.touched)" class="col-lg-12">
+					  <div *ngIf="NoQuejaCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+						Ingreso un caracter inválido, solo puede ingresar letras, números y guión -
+					  </div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-1">
+				<b>Fecha:</b>
+			</div>
+			 <div class="col-lg-3">
+					<input type="date" class="form-control" id="fechadesde" name="fechadesde" formControlName="fechadesde" placeholder="dd/mm/yyyy" >
+			 </div>
+			 <div class="col-lg-0">
+					&nbsp;<b>-</b>&nbsp;
+			 </div>		
+			 <div class="col-lg-3">
+					<input type="date" class="form-control" id="fechahasta" name="fechahasta" formControlName="fechahasta" placeholder="dd/mm/yyyy" >		
+			 </div>	
+		</div>
+		<div class="row">
+			<div class="col-lg-1">
+				<b>Estado:</b>
+			</div>
+			 <div class="col-lg-6">
+				<select class="form-control" formControlName="estadoFiltro" >
+					<option value="0">Todo</option>
+					<option value="1">Activo</option>
+					<option value="2">Inactivo</option>
+				</select>	
+			 </div>	
+		</div>
+		<div class="row">
+			<div class="col-lg-6">
+				<button class="btn btn-primary" (click)="SearchQuejas()" type="button">Buscar Quejas</button>
+			</div>
+		</div>
+		<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+			Hubo un error al procesar esta acción, por favor intente de nuevo.
+		</div>
+		</form>
+		<div class="container-fluid" *ngIf="QuejaResult >= 0">	
+			<div class="row">
+				<div class="col-lg-1">
+					&nbsp;
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<table class="table table-striped" >
+						<thead>
+						  <tr>
+							<th scope="col" width="20%">Fecha</th>
+							<th scope="col" width="30%">No. Queja</th>
+							<th scope="col" width="30%">Consumidor</th>
+							<th scope="col" width="20%">Proveedor</th>
+						  </tr>
+						</thead>
+						<tbody>
+						<ng-container *ngIf="QuejaResult > 0; else EmptyList">
+							<tr *ngFor="let thisItem of FrmMainList">
+								<td>{{thisItem.fecha_queja | date: "dd/MM/yyyy"}}</td>
+								<td><a (click)="AsignarQuejayCerrar(thisItem.quejanumero)" class="formlink" [routerLink]="">{{thisItem.quejanumero}}</a></td>
+								<td>{{thisItem.nombre_consumidor}}</td>
+								<td>{{thisItem.nombre_proveedor}}</td>
+							</tr>
+						</ng-container>
+						<ng-template #EmptyList>
+							<tr><td colspan="4">No se encontraron datos con los parámetros actuales de búsqueda. </td></tr>
+						</ng-template>
+						</tbody>
+					</table> 
+				</div>
+			</div>
+		</div>	
+	</div>	
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10">
+			Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+		 </div>
+		</div>
+	</div>	
+</ng-container>
+</body>
+</html>
+

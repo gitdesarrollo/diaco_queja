@@ -1,0 +1,357 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Aprobación Conciliación Virtual (Portal Proveedores)
+			</td>
+			<td width="10%" align="right" class="modaltitltd">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 1; else NoForm">
+	<ng-container *ngIf="!flagDetalle">
+		<div class="container" >
+			<div class="row">
+			 <div class="col-lg-1">
+				&nbsp;
+			 </div>
+			</div>
+			<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+			<div class="row">
+				<div class="col-lg-3">
+					Estado:
+				</div>
+				<div class="col-lg-4">
+					<select class="form-control" formControlName="estado" (change)="GetList()">
+						<option value="T" selected>Todos</option>
+						<option value="P" >Pendiente</option>
+						<option value="A" >Aprobado</option>
+						<option value="R" >Rechazado</option>
+					</select>
+				</div>
+			</div>
+			</form>
+			<div class="row">
+			 <div class="col-lg-1">
+				&nbsp;
+			 </div>
+			</div>
+			<ng-container *ngIf="ListUsuariosCount >= 0">
+			<div class="container-fluid" style="overflow: auto; max-height: 433px;">
+			<div class="row" >
+			  <div class="col-lg-12">
+
+				<div class="bs-component">
+				  <table class="table table-striped" >
+					<thead>
+					  <tr>
+						<th scope="col" width="20%">Fecha</th>
+						<th scope="col" width="30%">NIT</th>
+						<th scope="col" width="50%">Nombre</th>
+					  </tr>
+					</thead>
+					<tbody>
+						<ng-container *ngFor="let thisItem of list_conf">
+						   <tr>					
+								<td>{{thisItem['fecha_creado'] | date:'d/M/yy'}}</td>
+								<td><a (click)="ListClick(thisItem)" class="formlink" [routerLink]="">{{thisItem['nit']}}</a></td>
+								<td><a (click)="ListClick(thisItem)" class="formlink" [routerLink]="">{{thisItem['nombre']}}</a></td>
+							 </tr>
+						</ng-container>			 
+						<ng-container *ngIf="ListUsuariosCount == 0">
+							<tr><td colspan="3">No se encontraron datos para esta búsqueda </td></tr>
+						</ng-container>
+					</tbody>
+				  </table> 
+				</div><!-- /example -->
+			  </div>
+			</div>
+			</div>
+			</ng-container>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="flagDetalle">
+		<div class="container" >
+			<div class="row">
+			 <div class="col-lg-1">
+				&nbsp;
+			 </div>
+			</div>
+			<div class="row">
+				<div class="col-lg-3">
+					<button class="btn btn-primary" type="button" (click)="BackDialog()">Regresar a Listado</button>
+				</div>
+				<div class="col-lg-6">
+					&nbsp;
+				</div>
+				<ng-container *ngIf="str_qrpath">
+				<div class="col-lg-3" align="right">
+					<img src="{{str_qrpath}}" style="height:150px">
+				</div>
+				</ng-container>
+			</div>
+											
+			<div class="row">
+				<div class="col-lg-12">
+					<b>Detalle de Petición:</b>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					&nbsp;
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<b>NIT:</b> {{SingleElem['nit']}}, <b>Nombre:</b> {{SingleElem['nombre']}}
+				</div>
+				<div class="col-lg-12">
+					<b>Razón Social:</b> {{SingleElem['razon_social']}}
+				</div>
+				<div class="col-lg-12">
+					<b>Dirección:</b> {{SingleElem['direccion']}}
+				</div>
+				<div class="col-lg-12">
+					<b>Teléfono:</b> {{SingleElem['telefono']}}, <b>Correo:</b> {{SingleElem['correo']}}
+				</div>
+				<div class="col-lg-12">
+					<b>Teléfono Notif.:</b> {{SingleElem['telefono_notif']}}, <b>Correo Notif.:</b> {{SingleElem['correo_notif']}}
+				</div>
+				<div class="col-lg-12">
+					&nbsp;
+				</div>
+			</div>
+			
+			<div class="row"> 
+				<div class="col-lg-4">
+					<label><b>Formulario de Registro:</b></label>
+				</div>
+				<ng-container *ngIf="SingleElem['estado'] == 'P'">
+					<div class="col-lg-6">
+						<ng-container *ngIf="UploadFinished1; else LoadProgress1">
+							<input #formregistroVC type="file" name="form_registro" accept=".pdf, .jpg, .png, .gif, .jpeg">
+						</ng-container>
+						<ng-template #LoadProgress1>
+							<mat-progress-bar
+							  class="example-margin"
+							  [value]="progressperc1"
+							  [color]="progressaccent1">
+							</mat-progress-bar>
+						</ng-template>
+					</div>
+					<div class="col-lg-2">
+						<button type="button" class="btn btn-primary" (click)="UploadFile1();">Adjuntar</button>
+					</div>
+					<div class="col-lg-4">
+						&nbsp;
+					</div>
+				</ng-container>
+				<div class="col-lg-6">
+					<ng-container *ngIf="ImageList['formulario_registro'] != 0">
+						<a #replink1 (click)="ImageLink(ImageList['formulario_registro'],ImageList['formulario_registro_tipo']);" [routerLink]=""> Descargar Formulario de Registro</a>
+					</ng-container>
+				</div>
+			</div>
+			<div class="row"> 
+				<div class="col-lg-4">
+					<label><b>Nombramiento de Representante Legal:</b></label>
+				</div>
+				<ng-container *ngIf="SingleElem['estado'] == 'P'">
+					<div class="col-lg-6">
+						<ng-container *ngIf="UploadFinished2; else LoadProgress2">
+							<input #nombreplegalVC type="file" name="nombreplegal" accept=".pdf, .jpg, .png, .gif, .jpeg">
+						</ng-container>
+						<ng-template #LoadProgress2>
+							<mat-progress-bar
+							  class="example-margin"
+							  [value]="progressperc2"
+							  [color]="progressaccent2">
+							</mat-progress-bar>
+						</ng-template>
+					</div>
+					<div class="col-lg-2">
+						<button type="button" class="btn btn-primary" (click)="UploadFile2();">Adjuntar</button>
+					</div>
+					<div class="col-lg-4">
+						&nbsp;
+					</div>
+				</ng-container>
+				<div class="col-lg-6">
+					<ng-container *ngIf="ImageList['nombramiento_rep_legal'] != 0">
+						<a #replink2 (click)="ImageLink(ImageList['nombramiento_rep_legal'],ImageList['nombramiento_rep_legal_tipo']);" [routerLink]=""> Descargar Nombramiento Rep. Legal</a>
+					</ng-container>
+				</div>
+			</div>
+			<div class="row"> 
+				<div class="col-lg-4">
+					<label><b>DPI de Dueño o Representante Legal:</b></label>
+				</div>
+				<ng-container *ngIf="SingleElem['estado'] == 'P'">
+					<div class="col-lg-6">
+						<ng-container *ngIf="UploadFinished3; else LoadProgress3">
+							<input #dpiVC type="file" name="dpi" accept=".pdf, .jpg, .png, .gif, .jpeg">
+						</ng-container>
+						<ng-template #LoadProgress3>
+							<mat-progress-bar
+							  class="example-margin"
+							  [value]="progressperc3"
+							  [color]="progressaccent3">
+							</mat-progress-bar>
+						</ng-template>
+					</div>
+					<div class="col-lg-2">
+						<button type="button" class="btn btn-primary" (click)="UploadFile3();">Adjuntar</button>
+					</div>
+					<div class="col-lg-4">
+						&nbsp;
+					</div>
+				</ng-container>	
+				<div class="col-lg-6">
+					<ng-container *ngIf="ImageList['dpi_dueno_rep_legal'] != 0">
+						<a #replink3 (click)="ImageLink(ImageList['dpi_dueno_rep_legal'],ImageList['dpi_dueno_rep_legal_tipo']);" [routerLink]=""> Descargar DPI Dueño o Rep. Legal</a>
+					</ng-container>
+				</div>
+			</div>
+			<div class="row"> 
+				<div class="col-lg-4">
+					<label><b>Patente de Sociedad y Empresa:</b></label>
+				</div>
+				<ng-container *ngIf="SingleElem['estado'] == 'P'">
+					<div class="col-lg-6">
+						<ng-container *ngIf="UploadFinished4; else LoadProgress4">
+							<input #patenteVC type="file" name="patente" accept=".pdf, .jpg, .png, .gif, .jpeg">
+						</ng-container>
+						<ng-template #LoadProgress4>
+							<mat-progress-bar
+							  class="example-margin"
+							  [value]="progressperc4"
+							  [color]="progressaccent4">
+							</mat-progress-bar>
+						</ng-template>
+					</div>
+					<div class="col-lg-2">
+						<button type="button" class="btn btn-primary" (click)="UploadFile4();">Adjuntar</button>
+					</div>
+					<div class="col-lg-4">
+						&nbsp;
+					</div>
+				</ng-container>
+				<div class="col-lg-6">
+					<ng-container *ngIf="ImageList['patente_sociedad_empresa'] != 0">
+						<a #replink1 (click)="ImageLink(ImageList['patente_sociedad_empresa'],ImageList['patente_sociedad_empresa_tipo']);" [routerLink]=""> Descargar Patente Sociedad y Empresa</a>
+					</ng-container>
+				</div>
+			</div>
+			<div class="row"> 
+				<div class="col-lg-1">
+					&nbsp;
+				</div>
+			</div>
+			<form (ngSubmit)="onSubmit()" [formGroup]="FrmRazon" >
+			<div class="row">	
+				<ng-container *ngIf="SingleElem['estado'] == 'P'; else NoEdit">
+					
+						<div class="col-lg-4">
+							<ng-container *ngIf="flagBoton; else NoButton">
+								<button class="btn btn-apgreen" type="button" (click)="Aprobar()">Aprobar Petición</button>
+							</ng-container>
+							<ng-template #NoButton>
+								<span><i class="icon"></i></span>&nbsp;
+							</ng-template>
+						</div>
+						<div class="col-lg-3">
+							<ng-container *ngIf="flagBoton; else NoButton">
+								<button class="btn btn-danger" type="button" (click)="Rechazar()" [disabled]="!FrmRazon.valid">Rechazar Petición</button>
+							</ng-container>
+							<ng-template #NoButton>
+								<span><i class="icon"></i></span>&nbsp;
+							</ng-template>
+						</div>
+						<div class="col-lg-5">
+							<div *ngIf="!FrmRazon.valid" >
+								(El motivo es obligatorio para Rechazar)
+							</div>
+						</div>
+						<div class="col-lg-6">
+							&nbsp;
+						</div>
+						<div class="col-lg-1">
+							Motivo:
+						</div>
+						<div class="col-lg-5">
+							<input class="form-control" formControlName="razon" ng-maxlength="100" pattern="[A-Za-z üÜáéíóúÁÉÍÓÚÑñ1234567890_+*.(),/:'\-\n]*">
+						</div>
+						<div *ngIf="razonCtrl.invalid && (razonCtrl.dirty && razonCtrl.touched)" class="col-lg-12">
+							  <div *ngIf="razonCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+								Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( ) , ' : / -
+							  </div>
+						</div>
+					
+				</ng-container>
+				<ng-template #NoEdit>
+					<div class="col-lg-12">
+						Estado: {{SingleElem['estado_string']}}
+					</div>
+				</ng-template>
+				<ng-container *ngIf="SingleElem['estado'] == 'R'">
+					<div class="col-lg-12">
+						Motivo Rechazo: {{SingleElem['nota_rechazo']}}
+					</div>
+				</ng-container>
+			</div>
+			</form>
+			<div class="row">
+				<div class="col-lg-12">
+					&nbsp;
+				</div>
+			</div>				
+		</div>	
+	</ng-container>
+	
+	
+		
+	
+	<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+		Hubo un error al procesar esta acción, por favor intente de nuevo.
+	</div>
+
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>	
+	<div class="row">
+	 <div class="col-lg-10">
+		Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+	 </div>
+	</div>
+	</div>	
+</ng-container>		
+</body>
+</html>

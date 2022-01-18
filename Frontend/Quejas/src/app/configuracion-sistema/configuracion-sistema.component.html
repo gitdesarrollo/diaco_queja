@@ -1,0 +1,268 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Configuraci&oacute;n de Sistema
+			</td>
+			<td width="10%" align="right" class="modaltitltd">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 1; else NoForm">
+	<div class="container" >
+		<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+		<div class="row">
+		 <div class="col-lg-12">
+			<b>Atención al Consumidor</b>
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			<input class="form-control" formControlName="atcon_expirardias" type='number' step='1' (change)="FormUpdate()">
+		 </div>
+		 <div class="col-lg-11">
+			dias para expirar quejas en este flujo.
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			<input class="form-control" formControlName="atcon_alertadias" type='number' step='1' (change)="FormUpdate()">
+		 </div>
+		 <div class="col-lg-11">
+			dias para enviar alerta antes de expirar queja.
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			<input class="form-control" formControlName="atcon_verifdatos" type='number' step='1' (change)="FormUpdate()">
+		 </div>
+		 <div class="col-lg-11">
+			dias para mantener activo link de Verificación de Datos.
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-12">
+			<b>Jurídico</b>
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			<input class="form-control" formControlName="jur_expirardias" type='number' step='1' (change)="FormUpdate()">
+		 </div>
+		 <div class="col-lg-11">
+			dias para expirar quejas en este flujo.
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			<input class="form-control" formControlName="jur_alertadias" type='number' step='1' (change)="FormUpdate()">
+		 </div>
+		 <div class="col-lg-11">
+			dias para enviar alerta antes de expirar queja.
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-12">
+			<b>Verificación y Vigilancia</b>
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			<input class="form-control" formControlName="vyv_expirardias" type='number' step='1' (change)="FormUpdate()">
+		 </div>
+		 <div class="col-lg-11">
+			dias para expirar quejas en este flujo.
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			<input class="form-control" formControlName="vyv_alertadias" type='number' step='1' (change)="FormUpdate()">
+		 </div>
+		 <div class="col-lg-11">
+			dias para enviar alerta antes de expirar queja.
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-12">
+			<b>Servicios Públicos</b>
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			<input class="form-control" formControlName="sp_expirardias" type='number' step='1' (change)="FormUpdate()">
+		 </div>
+		 <div class="col-lg-11">
+			dias para expirar quejas en este flujo.
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			<input class="form-control" formControlName="sp_alertadias" type='number' step='1' (change)="FormUpdate()">
+		 </div>
+		 <div class="col-lg-11">
+			dias para enviar alerta antes de expirar queja.
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-12">
+			<b>Portal Proveedores:</b>
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			<input class="form-control" formControlName="pp_expirardias" type='number' step='1' (change)="FormUpdate()">
+		 </div>
+		 <div class="col-lg-11">
+			dias para expirar quejas en este flujo.
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			<input class="form-control" formControlName="pp_concvirtint" type='number' step='1' (change)="FormUpdate()">
+		 </div>
+		 <div class="col-lg-11">
+			dias para mantener activo link de Interacción Conciliación Virtual.
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			<input class="form-control" formControlName="pp_concvirtconf" type='number' step='1' (change)="FormUpdate()">
+		 </div>
+		 <div class="col-lg-11">
+			dias para mantener activo link de Confirmación de Queja Finalizada
+		 </div>
+		</div>
+		<div class="row">
+			<div class="col-lg-1">
+				&nbsp;
+			</div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-12">
+			<b>Correos Automáticos:</b>
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-2">
+			<select class="form-control" formControlName="ca_comperm" (change)="FormUpdate()">
+				<option [value]="1" selected>Activo</option>
+				<option [value]="0" selected>Inactivo</option>
+			</select>
+		 </div>
+		 <div class="col-lg-4">
+			Comunicación Permanente
+		 </div>
+		 <div class="col-lg-2">
+			<select class="form-control" formControlName="ca_verifdatos" (change)="FormUpdate()">
+				<option [value]="1" selected>Activo</option>
+				<option [value]="0" selected>Inactivo</option>
+			</select>
+		 </div>
+		 <div class="col-lg-4">
+			Verificación de Datos
+		 </div>
+		 <div class="col-lg-2">
+			<select class="form-control" formControlName="ca_aud" (change)="FormUpdate()">
+				<option [value]="1" selected>Activo</option>
+				<option [value]="0" selected>Inactivo</option>
+			</select>
+		 </div>
+		 <div class="col-lg-4">
+			Notificación de Audiencias Programadas
+		 </div>
+		 <div class="col-lg-2">
+			<select class="form-control" formControlName="ca_archsp" (change)="FormUpdate()">
+				<option [value]="1" selected>Activo</option>
+				<option [value]="0" selected>Inactivo</option>
+			</select>
+		 </div>
+		 <div class="col-lg-4">
+			Archivar en Servicios Públicos
+		 </div>
+		 <div class="col-lg-2">
+			<select class="form-control" formControlName="ca_confrespp" (change)="FormUpdate()">
+				<option [value]="1" selected>Activo</option>
+				<option [value]="0" selected>Inactivo</option>
+			</select>
+		 </div>
+		 <div class="col-lg-4">
+			Conf. Queja Resuelta en Portal de Prov.
+		 </div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+			<div class="col-lg-4">
+				<ng-container *ngIf="flagBoton; else NoButton">
+					<button class="btn btn-primary" type="button" (click)="Guardar()" [disabled]="!myForm.valid">Guardar</button> 
+				</ng-container>
+				<ng-template #NoButton>
+					<span><i class="icon"></i></span>&nbsp;
+				</ng-template>
+			</div>
+			<div class="col-lg-1">
+				&nbsp;
+			</div>
+			<div class="col-lg-4">
+				&nbsp;
+			</div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		</form>
+	</div>
+	<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+		Hubo un error al procesar esta acción, por favor intente de nuevo.
+	</div>
+	<div *ngIf="flagSaved" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+		Los datos fueron guardados correctamente.
+	</div>
+	<div *ngIf="flagChange" class="alert alert-warning col-lg-12">
+		Tiene cambios realizados pendientes de grabar.
+	</div>
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>	
+	<div class="row">
+	 <div class="col-lg-10">
+		Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+	 </div>
+	</div>
+	</div>	
+</ng-container>		
+</body>
+</html>

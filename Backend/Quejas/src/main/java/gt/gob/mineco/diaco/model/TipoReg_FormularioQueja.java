@@ -1,0 +1,499 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package gt.gob.mineco.diaco.model;
+import com.google.gson.JsonObject;
+import java.io.Serializable;
+import javax.persistence.*;
+import java.util.Date;
+/**
+ *
+ * @author julio
+ */
+@Entity
+@Table(name="reg_formulario_queja")
+@NamedQuery(name = "TipoReg_FormularioQueja.findAll",query = "SELECT t FROM TipoReg_FormularioQueja t where t.id_queja = :pId_queja")
+public class TipoReg_FormularioQueja implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+        @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id", precision=0)
+        private Integer id;
+        @Column(name="id_queja")
+        private Integer id_queja;
+        @Column(name="id_registro")
+        private Integer id_registro;
+        @Column(name="id_tipo_registro")
+        private Integer id_tipo_registro;
+        @Column(name="codigo")
+        private String codigo;
+        @Temporal(TemporalType.TIMESTAMP)
+        @Column(name="fecha")
+        private Date fecha;
+        @Column(name="via_ingreso")
+        private String via_ingreso;
+        @Column(name="con_identificacion")
+        private String con_identificacion;
+        @Column(name="con_nombre")
+        private String con_nombre;
+        @Column(name="con_telefono")
+        private String con_telefono;
+        @Column(name="con_email")
+        private String con_email;
+        @Column(name="con_dpto")
+        private String con_dpto;
+        @Column(name="con_zona")
+        private String con_zona;
+        @Column(name="con_direccion")
+        private String con_direccion;
+         @Column(name="con_municipio")
+        private String con_municipio;
+        @Column(name="prov_nombre")
+        private String prov_nombre;
+        @Column(name="prov_nit")
+        private String prov_nit;
+        @Column(name="prov_telefono")
+        private String prov_telefono;
+        @Temporal(TemporalType.TIMESTAMP)
+        @Column(name="prov_fechacompra")
+        private Date prov_fechacompra;
+        @Column(name="prov_direccion")
+        private String prov_direccion;
+        @Column(name="prov_departamento")
+        private String prov_departamento;
+        @Column(name="prov_zona")
+        private String prov_zona;
+        @Column(name="prov_municipio")
+        private String prov_municipio;
+        @Column(name="queja")
+        private String queja;
+        @Column(name="solucion")
+        private String solucion;
+        @Column(name="creado_por")
+        private Integer creado_por;
+        @Temporal(TemporalType.TIMESTAMP)
+        @Column(name="fecha_creacion")
+        private Date fecha_creacion;
+        @Column(name="quejanumero")
+        private Integer quejanumero;
+	@Column(name="anio_queja")
+        private Integer anio_queja;
+        
+	public TipoReg_FormularioQueja() {
+	}
+
+    public Integer getAnio_queja() {
+        return anio_queja;
+    }
+
+    public void setAnio_queja(Integer anio_queja) {
+        this.anio_queja = anio_queja;
+    }
+
+    public Integer getQuejanumero() {
+        return quejanumero;
+    }
+
+    public void setQuejanumero(Integer quejanumero) {
+        this.quejanumero = quejanumero;
+    }
+        
+        @Override
+        public String toString() {
+            JsonObject temp = new JsonObject();
+            temp.addProperty("id", this.getId());
+            temp.addProperty("id_queja", this.getId_queja());
+            temp.addProperty("id_registro", this.getId_registro());
+            temp.addProperty("id_tipo_registro", this.getId_tipo_registro());
+            temp.addProperty("codigo", this.getCodigo());
+              /*temp.addProperty("solicita_que",this.solicita_que);
+            temp.addProperty("fecha_comunicacion",this.fecha_comunicacion.toString());
+            temp.addProperty("visita_campo",this.visita_campo);
+            temp.addProperty("citacion",this.citacion);
+            temp.addProperty("audiencia_conciliacion",this.audiencia_conciliacion);
+            temp.addProperty("conclusion",this.conclusion);
+            temp.addProperty("comentarios",this.comentarios);*/
+            return temp.toString()+",";
+        }
+
+    /**
+     * @return the id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the id_queja
+     */
+    public Integer getId_queja() {
+        return id_queja;
+    }
+
+    /**
+     * @param id_queja the id_queja to set
+     */
+    public void setId_queja(Integer id_queja) {
+        this.id_queja = id_queja;
+    }
+
+    /**
+     * @return the id_registro
+     */
+    public Integer getId_registro() {
+        return id_registro;
+    }
+
+    /**
+     * @param id_registro the id_registro to set
+     */
+    public void setId_registro(Integer id_registro) {
+        this.id_registro = id_registro;
+    }
+
+    /**
+     * @return the id_tipo_registro
+     */
+    public Integer getId_tipo_registro() {
+        return id_tipo_registro;
+    }
+
+    /**
+     * @param id_tipo_registro the id_tipo_registro to set
+     */
+    public void setId_tipo_registro(Integer id_tipo_registro) {
+        this.id_tipo_registro = id_tipo_registro;
+    }
+
+    /**
+     * @return the codigo
+     */
+    public String getCodigo() {
+        return codigo;
+    }
+
+    /**
+     * @param codigo the codigo to set
+     */
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    /**
+     * @return the fecha
+     */
+    public Date getFecha() {
+        return fecha;
+    }
+
+    /**
+     * @param fecha the fecha to set
+     */
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    /**
+     * @return the via_ingreso
+     */
+    public String getVia_ingreso() {
+        return via_ingreso;
+    }
+
+    /**
+     * @param via_ingreso the via_ingreso to set
+     */
+    public void setVia_ingreso(String via_ingreso) {
+        this.via_ingreso = via_ingreso;
+    }
+
+    /**
+     * @return the con_identificacion
+     */
+    public String getCon_identificacion() {
+        return con_identificacion;
+    }
+
+    /**
+     * @param con_identificacion the con_identificacion to set
+     */
+    public void setCon_identificacion(String con_identificacion) {
+        this.con_identificacion = con_identificacion;
+    }
+
+    /**
+     * @return the con_nombre
+     */
+    public String getCon_nombre() {
+        return con_nombre;
+    }
+
+    /**
+     * @param con_nombre the con_nombre to set
+     */
+    public void setCon_nombre(String con_nombre) {
+        this.con_nombre = con_nombre;
+    }
+
+    /**
+     * @return the con_telefono
+     */
+    public String getCon_telefono() {
+        return con_telefono;
+    }
+
+    /**
+     * @param con_telefono the con_telefono to set
+     */
+    public void setCon_telefono(String con_telefono) {
+        this.con_telefono = con_telefono;
+    }
+
+    /**
+     * @return the con_email
+     */
+    public String getCon_email() {
+        return con_email;
+    }
+
+    /**
+     * @param con_email the con_email to set
+     */
+    public void setCon_email(String con_email) {
+        this.con_email = con_email;
+    }
+
+    /**
+     * @return the con_dpto
+     */
+    public String getCon_dpto() {
+        return con_dpto;
+    }
+
+    /**
+     * @param con_dpto the con_dpto to set
+     */
+    public void setCon_dpto(String con_dpto) {
+        this.con_dpto = con_dpto;
+    }
+
+    /**
+     * @return the con_zona
+     */
+    public String getCon_zona() {
+        return con_zona;
+    }
+
+    /**
+     * @param con_zona the con_zona to set
+     */
+    public void setCon_zona(String con_zona) {
+        this.con_zona = con_zona;
+    }
+
+    /**
+     * @return the con_municipio
+     */
+    public String getCon_municipio() {
+        return con_municipio;
+    }
+
+    /**
+     * @param con_municipio the con_municipio to set
+     */
+    public void setCon_municipio(String con_municipio) {
+        this.con_municipio = con_municipio;
+    }
+
+    /**
+     * @return the prov_nombre
+     */
+    public String getProv_nombre() {
+        return prov_nombre;
+    }
+
+    /**
+     * @param prov_nombre the prov_nombre to set
+     */
+    public void setProv_nombre(String prov_nombre) {
+        this.prov_nombre = prov_nombre;
+    }
+
+    /**
+     * @return the prov_nit
+     */
+    public String getProv_nit() {
+        return prov_nit;
+    }
+
+    /**
+     * @param prov_nit the prov_nit to set
+     */
+    public void setProv_nit(String prov_nit) {
+        this.prov_nit = prov_nit;
+    }
+
+    /**
+     * @return the prov_telefono
+     */
+    public String getProv_telefono() {
+        return prov_telefono;
+    }
+
+    /**
+     * @param prov_telefono the prov_telefono to set
+     */
+    public void setProv_telefono(String prov_telefono) {
+        this.prov_telefono = prov_telefono;
+    }
+
+    /**
+     * @return the prov_fechacompra
+     */
+    public Date getProv_fechacompra() {
+        return prov_fechacompra;
+    }
+
+    /**
+     * @param prov_fechacompra the prov_fechacompra to set
+     */
+    public void setProv_fechacompra(Date prov_fechacompra) {
+        this.prov_fechacompra = prov_fechacompra;
+    }
+
+    /**
+     * @return the prov_direccion
+     */
+    public String getProv_direccion() {
+        return prov_direccion;
+    }
+
+    /**
+     * @param prov_direccion the prov_direccion to set
+     */
+    public void setProv_direccion(String prov_direccion) {
+        this.prov_direccion = prov_direccion;
+    }
+
+    /**
+     * @return the prov_departamento
+     */
+    public String getProv_departamento() {
+        return prov_departamento;
+    }
+
+    /**
+     * @param prov_departamento the prov_departamento to set
+     */
+    public void setProv_departamento(String prov_departamento) {
+        this.prov_departamento = prov_departamento;
+    }
+
+    /**
+     * @return the prov_zona
+     */
+    public String getProv_zona() {
+        return prov_zona;
+    }
+
+    /**
+     * @param prov_zona the prov_zona to set
+     */
+    public void setProv_zona(String prov_zona) {
+        this.prov_zona = prov_zona;
+    }
+
+    /**
+     * @return the prov_municipio
+     */
+    public String getProv_municipio() {
+        return prov_municipio;
+    }
+
+    /**
+     * @param prov_municipio the prov_municipio to set
+     */
+    public void setProv_municipio(String prov_municipio) {
+        this.prov_municipio = prov_municipio;
+    }
+
+    /**
+     * @return the queja
+     */
+    public String getQueja() {
+        return queja;
+    }
+
+    /**
+     * @param queja the queja to set
+     */
+    public void setQueja(String queja) {
+        this.queja = queja;
+    }
+
+    /**
+     * @return the solucion
+     */
+    public String getSolucion() {
+        return solucion;
+    }
+
+    /**
+     * @param solucion the solucion to set
+     */
+    public void setSolucion(String solucion) {
+        this.solucion = solucion;
+    }
+
+    /**
+     * @return the creado_por
+     */
+    public Integer getCreado_por() {
+        return creado_por;
+    }
+
+    /**
+     * @param creado_por the creado_por to set
+     */
+    public void setCreado_por(Integer creado_por) {
+        this.creado_por = creado_por;
+    }
+
+    /**
+     * @return the fecha_creacion
+     */
+    public Date getFecha_creacion() {
+        return fecha_creacion;
+    }
+
+    /**
+     * @param fecha_creacion the fecha_creacion to set
+     */
+    public void setFecha_creacion(Date fecha_creacion) {
+        this.fecha_creacion = fecha_creacion;
+    }
+
+    /**
+     * @return the con_direccion
+     */
+    public String getCon_direccion() {
+        return con_direccion;
+    }
+
+    /**
+     * @param con_direccion the con_direccion to set
+     */
+    public void setCon_direccion(String con_direccion) {
+        this.con_direccion = con_direccion;
+    }
+}

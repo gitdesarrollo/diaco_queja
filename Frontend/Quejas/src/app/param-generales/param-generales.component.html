@@ -1,0 +1,157 @@
+<html>
+<head>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12 modaltitl">
+			<table width="100%">
+			<tr><td width="90%" class="modaltitltd">
+				Parámetros Generales
+			</td>
+			<td width="10%" align="right" class="modaltitltd">
+				<button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+			</td></tr>
+			</table>
+		</div>
+	</div>
+</div>
+<ng-container *ngIf="flagformvisible >= 1; else NoForm">
+	<div class="container" >
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+			<div class="col-lg-10">
+				<b>Datos de Ministro:</b>
+			</div>
+		</div>
+		<form (ngSubmit)="onSubmit()" [formGroup]="myForm" >
+		<div class="row" >
+			<div class="col-lg-2">
+				T&iacute;tulo:
+			</div>
+			<div class="col-lg-4">
+				<input type="text" class="form-control" formControlName="titulo" (change)="txtTrim(1)" ng-maxlength="15" >
+			</div>
+			<div *ngIf="tituloCtrl.invalid && (tituloCtrl.dirty && tituloCtrl.touched)" class="col-lg-12">
+				  <div *ngIf="tituloCtrl.errors.required" class="alert alert-danger col-lg-12">
+					Debe ingresar información en la sección T&iacute;tulo
+				  </div>
+			</div>
+			<div *ngIf="tituloCtrl.invalid && (tituloCtrl.dirty && tituloCtrl.touched)" class="col-lg-12">
+				  <div *ngIf="tituloCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+					Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( )
+				  </div>
+			</div>
+			<div class="col-lg-2">
+				G&eacute;nero:
+			</div>
+			<div class="col-lg-4">
+				<select class="form-control" formControlName="genero">
+					<option value='Masculino' selected>Masculino</option>
+					<option value='Femenino'>Femenino</option>
+				</select>
+			</div>
+			<div class="col-lg-2">
+				Nombre:
+			</div>
+			<div class="col-lg-10">
+				<input type="text" class="form-control" formControlName="nombre" (change)="txtTrim(2)" ng-maxlength="100">
+			</div>
+			<div *ngIf="nombreCtrl.invalid && (nombreCtrl.dirty && nombreCtrl.touched)" class="col-lg-12">
+				  <div *ngIf="nombreCtrl.errors.required" class="alert alert-danger col-lg-12">
+					Debe ingresar información en la sección Nombre
+				  </div>
+			</div>
+			<div *ngIf="nombreCtrl.invalid && (nombreCtrl.dirty && nombreCtrl.touched)" class="col-lg-12">
+				  <div *ngIf="nombreCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+					Ingreso un caracter inválido, solo puede ingresar letras, números y lo siguiente: _ + * . ( )
+				  </div>
+			</div>
+			<div class="col-lg-12">
+				&nbsp;
+			</div>
+			<div class="col-lg-2">
+				UMA:
+			</div>
+			<div class="col-lg-10">
+				<input class="form-control" formControlName="uma" type='number' step='0.01' (change)="FormatMonto()" ng-maxlength="15">
+			</div>
+			<div *ngIf="umaCtrl.invalid && (umaCtrl.dirty && umaCtrl.touched)" class="col-lg-12">
+				  <div *ngIf="umaCtrl.errors.required" class="alert alert-danger col-lg-12">
+					Debe ingresar información en la sección UMA
+				  </div>
+			</div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		<div class="row">
+			<div class="col-lg-4">
+				<ng-container *ngIf="flagBoton; else NoButton">
+					<button class="btn btn-primary" type="button" (click)="GuardarConfirmar()" [disabled]="!myForm.valid">Confirmar Cambios</button> 
+				</ng-container>
+				<ng-template #NoButton>
+					<span><i class="icon"></i></span>&nbsp;
+				</ng-template>
+			</div>
+			<div class="col-lg-1">
+				&nbsp;
+			</div>
+			<div class="col-lg-4">
+				<button class="btn btn-primary" type="button" (click)="closeDialog()">Cerrar Ventana</button>
+			</div>
+		</div>
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>
+		</form>
+	</div>
+	<div *ngIf="flagInfoError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+		Hubo un error al procesar esta acción, por favor intente de nuevo.
+	</div>
+	<div *ngIf="flagSaved" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
+		La Información fué guardada exitosamente.
+	</div>
+	<div *ngIf="flagChange" class="alert alert-warning col-lg-12">
+		Recuerde guardar los cambios realizados.
+	</div>
+</ng-container>
+<ng-template #NoForm>
+	<div class="container" *ngIf="!loaderror">	
+		<div class="row">
+		 <div class="col-lg-1">
+			&nbsp;
+		 </div>
+		</div>	
+		<div class="row">
+		 <div class="col-lg-10" align="center">
+			<i class="frmicon"></i>&nbsp;
+		 </div>
+		</div>	
+	</div>	
+</ng-template>	
+
+<ng-container *ngIf="loaderror">
+	<div class="container">
+	<div class="row">
+	 <div class="col-lg-1">
+		&nbsp;
+	 </div>
+	</div>	
+	<div class="row">
+	 <div class="col-lg-10">
+		Hubo un error al cargar el formulario, intente de nuevo mas tarde.
+	 </div>
+	</div>
+	</div>	
+</ng-container>		
+</body>
+</html>

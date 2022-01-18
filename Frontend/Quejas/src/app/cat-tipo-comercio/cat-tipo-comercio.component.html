@@ -1,0 +1,78 @@
+
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12 modaltitl">
+      <table width="100%">
+      <tr><td width="90%" class="modaltitltd">
+        Catalogo Tipo Comercio
+      </td>
+      <td width="10%" align="right" class="modaltitltd">
+        <button type="button" class="modaltitlb" (click)="closeDialog()">X</button>
+      </td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="container">
+<div class="row">
+  <div class="col-md-8 mt-4">
+        <ul>
+      <li 
+      *ngFor="let comercio of comercioArray"
+      class="list-group-item list-group-item-action"
+      (click)="openForEdit(comercio)"
+      [class.active]="comercio == selectedTipoComercio"
+      >
+      <span class="badge badge.primary">{{comercio.id_tipo_comercio}}</span> {{comercio.tipo_comercio}}
+      </li>
+    </ul>
+    <div class="card mt-4">
+      <div class="card-body">
+
+        <table>
+          <tr>
+            <td>(*)Selecciona actividad economica</td>
+            <td>
+              <select>
+                <option selected>
+                    {{selectedTipoComercio.id_actividad_economica}}  {{selectedTipoComercio.nombre_actividad_economica}}
+                </option>
+                <option
+                *ngFor="let actividad of actividadArray"
+                (click)="openForEditActividad(actividad)"
+                >
+                {{actividad.id_actividad_economica}} {{actividad.nombre_actividad_economica}}
+              </option>
+                
+              </select>
+
+            </td>
+          </tr>
+         
+        </table>
+        <div class="card-title">
+         Ingresa una nueva tipo de comercio		 
+        </div>
+
+      <div class="form-group">
+        <input type="text" [(ngModel)]="selectedTipoComercio.tipo_comercio" (blur)="setAfterAuxiliar()" (focus)="setBeforeAuxiliar()" placeholder="agregar tipo comercio" class="form-control">
+      </div>  
+
+      
+      <button (click)="addOrEdit()" class="btn btn-primary">
+          Guardar cambios
+      </button>
+      <button
+      *ngIf="selectedTipoComercio.id_tipo_comercio !== 0"
+      class="btn btn-danger"
+      (click)="delete()">
+        Borrar
+      </button>
+      </div>
+    </div>
+  </div>
+  
+</div>
+</div>
