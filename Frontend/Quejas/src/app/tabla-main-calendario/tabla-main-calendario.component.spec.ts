@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TablaMainAtConComponent } from './tabla-main-at-con.component';
+import { TablaMainAtConComponent } from './tabla-main-at-concomponent';
 
 describe('TablaMainAtConComponent', () => {
   let component: TablaMainAtConComponent;
