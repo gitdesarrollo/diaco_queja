@@ -1,25 +1,25 @@
-import {Component, OnInit} from '@angular/core';
-import {FormGroup, Validators, FormControl} from '@angular/forms';
-import {Pais} from '../shared/pais.model';
-import {PaisesService} from '../shared/paises.service';
-import {Subscription} from 'rxjs';
-import {MotivoQueja} from '../shared/motivo-queja.model';
-import {MotivosQuejaService} from '../shared/motivos-queja.service';
-import {Departamento} from '../shared/departamento.model';
-import {DepartamentosService} from '../shared/departamentos.service';
-import {Etnia} from '../shared/etnia.model';
-import {SedesService} from '../shared/sedes.service';
-import {EtniasService} from '../shared/etnias.service';
-import {Municipio} from '../shared/municipio.model';
-import {Consumidor} from '../shared/consumidor.model';
-import {Sede} from '../shared/sede.model';
-import {MunicipiosService} from '../shared/municipios.service';
-import {ConsumidoresService} from '../shared/consumidores.service';
-import {Router, ActivatedRoute, Params} from '@angular/router';
-import {QuejasService} from '../shared/quejas.service';
-import {SubmitFormService} from '../shared/submit-form.service';
-import {SeguridadService} from '../shared/seguridad.service';
-import {Queja} from '../shared/queja.model';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { Pais } from '../shared/pais.model';
+import { PaisesService } from '../shared/paises.service';
+import { Subscription } from 'rxjs';
+import { MotivoQueja } from '../shared/motivo-queja.model';
+import { MotivosQuejaService } from '../shared/motivos-queja.service';
+import { Departamento } from '../shared/departamento.model';
+import { DepartamentosService } from '../shared/departamentos.service';
+import { Etnia } from '../shared/etnia.model';
+import { SedesService } from '../shared/sedes.service';
+import { EtniasService } from '../shared/etnias.service';
+import { Municipio } from '../shared/municipio.model';
+import { Consumidor } from '../shared/consumidor.model';
+import { Sede } from '../shared/sede.model';
+import { MunicipiosService } from '../shared/municipios.service';
+import { ConsumidoresService } from '../shared/consumidores.service';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { QuejasService } from '../shared/quejas.service';
+import { SubmitFormService } from '../shared/submit-form.service';
+import { SeguridadService } from '../shared/seguridad.service';
+import { Queja } from '../shared/queja.model';
 
 //import { WINDOW } from "../shared/window.service";
 
@@ -59,18 +59,18 @@ export class ConsumidorComponent implements OnInit {
 
 
     constructor(private router: Router,
-                private paisesService: PaisesService,
-                private motivosQuejaService: MotivosQuejaService,
-                private departamentosService: DepartamentosService,
-                private municipiosService: MunicipiosService,
-                private etniasService: EtniasService,
-                private sedesService: SedesService,
-                private consumidoresService: ConsumidoresService,
-                private quejasService: QuejasService,
-                private _submitFormService: SubmitFormService,
-                private _seguridadService: SeguridadService
+        private paisesService: PaisesService,
+        private motivosQuejaService: MotivosQuejaService,
+        private departamentosService: DepartamentosService,
+        private municipiosService: MunicipiosService,
+        private etniasService: EtniasService,
+        private sedesService: SedesService,
+        private consumidoresService: ConsumidoresService,
+        private quejasService: QuejasService,
+        private _submitFormService: SubmitFormService,
+        private _seguridadService: SeguridadService
         , private _route: ActivatedRoute
-                //,@Inject(WINDOW) public window: Window
+        //,@Inject(WINDOW) public window: Window
     ) {
         //this.str_usuario="Usuario: "+this._submitFormService.Get_username();
         //console.info(this._route.snapshot.paramMap.get('dato'),this._route.snapshot.paramMap.get('id'));
@@ -150,11 +150,11 @@ export class ConsumidorComponent implements OnInit {
             }
         );
         //cargar sedes
-        this.sedesSubscription = this.sedesService.fetchData().subscribe(
-            res => {
-                this.sedes = res.value;
-            }
-        );
+        // this.sedesSubscription = this.sedesService.fetchData().subscribe(
+        //     res => {
+        //         this.sedes = res.value;
+        //     }
+        // );
         // listener cuando finaliza la operacion de creacion
         this.consumidorOperationSubscription = this.consumidoresService.operation.subscribe(
             (consumidor: Consumidor) => {
@@ -207,7 +207,8 @@ export class ConsumidorComponent implements OnInit {
             //'direccionNumero': new FormControl(consumidor ? consumidor.direccionAvenida : ''), // , Validators.required),
             'direccionZona': new FormControl(consumidor ? consumidor.direccionZona : ''), // , Validators.required),
             'direccionDetalle': new FormControl(consumidor ? consumidor.direccionDetalle : ''), // , Validators.required),
-            'sedeDiacoCercana': new FormControl(''), // , Validators.required),
+
+            // 'sedeDiacoCercana': new FormControl(''), // , Validators.required),
 
             'telefonoCelular': new FormControl(consumidor ? consumidor.telefonoCelular : ''), // , Validators.required),
             'telefonoDomicilio': new FormControl(consumidor ? consumidor.telefonoDomicilio : ''),
@@ -250,9 +251,9 @@ export class ConsumidorComponent implements OnInit {
                 'motivoQueja': (consumidor.motivoQueja ? consumidor.motivoQueja : consumidor.idMotivoQueja)
             });
             //sedeDiacoCercana
-            this.consumidorForm.patchValue({
-                'sedeDiacoCercana': consumidor.sedeDiacoCercana
-            });
+            // this.consumidorForm.patchValue({
+            //     'sedeDiacoCercana': consumidor.sedeDiacoCercana
+            // });
         }
     }
 
@@ -324,7 +325,7 @@ export class ConsumidorComponent implements OnInit {
         let codigoMunicipio = this.consumidorForm.value.codigoMunicipio;
         let direccionDetalle = this.consumidorForm.value.direccionDetalle;
         let direccionZona = this.consumidorForm.value.direccionZona;
-        let sedeDiacoCercana = this.consumidorForm.value.sedeDiacoCercana;
+        // let sedeDiacoCercana = this.consumidorForm.value.sedeDiacoCercana;
         let telefonoCelular = this.consumidorForm.value.telefonoCelular;
         let iCheck_ = this.consumidorForm.value.iCheck;
 
@@ -417,11 +418,11 @@ export class ConsumidorComponent implements OnInit {
             }
         }
 
-/*         if (nitConsumidor == '' || nitConsumidor == undefined) {
-            this.mjsError += '- Ingrese su NIT.  ' + '\r\n';
-        } else {*/
-            consumidor.nitConsumidor = this.consumidorForm.value.nitConsumidor;
-        
+        /*         if (nitConsumidor == '' || nitConsumidor == undefined) {
+                    this.mjsError += '- Ingrese su NIT.  ' + '\r\n';
+                } else {*/
+        consumidor.nitConsumidor = this.consumidorForm.value.nitConsumidor;
+
 
         if (motivoQueja == '' || motivoQueja == null || motivoQueja == undefined) {
             this.mjsError += '- Seleccione motivo de queja.  ' + '\r\n';
@@ -454,11 +455,11 @@ export class ConsumidorComponent implements OnInit {
         }
 
         //alert(sedeDiacoCercana);
-        if (sedeDiacoCercana == '' || sedeDiacoCercana == null || sedeDiacoCercana == undefined) {
-            this.mjsError += '- Selecciones sede.  ' + '\r\n';
-        } else {
-            consumidor.sedeDiacoCercana = this.consumidorForm.value.sedeDiacoCercana;
-        }
+        // if (sedeDiacoCercana == '' || sedeDiacoCercana == null || sedeDiacoCercana == undefined) {
+        //     this.mjsError += '- Selecciones sede.  ' + '\r\n';
+        // } else {
+        //     consumidor.sedeDiacoCercana = this.consumidorForm.value.sedeDiacoCercana;
+        // }
 
         if (telefonoCelular == '' || telefonoCelular == undefined) {
             this.mjsError += '- Ingrese su numero de telefono celular.  ' + this.consumidorForm.value.telefonoCelular + '\r\n';
@@ -545,12 +546,12 @@ export class ConsumidorComponent implements OnInit {
         if (this.existingMode) {
             //actualiza consumidor
             //consumidor.usuarioModifico = this.str_usuario;
-			console.log('valor que trae la variable consumidor 2', consumidor);
+            console.log('valor que trae la variable consumidor 2', consumidor);
             this.consumidoresService.createConsumidor(consumidor);
             this.nextStep(this.existingConsumidor);
         } else {
             //consumidor.usuarioAdiciono = this.str_usuario;
-			console.log('valor que trae la variable consumidor', consumidor);
+            console.log('valor que trae la variable consumidor', consumidor);
             this.consumidoresService.createConsumidor(consumidor);
         }
     }

@@ -32,7 +32,8 @@ import Swal from 'sweetalert2';
 @Component({
 	selector: 'app-pquejaini',
 	templateUrl: './pquejaini.component.html',
-	styleUrls: ['./pquejaini.component.scss']
+	// styleUrls: ['./custom.css']
+	styleUrls: ['./pquejaini.component.scss','./custom.css']
 })
 
 export class PquejainiComponent implements OnInit {
@@ -125,6 +126,7 @@ export class PquejainiComponent implements OnInit {
 			(params: Params) => {
 				this.vdato = params.dato;
 				this.vid = params.id;
+				
 			}
 		);
 		//verificar parametros

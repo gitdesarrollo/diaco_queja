@@ -1,20 +1,22 @@
 <html>
+
 <head>
 </head>
+
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <span class="navbar-text whitefont">DIACO  
-    <span class="badge badge-secondary"> {{str_queja}}</span> 
-    - Datos de consumidor 
-  </span>
-  <span class="navbar-text whitefont">&nbsp;&nbsp;&nbsp;</span>
-  <!---- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <span class="navbar-text whitefont">DIACO
+      <span class="badge badge-secondary"> {{str_queja}}</span>
+      - Datos de consumidor
+    </span>
+    <span class="navbar-text whitefont">&nbsp;&nbsp;&nbsp;</span>
+    <!---- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>--->
-  <div class="collapse navbar-collapse" id="navbarText">
-  <ul class="navbar-nav mr-auto">
-   <!----     <li class="nav-item active">
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+        <!----     <li class="nav-item active">
         <a class="nav-link whitelink" href="#">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
@@ -23,241 +25,202 @@
       <li class="nav-item">
         <a class="nav-link whitelink" href="#">Pricing</a>
       </li>--->
-    </ul>  
+      </ul>
+    </div>
+    <span class="navbar-text whitefont">
+      {{str_usuario}}
+    </span>
+    <span class="navbar-text whitefont">
+      <!--a class="nav-link whitelink" [routerLink]="['/Login']">Cerrar Sesi&oacute;n</a-->
+      <!--button class="btn btn-primary row" (click)="onDismissClicked()">Cancelar</button-->
+    </span>
+  </nav>
+  <div class="container-fluid center-h center-v" *ngIf="cerrar_=='si'" layout-align="start center" flex>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <span class="navbar-text whitefont">
+        Gracias por utilizar el sistema de registro DIACO.<br>
+        Oficinas: 7a av. 7-61 Zona 4, 3er. Nivel Edificio del Registro Mercantil <br>
+        Teléfono: 2501-9898 <br><br>
+        Centro de Atención de Quejas: 6av. 0-35 Zona 4 centro comercial Plaza Zona 4 <br>
+        Área de Restaurantes 3er. Nivel Tel: 2501-9600. <br>
+        <br>
+        Puede cerrar esta ventana.
+
+
+      </span>
+    </nav>
   </div>
-  <span class="navbar-text whitefont">
-    {{str_usuario}}  
-  </span>
-  <span class="navbar-text whitefont">
-    <!--a class="nav-link whitelink" [routerLink]="['/Login']">Cerrar Sesi&oacute;n</a-->
-	<!--button class="btn btn-primary row" (click)="onDismissClicked()">Cancelar</button-->
-  </span>
-</nav>
-<div class="container-fluid center-h center-v" *ngIf="cerrar_=='si'" layout-align="start center" flex>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-<span class="navbar-text whitefont">
-Gracias por utilizar el sistema de registro DIACO.<br>
-Oficinas: 7a av. 7-61 Zona 4, 3er. Nivel Edificio del Registro Mercantil <br>
-Teléfono: 2501-9898 <br><br>
-Centro de Atención de Quejas: 6av. 0-35 Zona 4 centro comercial Plaza Zona 4 <br>
-Área de Restaurantes 3er. Nivel Tel: 2501-9600. <br>
-<br>
-Puede cerrar esta ventana.
 
 
-</span>
-</nav>
-</div>
-
-
-<div class="container-fluid" *ngIf="cerrar_=='no'" >
-  <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="success">
-    <h4 class="alert-heading">Queja registrada!</h4>
-    <p>Su queja ha sido registrada exitosamente.  {{vsecuencia}}-{{vanio}}</p>
-    <hr>
-    <button class="btn btn-primary" (click)="onHomeClicked()">Cerrar ventana</button>
-    <!--button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="onDismissClicked()">
+  <div class="container-fluid" *ngIf="cerrar_=='no'">
+    <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="success">
+      <h4 class="alert-heading">Queja registrada!</h4>
+      <p>Su queja ha sido registrada exitosamente. {{vsecuencia}}-{{vanio}}</p>
+      <hr>
+      <button class="btn btn-primary" (click)="onHomeClicked()">Cerrar ventana</button>
+      <!--button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="onDismissClicked()">
       <span aria-hidden="true">&times;</span>
     </button-->
-	<p> </p>
-	<p>
-	<strong>
-		 <button type="button" class="btn btn-primary row" (click)="onPrintQueja()">Imprimir queja {{vsecuencia}}-{{vanio}}</button>
-	</strong>
-	</p>
-  </div>
-  <div class="row">
-    &nbsp;
-  </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <form (ngSubmit)="onSubmit()" [formGroup]="quejaForm">
-        <div class="form-group row">
-          <label for="facturaNumero" class="col-sm-2 col-form-label">Número de Factura o Contrato</label>
-          <div class="col-sm-6">
-            <input
-              id="facturaNumero"
-              type="text"
-              class="form-control"
-              formControlName="facturaNumero"
-			  matTooltipPosition="after"
-			  matTooltip="Ingrese Numero de factura"
-			  matTooltipClass="custom-tooltip-blue"
-			  placeholder="Factura"
-			  required
-        disabled
-			  >
+      <p> </p>
+      <p>
+        <strong>
+          <button type="button" class="btn btn-primary row" (click)="onPrintQueja()">Imprimir queja
+            {{vsecuencia}}-{{vanio}}</button>
+        </strong>
+      </p>
+    </div>
+    <div class="row">
+      &nbsp;
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <form (ngSubmit)="onSubmit()" [formGroup]="quejaForm">
+          <div class="form-group row">
+            <label for="facturaNumero" class="col-sm-2 col-form-label">Número de Factura o Contrato</label>
+            <div class="col-sm-6">
+              <input id="facturaNumero" type="text" class="form-control" formControlName="facturaNumero"
+                matTooltipPosition="after" matTooltip="Ingrese Numero de factura" matTooltipClass="custom-tooltip-blue"
+                placeholder="Factura" required disabled>
+            </div>
           </div>
-        </div>
 
-  
-        <div class="form-group row">
-          <label for="fechaFactura" class="col-sm-2 col-form-label">Fecha Documento</label>
-          <div class="col-sm-10">
-            <input
-              id="fechaFactura"
-              type="text"
-              class="form-control"
-              bsDatepicker #dp="bsDatepicker"
-              formControlName="fechaFactura"
-			  matTooltipPosition="after"
-			  matTooltip="Ingrese fecha de factura"
-			  matTooltipClass="custom-tooltip-blue"
-			  placeholder="Fecha factura"
-			  required
-			  >
+
+          <div class="form-group row">
+            <label for="fechaFactura" class="col-sm-2 col-form-label">Fecha Documento</label>
+            <div class="col-sm-10">
+              <input id="fechaFactura" type="text" class="form-control" bsDatepicker #dp="bsDatepicker"
+                formControlName="fechaFactura" matTooltipPosition="after" matTooltip="Ingrese fecha de factura"
+                matTooltipClass="custom-tooltip-blue" placeholder="Fecha factura" required>
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="detalleQueja" class="col-sm-2 col-form-label">(*) Detalle Queja (sea breve y conciso)</label>
-          <div class="col-sm-10">
-            <textarea
-              id="detalleQueja"
-              class="form-control"
-              formControlName="detalleQueja"
-              matTooltipPosition="after"
-              matTooltip="Ingrese detalle de la queja"
-              matTooltipClass="custom-tooltip-blue"
-              placeholder="Detalle de la queja"
-              maxLength="1000"
-              required
-			  ></textarea>
+          <div class="form-group row">
+            <label for="detalleQueja" class="col-sm-2 col-form-label">(*) Detalle Queja (sea breve y conciso)</label>
+            <div class="col-sm-10">
+              <textarea id="detalleQueja" class="form-control" formControlName="detalleQueja" matTooltipPosition="after"
+                matTooltip="Ingrese detalle de la queja" matTooltipClass="custom-tooltip-blue"
+                placeholder="Detalle de la queja" maxLength="1000" required></textarea>
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="solicitaQue" class="col-sm-2 col-form-label">(*) Solicito que (sea breve y conciso)</label>
-          <div class="col-sm-10">
-            <textarea
-              id="solicitaQue"
-              class="form-control"
-              formControlName="solicitaQue"
-			  matTooltipPosition="after"
-			  matTooltip="Ingrese solicitud de la queja"
-			  matTooltipClass="custom-tooltip-blue"
-			  placeholder="Solicitud de la queja"
-			  maxLength="250"
-			  required
-				></textarea>
+          <div class="form-group row">
+            <label for="solicitaQue" class="col-sm-2 col-form-label">(*) Posible solución (sea breve y conciso)</label>
+            <div class="col-sm-10">
+              <textarea id="solicitaQue" class="form-control" formControlName="solicitaQue" matTooltipPosition="after"
+                matTooltip="Ingrese solicitud de la queja" matTooltipClass="custom-tooltip-blue"
+                placeholder="Solicitud de la queja" maxLength="250" required></textarea>
+            </div>
           </div>
-        </div>
-		
-		<div *ngIf="quejaForm.get('facturaNumero').errors && quejaForm.get('facturaNumero').dirty">
-				<p *ngIf="quejaForm.get('facturaNumero').hasError('required')" [ngStyle]="{color: 'red'}">Ingrese su Número de Factura o Contrato</p>
-			  </div>
-		<div *ngIf="quejaForm.get('fechaFactura').errors && quejaForm.get('fechaFactura').dirty">
-				<p *ngIf="quejaForm.get('fechaFactura').hasError('required')" [ngStyle]="{color: 'red'}" >Ingrese su Fecha Documento</p>
-			  </div>
-		<div *ngIf="quejaForm.get('detalleQueja').errors && quejaForm.get('detalleQueja').dirty">
-				<p *ngIf="quejaForm.get('detalleQueja').hasError('required')" [ngStyle]="{color: 'red'}">Ingrese su Detalle Queja</p>
-			  </div>	 
-		<div *ngIf="quejaForm.get('detalleQueja').errors && quejaForm.get('detalleQueja').dirty">
-				<p *ngIf="quejaForm.get('detalleQueja').hasError('maxLength')" [ngStyle]="{color: 'red'}">Detalle de queda solo admite 1000 caracteres</p>
-				<p *ngIf="quejaForm.get('detalleQueja').hasError('required')" [ngStyle]="{color: 'red'}">Ingrese su Detalle Queja</p>
-			  </div>	  
-		<div *ngIf="quejaForm.get('solicitaQue').errors && quejaForm.get('solicitaQue').dirty">
-				<p *ngIf="quejaForm.get('solicitaQue').hasError('maxLength')" [ngStyle]="{color: 'red'}">Solicitud de queja solo admite 250 caracteres</p>
-				<p *ngIf="quejaForm.get('detalleQueja').hasError('required')" [ngStyle]="{color: 'red'}">Ingrese su Solicitud Queja</p>
-		</div>
-		
-        <div class="form-group row"   *ngIf="presencial != 'presencial'">
-		<div *ngIf="_existenUploads=='0'">
-          <label for="" class="col-sm-2 col-form-label">Adjuntos Obligatorios</label>
-          <div class="col-sm-10">
-            <div class="card">
-              <div class="card-body">
-                <div class="form-group row">
-                  <label for="filFactura" class="col-sm-2 col-form-label">(*) Factura o Contrato</label>
-                  <div class="col-sm-10">
-                    <input
-                      #filFactura
-                      id="filFactura"
-                      type="file"
-                      ng2FileSelect
-                      [uploader]="uploader"
-                      class="form-control"
-                      (change)="onFileChanged('FAC')"
-					  matTooltipPosition="after"
-					  matTooltip="Ingrese su factura"
-					  matTooltipClass="custom-tooltip-blue"
-					  placeholder="Factura"
-					  
-				>
+
+          <div *ngIf="quejaForm.get('facturaNumero').errors && quejaForm.get('facturaNumero').dirty">
+            <p *ngIf="quejaForm.get('facturaNumero').hasError('required')" [ngStyle]="{color: 'red'}">Ingrese su Número
+              de Factura o Contrato</p>
+          </div>
+          <div *ngIf="quejaForm.get('fechaFactura').errors && quejaForm.get('fechaFactura').dirty">
+            <p *ngIf="quejaForm.get('fechaFactura').hasError('required')" [ngStyle]="{color: 'red'}">Ingrese su Fecha
+              Documento</p>
+          </div>
+          <div *ngIf="quejaForm.get('detalleQueja').errors && quejaForm.get('detalleQueja').dirty">
+            <p *ngIf="quejaForm.get('detalleQueja').hasError('required')" [ngStyle]="{color: 'red'}">Ingrese su Detalle
+              Queja</p>
+          </div>
+          <div *ngIf="quejaForm.get('detalleQueja').errors && quejaForm.get('detalleQueja').dirty">
+            <p *ngIf="quejaForm.get('detalleQueja').hasError('maxLength')" [ngStyle]="{color: 'red'}">Detalle de queda
+              solo admite 1000 caracteres</p>
+            <p *ngIf="quejaForm.get('detalleQueja').hasError('required')" [ngStyle]="{color: 'red'}">Ingrese su Detalle
+              Queja</p>
+          </div>
+          <div *ngIf="quejaForm.get('solicitaQue').errors && quejaForm.get('solicitaQue').dirty">
+            <p *ngIf="quejaForm.get('solicitaQue').hasError('maxLength')" [ngStyle]="{color: 'red'}">Solicitud de queja
+              solo admite 250 caracteres</p>
+            <p *ngIf="quejaForm.get('detalleQueja').hasError('required')" [ngStyle]="{color: 'red'}">Ingrese su
+              Solicitud Queja</p>
+          </div>
+
+          <div class="form-group row" *ngIf="presencial != 'presencial'">
+            <div *ngIf="_existenUploads=='0'">
+              <label for="" class="col-sm-2 col-form-label">Adjuntos Obligatorios</label>
+              <div class="col-sm-10">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="form-group row">
+                      <label for="filFactura" class="col-sm-2 col-form-label">(*) Factura o Contrato</label>
+                      <div class="col-sm-10">
+                        <input #filFactura id="filFactura" type="file" ng2FileSelect [uploader]="uploader"
+                          class="form-control" (change)="onFileChanged('FAC')" matTooltipPosition="after"
+                          matTooltip="Ingrese su factura" matTooltipClass="custom-tooltip-blue" placeholder="Factura">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="filDpi" class="col-sm-2 col-form-label">(*) DPI o Pasaporte</label>
+                      <div class="col-sm-10">
+                        <input #filDpi id="filDpi" type="file" ng2FileSelect [uploader]="uploader" class="form-control"
+                          (change)="onFileChanged('DPI')" matTooltipPosition="after" matTooltip="Ingrese DPI"
+                          matTooltipClass="custom-tooltip-blue" placeholder="DPI">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <p>Estos documentos deben ir completos, por ejemplo el DPI debe ser escaneado a ambos lados.</p>
+                    </div>
                   </div>
-                </div>
-                <div class="form-group row">
-                  <label for="filDpi" class="col-sm-2 col-form-label">(*) DPI o Pasaporte</label>
-                  <div class="col-sm-10">
-                    <input
-                      #filDpi
-                      id="filDpi"
-                      type="file"
-                      ng2FileSelect
-                      [uploader]="uploader"
-                      class="form-control"
-                      (change)="onFileChanged('DPI')"
-					  matTooltipPosition="after"
-					  matTooltip="Ingrese DPI"
-					  matTooltipClass="custom-tooltip-blue"
-					  placeholder="DPI"
-					  
-						>
-                  </div>
-                </div>
-                <div class="row">
-                  <p>Estos documentos deben ir completos, por ejemplo el DPI debe ser escaneado a ambos lados.</p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-		</div>
-        
-		<div class="form-group row" *ngIf="_existenUploads=='0'">
-          <label for="filOtros" class="col-sm-2 col-form-label">Adjuntar otro documento</label>
-          <div class="col-sm-6">
-            <input
-              #filOtros
-              id="filOtros"
-              type="file"
-              ng2FileSelect
-              [uploader]="uploader"
-			  (change)="onFileChanged('OTRO')"
-              class="form-control">
-          </div>
-          <!--div class="col-sm-4 text-left">
+
+          <div class="form-group row" *ngIf="_existenUploads=='0'">
+            <label for="filOtros" class="col-sm-2 col-form-label">Adjuntar otro documento</label>
+            <div class="col-sm-6">
+              <input #filOtros id="filOtros" type="file" ng2FileSelect [uploader]="uploader"
+                (change)="onFileChanged('OTRO')" class="form-control">
+            </div>
+            <!--div class="col-sm-4 text-left">
             <button
               class="btn btn-primary">Agregar Documento</button>
           </div-->
-        </div>
-        <div class="row"  *ngIf="_existenUploads=='0'">
-          <div class="container">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Documentos adjuntos {{ uploader?.queue?.length }}</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of uploader.queue; let i = index">
-                  <td>{{item.file.name}}</td>
-                  <td>
-                    <button
-                      class="btn btn-danger"
-                      (click)="onRemoveClicked(i)">Quitar</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
           </div>
-        </div>
-		
-		<div class="form-group row" *ngIf="_existenUploads=='1'">
-          <div class="col sm-6">
-            <div class="row">
-              <label for="documento" class="col-sm-4 col-form-label">(*) Documentos adjuntos</label>
-              <div class="col-sm-8">
-                <!--select
+          <div class="row" *ngIf="_existenUploads=='0'">
+            <div class="container">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Documentos adjuntos {{ uploader?.queue?.length }}</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of uploader.queue; let i = index">
+                    <td>{{item.file.name}}</td>
+                    <td>
+                      <button class="btn btn-danger" (click)="onRemoveClicked(i)">Quitar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <div class="row">
+                <label for="sedeDiacoCercana" class="col-sm-4 col-form-label">(*) Sede DIACO mas cercana</label>
+                <div class="col-sm-8">
+                  <select id="sedeDiacoCercana" class="form-control" formControlName="sedeDiacoCercana"
+                    matTooltipPosition="after" matTooltip="Ingrese sede" matTooltipClass="custom-tooltip-blue"
+                    placeholder="Sede">
+                    <option disabled selected>Escoger</option>
+                    <option value="{{sede.idDiacoSede}}" *ngFor="let sede of sedes">{{sede.nombreSede}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-group row" *ngIf="_existenUploads=='1'">
+            <div class="col sm-6">
+              <div class="row">
+                <label for="documento" class="col-sm-4 col-form-label">(*) Documentos adjuntos</label>
+                <div class="col-sm-8">
+                  <!--select
                   id="documento"
                   class="form-control"
                   formControlName="documento"
@@ -270,47 +233,44 @@ Puede cerrar esta ventana.
                   <option disabled selected>Escoger</option>
                   <option value="{{documento.id_imagen_queja}}" *ngFor="let documento of documentosAdjuntos">{{documento.imagen}}</option>
                 </select-->
-				<div class="reglist">
-				<table class="table table-striped">
-				  <thead>
-					<tr>
-					  <th>documento adjunto</th>
-					</tr>
-				  </thead>
-				  <tbody>
-					<tr *ngFor="let documento of documentosAdjuntos">
-					  <th scope="row"></th>
-					  <td>{{ documento.descripcion_imagen_otros }}</td>
-					</tr>
-				  </tbody>
-				</table>
-			  </div>
-					  
+                  <div class="reglist">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>documento adjunto</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let documento of documentosAdjuntos">
+                          <th scope="row"></th>
+                          <td>{{ documento.descripcion_imagen_otros }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
               </div>
             </div>
           </div>
-        </div>
-		
-        <div class="form-group row">
-          <div class="col-sm-12 text-center">
-            <button
-              class="btn btn-primary"
-              type="submit"
-			  [disabled]="completado "
-              >Guardar y Cerrar Queja</button>
+
+          <div class="form-group row">
+            <div class="col-sm-12 text-center">
+              <button class="btn btn-primary" type="submit" [disabled]="completado ">Guardar y Cerrar Queja</button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 
 
-	<!--div *ngIf="flagInfoError" class="alert alert-alert col-lg-12" [@EnterLeave]="'flyIn'">
+  <!--div *ngIf="flagInfoError" class="alert alert-alert col-lg-12" [@EnterLeave]="'flyIn'">
 		Hubo un error al procesar esta acción, por favor intente de nuevo.
 	</div-->
 
 
-	
+
 </body>
+
 </html>

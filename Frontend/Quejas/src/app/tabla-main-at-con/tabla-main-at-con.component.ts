@@ -25,6 +25,8 @@ import {SubmitFormService} from '../shared/submit-form.service';
 import {SeguridadService} from '../shared/seguridad.service';
 import {tryCatch} from 'rxjs/internal-compatibility';
 
+
+
 declare function myclick(thisobject): any;
 
 @Component({
@@ -464,8 +466,7 @@ export class TablaMainAtConComponent implements OnInit {
     this._maintableservice.getUsers(frmmainloc).subscribe((Data) => {
       if (Data['reason'] == 'OK') {
         tempstr = Data['value'];
-        console.log('data infor:' , Data);
-        //console.log(tempstr);
+        console.log('data infor:' , JSON.parse('[' + tempstr.slice(0, -1) + ']'));
         if (tempstr != null && tempstr != '') {
           this.FrmMainListFD = JSON.parse('[' + tempstr.slice(0, -1) + ']');
           if (this.FrmMainListFD.length >= 2000) {
@@ -478,10 +479,9 @@ export class TablaMainAtConComponent implements OnInit {
         this.rows = this.FrmMainListFD;
         this.data = this.rows;
         this.filteredData = this.rows;
-        console.log(Data);
+        
         this.flagDBError = false;
       } else {
-        console.log('Rest Service Error');
         this.flagDBError = true;
         this.SetSecTimerDBError();
       }
@@ -586,10 +586,14 @@ export class TablaMainAtConComponent implements OnInit {
 
   SetBtnClass(enabled: boolean, image) {
     if (enabled) {
-      return 'btn btn-apgreen btn-image ' + image;
+      return 'btn btn-apgreen btn-image  ' + image;
     } else {
-      return 'btn btn-primary btn-image ' + image;
+      return 'btn btn-primary btn-image  ' + image;
     }
+  }
+
+  changeClassIcon(enabled: boolean){
+    return enabled ? "btn btn-apgreen icon-dashboard " : "btn btn-primary icon-dashboard ";
   }
 
 }

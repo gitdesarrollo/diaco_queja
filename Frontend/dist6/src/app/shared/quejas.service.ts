@@ -140,11 +140,32 @@ export class QuejasService {
       }*/
 
     saveData(queja: Queja) {
-
-        return this.http.post<any>(BASE_URL_REST_FILE2 + 'quejas', queja, this.httpOptions).pipe(
-            tap((item) => console.log('asignacion 1')), catchError(this.handleError<any>('error en grabar '))
+        return  this.http.post<any>(BASE_URL_REST_FILE2 + 'quejas', queja, this.httpOptions).pipe(
+            tap(response => {
+                console.log("respuesta de queja ", response)               
+            }),
+            catchError(this.handleError<any>('error 2'))
         );
 
+        // // this.http.post<ResponseRs>(BASE_URL_REST_FILE2 + 'consumidores/update_sede', consumidor); 
+        // return this.http.post<any>(BASE_URL_REST_FILE2 + 'quejas', queja, this.httpOptions).pipe(
+        //     tap((item) => console.log('asignacion 1', queja)), catchError(this.handleError<any>('error en grabar '))
+        // );
+
+    }
+
+    saveSedeCercana(consumidor: Consumidor){
+        return this.http.post<ResponseRs>(BASE_URL_REST_FILE2 + 'consumidores/update_sede', consumidor).pipe(
+            tap(response => {
+                if (response.code === 200) {
+                    console.log("Primera respuesta")
+                }else {
+                    console.log("error en sede");
+                }
+                
+            }),
+            catchError(this.handleError<any>('error 1'))
+        );
     }
 
     dynamicAssignment(queja: Queja) {

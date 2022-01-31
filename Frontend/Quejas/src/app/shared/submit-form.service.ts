@@ -197,7 +197,7 @@ export class SubmitFormService {
 				this.srv_atencion_consumidor=rol;
 		}
 	}
-	console.log('rol at con: ',this.srv_atencion_consumidor);
+	// console.log('rol at con: ',this.srv_atencion_consumidor);
   }
   
   LoadServPub(formsubmit){

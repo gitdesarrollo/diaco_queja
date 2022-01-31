@@ -4,6 +4,7 @@ import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 import {QuejasService} from '../shared/quejas.service';
 import {Queja} from '../shared/queja.model';
+import { Consumidor } from '../shared/consumidor.model';
 import {FileUploader, FileItem} from 'ng2-file-upload';
 import {HttpClient} from '@angular/common/http';
 import {BASE_URL_REST_FILE2} from '../conc-virt-const';
@@ -16,6 +17,8 @@ import {BsLocaleService} from 'ngx-bootstrap/datepicker';
 import {listLocales} from 'ngx-bootstrap/chronos';
 import {formatDate} from '@angular/common';
 import {Adjuntos} from '../shared/adjuntos.model';
+import {Sede} from '../shared/sede.model';
+import {SedesService} from '../shared/sedes.service';
 
 
 @Component({
@@ -53,11 +56,14 @@ export class QuejaComponent implements OnInit {
     _existenUploads: string = '0';
     documentosAdjuntos: Adjuntos[];
     documentosSubscription: Subscription;
+    sedes: Sede[];
+    sedesSubscription: Subscription;
 
     constructor(private router: Router,
                 private quejasService: QuejasService,
                 private _submitFormService: SubmitFormService,
-                private _seguridadService: SeguridadService
+                private _seguridadService: SeguridadService,
+                private sedesService: SedesService
         , private localeService: BsLocaleService) {
         //,public dialogRef: MatDialogRef<QuejaComponent>) {
         //this.str_usuario="Usuario: "+this._submitFormService.Get_username();
@@ -100,6 +106,12 @@ export class QuejaComponent implements OnInit {
             this.str_queja = '- Queja No. ' + _queja.noQueja + '-' + _queja.anio;
         }
         this.presencial = this.quejasService.vdato;
+
+        this.sedesSubscription = this.sedesService.fetchData().subscribe(
+            res => {
+                this.sedes = res.value;
+            }
+        );
     }
 
     initQuejaForm(_queja: Queja) {
@@ -118,7 +130,8 @@ export class QuejaComponent implements OnInit {
             'fechaFactura': new FormControl(_queja ? _queja.fechaFactura : '', Validators.required),
             'detalleQueja': new FormControl(_queja ? _queja.detalleQueja : '', Validators.required),
             'solicitaQue': new FormControl(_queja ? _queja.solicitaQue : '', Validators.required),
-            'documento': new FormControl('')
+            'documento': new FormControl(''),
+            'sedeDiacoCercana': new FormControl(''),
         });
         console.info('existe', _queja);
         if (_queja) {
@@ -141,6 +154,10 @@ export class QuejaComponent implements OnInit {
                     }
                 }
             );
+           //sedeDiacoCercana
+            this.quejaForm.patchValue({
+                'sedeDiacoCercana': _queja.sedeDiacoCercana
+            }); 
         }
 
     }
@@ -183,6 +200,8 @@ export class QuejaComponent implements OnInit {
 
     public onSubmit() {
         let queja: Queja = new Queja();
+        let consumidor: Consumidor = new Consumidor();
+        let sedeDiacoCercana = this.quejaForm.value.sedeDiacoCercana;
         if (this.quejaForm.value.facturaNumero == '' || this.quejaForm.value.facturaNumero == undefined) {
             //this.mjsError += '- Ingrese numero de factura o documento.  ' + '\r\n';
             queja.facturaNumero = this.quejaForm.value.facturaNumero;
@@ -207,6 +226,13 @@ export class QuejaComponent implements OnInit {
         queja.idConsumidor = this.quejasService.consumidor.idConsumidor;
         queja.idProveedor = this.quejasService.proveedor.idProveedor;
 
+        //alert(sedeDiacoCercana);
+        if (sedeDiacoCercana == '' || sedeDiacoCercana == null || sedeDiacoCercana == undefined) {
+            this.mjsError += '- Selecciones sede.  ' + '\r\n';
+        } else {
+            consumidor.sedeDiacoCercana = this.quejaForm.value.sedeDiacoCercana;
+        }
+
         if (this.mjsError == '') {
 
         } else {
@@ -228,6 +254,8 @@ export class QuejaComponent implements OnInit {
         */
         let _queja: Queja = this.quejasService.quejat;
         let _proveedor = this.quejasService.proveedor;
+
+        
 
         if (_queja) {
             queja.idQueja = _queja.idQueja;
@@ -257,10 +285,12 @@ export class QuejaComponent implements OnInit {
             queja.expiradomail = _queja.expiradomail;
             queja.flagalerta = _queja.flagalerta;
             queja.idEstablecimiento = _queja.idEstablecimiento;
+            queja.sedeDiacoCercana = _queja.sedeDiacoCercana;
         }
 
         let _sucursal = this.quejasService.sucursal;
         let _idsucursal = this.quejasService.idsucursal;
+        consumidor.idConsumidor = queja.idConsumidor;
         console.info('queja', queja);
         if (_sucursal != null && _sucursal != undefined) {
             queja.idEstablecimiento = _sucursal.idEstablecimiento;
@@ -290,6 +320,12 @@ export class QuejaComponent implements OnInit {
         }
 
         //queja = this.quejasService.createQueja(queja, this.uploader).susbribe;
+        this.quejasService.saveSedeCercana(consumidor).subscribe(
+            response => {
+                console.log("Ingreso de sede cercana ", response)
+            }
+        )
+
         this.quejasService.saveData(queja).subscribe(
             (retvalue) => {
                 if (retvalue) {
@@ -315,6 +351,9 @@ export class QuejaComponent implements OnInit {
                 );
             }
         );
+
+        
+
         this.quejasService.consumidor = null;
         this.quejasService.proveedor = null;
         this.quejasService.quejat = null;

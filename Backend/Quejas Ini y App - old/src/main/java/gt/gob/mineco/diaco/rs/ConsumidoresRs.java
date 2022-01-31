@@ -1,5 +1,6 @@
 package gt.gob.mineco.diaco.rs;
 
+import gt.gob.mineco.diaco.dao.ConsumidorRepository;
 import gt.gob.mineco.diaco.dto.ConsumidorDto;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -10,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import gt.gob.mineco.diaco.model.DiacoConsumidor;
 import gt.gob.mineco.diaco.model.TipoEmail;
@@ -26,6 +28,9 @@ public class ConsumidoresRs {
     @Inject
     ConsumidoresServiceImp consumidoresService;
 
+    @Inject
+    ConsumidorRepository consumidorDao;
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -35,6 +40,19 @@ public class ConsumidoresRs {
         consumidor = consumidoresService.saveConsumidor(consumidor);
         response.setValue(consumidor);
         return response;
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/update_sede")
+    public ResponseRs updateSede(DiacoConsumidor consumidor){
+        ResponseRs response = new ResponseRs();
+        // DiacoConsumidor infoConsumidor = this.consumidorDao.findById(consumidor.getIdConsumidor());
+        consumidor = consumidoresService.updateSede(consumidor);
+        response.setCode(200L);
+        response.setReason("ok");
+        response.setValue(consumidor);
+        return response; 
     }
     
     @POST

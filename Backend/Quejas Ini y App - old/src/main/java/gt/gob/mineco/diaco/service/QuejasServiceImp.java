@@ -66,6 +66,7 @@ public class QuejasServiceImp {
     //procedimiento que se llama cuando se llena los 40 datos
     public DiacoQueja saveQuejadq(DiacoQueja queja) {
         boolean existeq = false;
+        
         if (queja.getIdQueja() != null) {
             System.out.println("actualiza queja " + queja.getIdQueja());
             existeq = true;
@@ -92,12 +93,14 @@ public class QuejasServiceImp {
                 noQueja = noQuejaIni;
             }
             queja.setAnio(LocalDate.now().getYear());
+            // System.out.println("Sede queja" + queja.getIdDiacoSede());
             queja.setNoQueja(noQueja);
             queja.setFechaQueja(new Timestamp(new Date().getTime()));
 
         }
         if (existeq) {
             quejaDao.merge(queja);
+            
         } else {
             quejaDao.save(queja);
         }

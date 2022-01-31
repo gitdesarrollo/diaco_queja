@@ -57,8 +57,15 @@ public class ConsumidoresServiceImp {
         return consumidorDao.save(consumidor);
     }
 
+    public DiacoConsumidor updateSede(DiacoConsumidor consumidor){
+        System.out.println("Sede Cercana"+ consumidor.getSedeDiacoCercana());
+        DiacoConsumidor data = this.findConsumidorById(consumidor.getIdConsumidor());
+        data.setSedeDiacoCercana(consumidor.getSedeDiacoCercana());
+         return this.consumidorDao.merge(data);
+    }
+
     public DiacoConsumidor updateConsumidor(DiacoConsumidor consumidor) {
-        System.out.println("actualiza "+(consumidor!=null?consumidor.getIdConsumidor():"null"));
+        // System.out.println("actualiza "+(consumidor!=null?consumidor.getIdConsumidor():"null"));
         if (consumidor != null) {
             DiacoConsumidor temp = this.findConsumidorById(consumidor.getIdConsumidor());
             //System.out.println("temp "+(temp!=null?temp.getIdConsumidor():"null"));

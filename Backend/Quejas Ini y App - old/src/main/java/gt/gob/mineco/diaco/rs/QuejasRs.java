@@ -22,8 +22,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.apache.axis.encoding.ser.SourceDataHandlerDeserializer;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import gt.gob.mineco.diaco.service.ConsumidoresServiceImp;
 
 @Path("/quejas")
 @RequestScoped
@@ -33,6 +36,8 @@ public class QuejasRs {
     QuejasServiceImp quejasService;
     @Inject
     ConsumidorRepository consumidorDao;
+    @Inject
+    ConsumidoresServiceImp consumidoresService;
 
     @GET
     @Path("/{noqueja}")
@@ -51,8 +56,12 @@ public class QuejasRs {
     @Consumes(MediaType.APPLICATION_JSON)
     public ResponseRs createQueja(DiacoQueja queja) {
         ResponseRs response = new ResponseRs();
-        queja.setCompleto30Datos("1");
+        // consumidor.setIdConsumidor(queja.getIdConsumidor());
+        // consumidor = consumidoresService.updateConsumidor(consumidor);
+        
         DiacoConsumidor id = this.consumidorDao.findById(queja.getIdConsumidor());
+        System.out.println("lo que viene del metodo" + id.getSedeDiacoCercana());
+        queja.setCompleto30Datos("1");
         queja.setIdDiacoSede(id.getSedeDiacoCercana());
         queja.setIdMotivoQueja(id.getIdMotivoQueja());
         queja = quejasService.saveQuejadq(queja);

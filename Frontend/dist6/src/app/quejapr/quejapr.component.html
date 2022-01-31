@@ -1,13 +1,15 @@
 <html>
+
 <head>
 
 </head>
+
 <body>
-    
+
 	<div class="container">
-	
-	
-	<!--img src="imagen-grd2.png" class="center"/-->
+
+
+		<!--img src="imagen-grd2.png" class="center"/-->
 		<div class="row">
 			<div class="col-lg-4 text-center">
 				&nbsp;
@@ -21,214 +23,170 @@
 		</div>
 	</div>
 
-<div class="container" *ngIf="continuar=='1'">
+	<div class="container" *ngIf="continuar=='1'">
 
- 
-  
-  <!--div class="row">
+
+
+		<!--div class="row">
     <h2></h2>
   </div-->
-  <div class="row">
-    <div class="col-lg-12">
-      <form [formGroup]="quejaForm" (ngSubmit)="onSubmit()" novalidate>
-	   	<div class="form-group row">
-        <label for="" class="col-lg-8 col-form-label">Consulta/Solicitud de parte del <strong>Proveedor.</strong></label>
-		
-		<div class="col-lg-12">
-            <div class="card">
-              <div class="card-body">
-				<div class="form-group row">
-				  <label for="detalleQueja"  class="col-lg-12 col-form-label" [ngStyle]="{color: 'blue'}"></label>
-				  <div class="col-lg">
-					{{_vConsulta}}
-				  </div>
-				</div>  
-			  </div>
-			</div>
-		</div>
-		</div>
-
-		<div class="form-group row">
-			<label for="" class="col-lg-2 col-form-label"><strong>Respuesta</strong></label>
+		<div class="row">
 			<div class="col-lg-12">
-				<div class="card">
-				  <div class="card-body">
+				<form [formGroup]="quejaForm" (ngSubmit)="onSubmit()" novalidate>
 					<div class="form-group row">
-					  <label for="respuesta"  class="col-lg-12 col-form-label" [ngStyle]="{color: 'blue'}"></label>
-					  <div class="col-lg">
-						<textarea
-						  id="respuesta"
-						  class="form-control"
-						  matTooltipPosition="after"
-								  matTooltip="Ingrese su respuesta"
-								  matTooltipClass="custom-tooltip-blue"
-						  formControlName="respuesta"
-						  maxLength="200"
-						  required
-						  placeholder="Escribe aquí tu respuesta"
-						  ></textarea>
-					  </div>
-					</div>  
-				  </div>
-				</div>
-			</div>
-			</div>
-	  
-	  
-	  
-		<div class="form-group row">
-          <label for="" class="col-lg-3 col-form-label">Datos Consumidor</label>
-		   
-		<div class="col-lg-12">
-            <div class="card">
-              <div class="card-body">
-			  
-				<div class="form-group row">
-				
-				<label for="et1" >(-)</label>
-				<label for="dpiPasaporte" class="col-lg-2 col-form-label" >DPI o pasaporte</label>
-          <div class="col-lg-3">
-            <input
-              id="dpiPasaporte"
-              type="text"
-              class="form-control"
-			  matTooltipPosition="after"
-					  matTooltip="Ingrese su DPI o Pasaporte"
-					  matTooltipClass="custom-tooltip-blue"
-              formControlName="dpiPasaporte"
-			  (change)="onDocumentoIdentificacionChanged()"
-			  placeholder="Documento"
-			  required
-			  >
+						<label for="" class="col-lg-8 col-form-label">Consulta/Solicitud de parte del
+							<strong>Proveedor.</strong></label>
 
-          </div>
-		  <label for="et2" [ngStyle]="{color: 'red'}" class="col-lg-1 col-form-label"></label>
-		  <label for="et2" [ngStyle]="{color: 'red'}" >(*)</label>
-		  <label for="nombre" class="col-lg-2 col-form-label">Nombre(s)</label>
-		  <div class="col-lg-3" *ngIf="_vdatos == '10'">
-			<input
-			  id="nombre"
-			  type="text"
-			  class="form-control"
-			  matTooltipPosition="after"
-			  matTooltip="Ingrese su nombre"
-			  matTooltipClass="custom-tooltip-blue"
-			  formControlName="nombre" 
-			  placeholder="Nombre(s)"
-			  required>
-		  </div>
-		  <div class="col-lg-3"   >
-			<label [ngStyle]="{color: 'blue'}">{{_pnombre}}</label>
-		</div>
-				  
-				</div>
-				
-				
-	
-	
-				<div class="form-group row">
-				
-	<label for="et3" [ngStyle]="{color: 'red'}">(*)</label>
-	  <label for="apellido" class="col-lg-2 col-form-label">Apellido(s)</label>
-	  <div class="col-lg-3" *ngIf="_vdatos == '1O'">
-		<input
-		  id="apellido"
-		  type="text"
-		  class="form-control"
-		  matTooltipPosition="after"
-		  matTooltip="Ingrese su apellido"
-		  matTooltipClass="custom-tooltip-blue"
-		  formControlName="apellido" 
-		  placeholder="Apellido(s)"
-		  required>
-	  </div>
-	   <div class="col-lg-3"   >
-			<label [ngStyle]="{color: 'blue'}">{{_papellido}}</label>
-		</div>
-					 <label for="et2" [ngStyle]="{color: 'red'}" class="col-lg-1 col-form-label"></label>
-		 <label for="et4" [ngStyle]="{color: 'red'}">(*)</label>		
-          <label for="telefono" class="col-lg-2 col-form-label">telefono</label>
-          <div class="col-lg-3" *ngIf="_vdatos == '10'">
-            <input
-              id="telefono"
-              type="text"
-              class="form-control"
-			  matTooltipPosition="after"
-					  matTooltip="Ingrese su Número de teléfono"
-					  matTooltipClass="custom-tooltip-blue"
-              formControlName="telefono"
-			  placeholder="Teléfono"
-			   pattern="^[0-9]{8}$"
-			  required>
-          </div>
-		  <div class="col-lg-3"   >
-			<label [ngStyle]="{color: 'blue'}">{{_ptelefono}}</label>
-		</div>
-		  </div>
-		  <div class="form-group row">
-		  <label for="et5" [ngStyle]="{color: 'red'}">(*)</label>
-		  <label for="correo" class="col-lg-2 col-form-label">Correo Electronico</label>
-          <div class="col-lg-3" *ngIf="_vdatos == '10'" >
-            <input
-              id="correo"
-              type="text"
-              class="form-control"
-			  matTooltipPosition="after"
-					  matTooltip="Ingrese su correo electrónico"
-					  matTooltipClass="custom-tooltip-blue"
-              formControlName="correo"
-			  placeholder="Correo"
-			  pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-			  required>
-          </div>
-		  <div class="col-lg-3"  >
-			<label [ngStyle]="{color: 'blue'}">{{_pcorreo}}</label>
-		</div>
-        </div>
-				
-			
-		<div class="form-group row">
-		  <label for="et6" [ngStyle]="{color: 'red'}">(*)</label>
-          <label for="detalleQueja" class="col-lg-2 col-form-label">Detalle Queja (sea breve y conciso)</label>
-          <div class="col-lg-3" *ngIf="_vdatos == '1'">
-            <textarea
-              id="detalleQueja"
-              class="form-control"
-			  matTooltipPosition="after"
-					  matTooltip="Ingrese su queja"
-					  matTooltipClass="custom-tooltip-blue"
-              formControlName="detalleQueja"
-			  maxLength="1000"
-			  required
-			  ></textarea>
-          </div>
-		<div class="col-lg-3" *ngIf="_vdatos == '0'"  >
-			<label [ngStyle]="{color: 'blue'}">{{_detalle}}</label>
-		</div>
-         <label for="et7" [ngStyle]="{color: 'red'}">(*)</label>
-          <label for="solicitaQue" class="col-lg-2 col-form-label">Petición Queja (sea breve y conciso)</label>
-          <div class="col-lg-3" *ngIf="_vdatos == '1'">
-            <textarea
-              id="solicitaQue"
-              class="form-control"
-			  matTooltipPosition="after"
-					  matTooltip="Ingrese su solicitud de la queja ingresada."
-					  matTooltipClass="custom-tooltip-blue"
-              formControlName="solicitaQue"
-			  maxLength="250"
-			  required
-			  ></textarea>
-          </div>
-			<div class="col-lg-3" *ngIf="_vdatos == '0'"  >
-				<label [ngStyle]="{color: 'blue'}">{{_solicitud}}</label>
-			</div>
-        </div>
-				
-			  </div>
-			</div>
-		</div>
-		</div>
-		<!--div *ngIf="quejaForm.get('dpiPasaporte').errors && quejaForm.get('dpiPasaporte').dirty">
+						<div class="col-lg-12">
+							<div class="card">
+								<div class="card-body">
+									<div class="form-group row">
+										<label for="detalleQueja" class="col-lg-12 col-form-label"
+											[ngStyle]="{color: 'blue'}"></label>
+										<div class="col-lg">
+											{{_vConsulta}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="" class="col-lg-2 col-form-label"><strong>Respuesta</strong></label>
+						<div class="col-lg-12">
+							<div class="card">
+								<div class="card-body">
+									<div class="form-group row">
+										<label for="respuesta" class="col-lg-12 col-form-label"
+											[ngStyle]="{color: 'blue'}"></label>
+										<div class="col-lg">
+											<textarea id="respuesta" class="form-control" matTooltipPosition="after"
+												matTooltip="Ingrese su respuesta" matTooltipClass="custom-tooltip-blue"
+												formControlName="respuesta" maxLength="200" required
+												placeholder="Escribe aquí tu respuesta"></textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class="form-group row">
+						<label for="" class="col-lg-3 col-form-label">Datos Consumidor</label>
+
+						<div class="col-lg-12">
+							<div class="card">
+								<div class="card-body">
+
+									<div class="form-group row">
+
+										<label for="et1">(-)</label>
+										<label for="dpiPasaporte" class="col-lg-2 col-form-label">DPI o
+											pasaporte</label>
+										<div class="col-lg-3">
+											<input id="dpiPasaporte" type="text" class="form-control"
+												matTooltipPosition="after" matTooltip="Ingrese su DPI o Pasaporte"
+												matTooltipClass="custom-tooltip-blue" formControlName="dpiPasaporte"
+												(change)="onDocumentoIdentificacionChanged()" placeholder="Documento"
+												required>
+
+										</div>
+										<label for="et2" [ngStyle]="{color: 'red'}"
+											class="col-lg-1 col-form-label"></label>
+										<label for="et2" [ngStyle]="{color: 'red'}">(*)</label>
+										<label for="nombre" class="col-lg-2 col-form-label">Nombre(s)</label>
+										<div class="col-lg-3" *ngIf="_vdatos == '10'">
+											<input id="nombre" type="text" class="form-control"
+												matTooltipPosition="after" matTooltip="Ingrese su nombre"
+												matTooltipClass="custom-tooltip-blue" formControlName="nombre"
+												placeholder="Nombre(s)" required>
+										</div>
+										<div class="col-lg-3">
+											<label [ngStyle]="{color: 'blue'}">{{_pnombre}}</label>
+										</div>
+
+									</div>
+
+
+
+
+									<div class="form-group row">
+
+										<label for="et3" [ngStyle]="{color: 'red'}">(*)</label>
+										<label for="apellido" class="col-lg-2 col-form-label">Apellido(s)</label>
+										<div class="col-lg-3" *ngIf="_vdatos == '1O'">
+											<input id="apellido" type="text" class="form-control"
+												matTooltipPosition="after" matTooltip="Ingrese su apellido"
+												matTooltipClass="custom-tooltip-blue" formControlName="apellido"
+												placeholder="Apellido(s)" required>
+										</div>
+										<div class="col-lg-3">
+											<label [ngStyle]="{color: 'blue'}">{{_papellido}}</label>
+										</div>
+										<label for="et2" [ngStyle]="{color: 'red'}"
+											class="col-lg-1 col-form-label"></label>
+										<label for="et4" [ngStyle]="{color: 'red'}">(*)</label>
+										<label for="telefono" class="col-lg-2 col-form-label">telefono</label>
+										<div class="col-lg-3" *ngIf="_vdatos == '10'">
+											<input id="telefono" type="text" class="form-control"
+												matTooltipPosition="after" matTooltip="Ingrese su Número de teléfono"
+												matTooltipClass="custom-tooltip-blue" formControlName="telefono"
+												placeholder="Teléfono" pattern="^[0-9]{8}$" required>
+										</div>
+										<div class="col-lg-3">
+											<label [ngStyle]="{color: 'blue'}">{{_ptelefono}}</label>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="et5" [ngStyle]="{color: 'red'}">(*)</label>
+										<label for="correo" class="col-lg-2 col-form-label">Correo Electronico</label>
+										<div class="col-lg-3" *ngIf="_vdatos == '10'">
+											<input id="correo" type="text" class="form-control"
+												matTooltipPosition="after" matTooltip="Ingrese su correo electrónico"
+												matTooltipClass="custom-tooltip-blue" formControlName="correo"
+												placeholder="Correo"
+												pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" required>
+										</div>
+										<div class="col-lg-3">
+											<label [ngStyle]="{color: 'blue'}">{{_pcorreo}}</label>
+										</div>
+									</div>
+
+
+									<div class="form-group row">
+										<label for="et6" [ngStyle]="{color: 'red'}">(*)</label>
+										<label for="detalleQueja" class="col-lg-2 col-form-label">Detalle Queja (sea
+											breve y conciso)</label>
+										<div class="col-lg-3" *ngIf="_vdatos == '1'">
+											<textarea id="detalleQueja" class="form-control" matTooltipPosition="after"
+												matTooltip="Ingrese su queja" matTooltipClass="custom-tooltip-blue"
+												formControlName="detalleQueja" maxLength="1000" required></textarea>
+										</div>
+										<div class="col-lg-3" *ngIf="_vdatos == '0'">
+											<label [ngStyle]="{color: 'blue'}">{{_detalle}}</label>
+										</div>
+										<label for="et7" [ngStyle]="{color: 'red'}">(*)</label>
+										<label for="solicitaQue" class="col-lg-2 col-form-label">Petición Queja (sea
+											breve y conciso)</label>
+										<div class="col-lg-3" *ngIf="_vdatos == '1'">
+											<textarea id="solicitaQue" class="form-control" matTooltipPosition="after"
+												matTooltip="Ingrese su solicitud de la queja ingresada."
+												matTooltipClass="custom-tooltip-blue" formControlName="solicitaQue"
+												maxLength="250" required></textarea>
+										</div>
+										<div class="col-lg-3" *ngIf="_vdatos == '0'">
+											<label [ngStyle]="{color: 'blue'}">{{_solicitud}}</label>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--div *ngIf="quejaForm.get('dpiPasaporte').errors && quejaForm.get('dpiPasaporte').dirty">
 				<p *ngIf="quejaForm.get('dpiPasaporte').hasError('required')" [ngStyle]="{color: 'red'}">Ingrese su DPI o Pasaporte</p>
 			  </div>
 		<div *ngIf="quejaForm.get('telefono').errors && quejaForm.get('telefono').dirty">
@@ -242,158 +200,133 @@
 			  </div>	  
 		<div *ngIf="quejaForm.get('solicitaQue').errors && quejaForm.get('solicitaQue').dirty">
 				<p *ngIf="quejaForm.get('solicitaQue').hasError('maxLength')" [ngStyle]="{color: 'red'}">Solicitud de queja solo admite 250 caracteres</p>
-			  </div-->	
-			  
-		<div class="form-group row">
-          <label for="" class="col-lg-2 col-form-label">Datos Proveedor</label>
-		<div class="col-lg-12">
-            <div class="card">
-              <div class="card-body">
-			  
-			  <div class="form-group row">
-			      <label for="et8" [ngStyle]="{color: 'red'}">(*)</label>
-				  <label for="nitProveedor" class="col-lg-2 col-form-label">NIT</label>
-				  <div class="col-lg-3">
-					<input
-					  id="nitProveedor"
-					  type="text"
-					  class="form-control"
-					  matTooltipPosition="after"
-					  matTooltip="Ingrese NIT del proveedor"
-					  matTooltipClass="custom-tooltip-blue"
-					  formControlName="nitProveedor"
-					  (click)="onProveedorChanged()"
-					  placeholder="NIT"
-					  pattern="^[0-9]+([0-9]|[K]|[k]){1}$"
-					  required>
-					  
-					  
-				  </div>
-				   <label for="et2" [ngStyle]="{color: 'red'}" class="col-lg-1 col-form-label"></label>
-				  <label for="et9" [ngStyle]="{color: 'red'}">(*)</label>
-				  <label for="ubicacion" class="col-lg-2 col-form-label">Ubicacion</label>
-				  <div class="col-lg-3" *ngIf="_vdatos == '1'"  >
-				  <input
-					  id="ubicacion"
-					  type="text"
-					  class="form-control"
-					  matTooltipPosition="after"
-					  matTooltip="Ingrese ubicacion"
-					  matTooltipClass="custom-tooltip-blue"
-					  formControlName="ubicacion"
-					  placeholder="Ubicación"
-					  required>
-				 </div>
-				 <div class="col-lg-3" *ngIf="_vdatos == '0'"  >
-					<label [ngStyle]="{color: 'blue'}">{{_ubicacion}}</label>
-				</div>
-			</div>
-			
-			<div class="form-group row">
-			<label for="nitProveedor" class="col-lg-10 col-form-label" [ngStyle]="{color: 'blue'}" >{{nproveedor}}</label>
-				
-			</div>
-			
-			  </div>
-			</div>
-		</div>
-		  
-		 
-		  
-		</div>
-		<div *ngIf="quejaForm.get('nitProveedor').errors && quejaForm.get('nitProveedor').dirty">
-				<p *ngIf="quejaForm.get('nitProveedor').hasError('pattern')" [ngStyle]="{color: 'red'}">Error NIT incorrecto</p>
-			  </div>
-		
-		
-        <div class="form-group row" *ngIf="_varchivos=='1'">
-          <label for="" class="col-lg-12 col-form-label">Datos Adjuntos</label>
-          <div class="col-lg-12">
-            <div class="card">
-              <div class="card-body">
-                <div class="form-group row">
-				  <label for="et9" [ngStyle]="{color: 'red'}">(*)</label> 
-                  <label for="filFactura" class="col-lg-2 col-form-label">Factura o Contrato</label>
-                  <div class="col-lg-10">
-                    <input
-                      #filFactura
-                      id="filFactura"
-	                      type="file"
-                      ng2FileSelect
-                      [uploader]="uploader"
-                      class="form-control"
-					  matTooltipPosition="above"
-					  matTooltip="Agrege copia de su documento."
-					  matTooltipClass="custom-tooltip-blue"
-                      (change)="onFileChanged('FAC')"
-					  required>
-                  </div>
-                </div>
-                <div class="form-group row">
-				  <label for="et9" [ngStyle]="{color: 'red'}">(*)</label>
-                  <label for="filDpi" class="col-lg-2 col-form-label">DPI o Pasaporte</label>
-                  <div class="col-lg-10">
-                    <input
-                      #filDpi
-                      id="filDpi"
-                      type="file"
-                      ng2FileSelect
-                      [uploader]="uploader"
-                      class="form-control"
-					  matTooltipPosition="above"
-					  matTooltip="Agrege su copia de DPI o Pasaporte"
-					  matTooltipClass="custom-tooltip-blue"
-                      (change)="onFileChanged('DPI')"
-					  required>
-                  </div>
-                </div>
-                <div class="row">
-                  <p>Estos documentos deben ir completos, por ejemplo el DPI debe ser escaneado a ambos lados.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-		  <label class="col-form-label" >(Los campos marcados </label>
-		  <label class="col-form-label" [ngStyle]="{color: 'red'}">  (*)  </label>
-		  <label class="col-form-label" > son obligatorios.)</label>
-        </div>
-		
+			  </div-->
 
-		
-		
-        <div class="form-group row" *ngIf="success==false">
-          <div class="col-lg-12 text-center">
-            <button
-              class="btn btn-primary"
-              type="submit"
-			  matTooltipPosition="after"
-					  matTooltip="Grabe su queja."
-					  matTooltipClass="custom-tooltip-blue"
-              >Guardar Queja</button>
-          </div>
-		</div>  
-		<!--div class="form-group row">
+					<div class="form-group row">
+						<label for="" class="col-lg-2 col-form-label">Datos Proveedor</label>
+						<div class="col-lg-12">
+							<div class="card">
+								<div class="card-body">
+
+									<div class="form-group row">
+										<label for="et8" [ngStyle]="{color: 'red'}">(*)</label>
+										<label for="nitProveedor" class="col-lg-2 col-form-label">NIT</label>
+										<div class="col-lg-3">
+											<input id="nitProveedor" type="text" class="form-control"
+												matTooltipPosition="after" matTooltip="Ingrese NIT del proveedor"
+												matTooltipClass="custom-tooltip-blue" formControlName="nitProveedor"
+												(click)="onProveedorChanged()" placeholder="NIT"
+												pattern="^[0-9]+([0-9]|[K]|[k]){1}$" required>
+
+
+										</div>
+										<label for="et2" [ngStyle]="{color: 'red'}"
+											class="col-lg-1 col-form-label"></label>
+										<label for="et9" [ngStyle]="{color: 'red'}">(*)</label>
+										<label for="ubicacion" class="col-lg-2 col-form-label">Ubicacion</label>
+										<div class="col-lg-3" *ngIf="_vdatos == '1'">
+											<input id="ubicacion" type="text" class="form-control"
+												matTooltipPosition="after" matTooltip="Ingrese ubicacion"
+												matTooltipClass="custom-tooltip-blue" formControlName="ubicacion"
+												placeholder="Ubicación" required>
+										</div>
+										<div class="col-lg-3" *ngIf="_vdatos == '0'">
+											<label [ngStyle]="{color: 'blue'}">{{_ubicacion}}</label>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label for="nitProveedor" class="col-lg-10 col-form-label"
+											[ngStyle]="{color: 'blue'}">{{nproveedor}}</label>
+
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+
+
+					</div>
+					<div *ngIf="quejaForm.get('nitProveedor').errors && quejaForm.get('nitProveedor').dirty">
+						<p *ngIf="quejaForm.get('nitProveedor').hasError('pattern')" [ngStyle]="{color: 'red'}">Error
+							NIT incorrecto</p>
+					</div>
+
+
+					<div class="form-group row" *ngIf="_varchivos=='1'">
+						<label for="" class="col-lg-12 col-form-label">Datos Adjuntos</label>
+						<div class="col-lg-12">
+							<div class="card">
+								<div class="card-body">
+									<div class="form-group row">
+										<label for="et9" [ngStyle]="{color: 'red'}">(*)</label>
+										<label for="filFactura" class="col-lg-2 col-form-label">Factura o
+											Contrato</label>
+										<div class="col-lg-10">
+											<input #filFactura id="filFactura" type="file" ng2FileSelect
+												[uploader]="uploader" class="form-control" matTooltipPosition="above"
+												matTooltip="Agrege copia de su documento."
+												matTooltipClass="custom-tooltip-blue" (change)="onFileChanged('FAC')"
+												required>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="et9" [ngStyle]="{color: 'red'}">(*)</label>
+										<label for="filDpi" class="col-lg-2 col-form-label">DPI o Pasaporte</label>
+										<div class="col-lg-10">
+											<input #filDpi id="filDpi" type="file" ng2FileSelect [uploader]="uploader"
+												class="form-control" matTooltipPosition="above"
+												matTooltip="Agrege su copia de DPI o Pasaporte"
+												matTooltipClass="custom-tooltip-blue" (change)="onFileChanged('DPI')"
+												required>
+										</div>
+									</div>
+									<div class="row">
+										<p>Estos documentos deben ir completos, por ejemplo el DPI debe ser escaneado a
+											ambos lados.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<label class="col-form-label">(Los campos marcados </label>
+						<label class="col-form-label" [ngStyle]="{color: 'red'}"> (*) </label>
+						<label class="col-form-label"> son obligatorios.)</label>
+					</div>
+
+
+
+
+					<div class="form-group row" *ngIf="success==false">
+						<div class="col-lg-12 text-center">
+							<button class="btn btn-primary" type="submit" matTooltipPosition="after"
+								matTooltip="Grabe su queja." matTooltipClass="custom-tooltip-blue">Guardar
+								Queja</button>
+						</div>
+					</div>
+					<!--div class="form-group row">
 		  <div class="col-lg-12 text-center">
             <button type="button" class="btn btn-primary row" (click)="onDismissClicked()">{{cancelar}}</button>
           </div>
   
         </div-->
-      </form>
-	<div *ngIf="showSpinner" class="alert alert-alert col-lg-12" [@EnterLeave]="'flyIn'">
-		Favor espere se grabe su queja..
-	</div>
-	  
-  
-    </div>
-  </div>
-  
-  <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="success">
-    <strong>Queja registrada!</strong> La solicitud de actualización de su queja ha sido registrada exitosamente. {{vsecanio}}-{{vanio}} 
+				</form>
+				<div *ngIf="showSpinner" class="alert alert-alert col-lg-12" [@EnterLeave]="'flyIn'">
+					Favor espere se grabe su queja..
+				</div>
 
-  </div>
-    
-</div>
-    <!--img src="diaco-grd.jpg" class="center"/-->
+
+			</div>
+		</div>
+
+		<div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="success">
+			<strong>Queja registrada!</strong> La solicitud de actualización de su queja ha sido registrada
+			exitosamente. {{vsecanio}}-{{vanio}}
+
+		</div>
+
+	</div>
+	<!--img src="diaco-grd.jpg" class="center"/-->
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-4 text-center">
@@ -410,4 +343,5 @@
 
 
 </body>
+
 </html>

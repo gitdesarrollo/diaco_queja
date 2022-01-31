@@ -91,6 +91,10 @@ import { CatSucursalComponent } from './cat-sucursal/cat-sucursal.component';
 import {FullCalendarModule} from 'primeng/fullcalendar';
 import { TablaMainCalendarioComponent } from './tabla-main-calendario/tabla-main-calendario.component';
 
+
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -185,10 +189,11 @@ import { TablaMainCalendarioComponent } from './tabla-main-calendario/tabla-main
 	MatProgressBarModule,
 	MatTreeModule,
 	MatIconModule,
-	FullCalendarModule //<-- calendario modulo
+	FullCalendarModule, //<-- calendario modulo
+	
   ],
 providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}, DatePipe],
   bootstrap: [AppComponent],
   entryComponents: [ComunicacionPermanenteComponent, VerifConcicliacionVirtComponent, BitacoraACComponent, PrimeraAudienciaComponent, SegundaAudienciaComponent, ConciliacionComponent, IncomparecenciaComponent, VisitaCampoComponent, ArchivarQuejaComponent, MovimientoExpedienteComponent, GuiaRegistrosComponent, ResumenQuejasComponent, VerifDatosComponent, ConfirmarAccionComponent, BusquedaComponent, MovimientoConfirmarComponent, SubirArchivosComponent, MovimientoServPubComponent, ArchivarServPubComponent, ActaVerificacionComponent, InformeFinalVerificacionComponent, ArchivarVerificacionComponent, MovimientoVerificacionComponent, MovimientoConfVerificacionComponent, DocumentarComponent, ConciliacionJuridicoComponent, MovimientoConfJuridicoComponent, MovimientoJuridicoComponent, ArchivarJuridicoComponent, ReasignarReactivarComponent, ParamGeneralesComponent, ConfUsuarioComponent, UsuarioDetalleComponent, ConfiguracionSistemaComponent, ConfUsuarioConcPreviaComponent, UsuarioDetalleConcPreviaComponent, AsignarColaComponent, AprobarConcPreviaComponent,CatDepartamentoComponent,CatPaisesComponent,CatDepartamentoInternoComponent,CatMotivoQuejaComponent,CatMunicipioComponent,CatSedesComponent,CatDiaInhabilComponent,CatProveedorComponent,JuridicoResultadoAudienciaComponent, JuridicoResolucionFinalComponent,CambiarPasswordComponent, VyvAsignaColaComponent,CatPuestoComponent,CatTipoColaComponent,CatConsumidorComponent,CatTipoConsumidorComponent,CatAreaComponent,CatFinalizacionComponent ,CatActividadEconomicaComponent,CatTipoComercioComponent,CatSucursalComponent,TablaMainCalendarioComponent ]
 })
-export class AppModule { }
+export class AppModule {}

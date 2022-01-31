@@ -39,4 +39,5 @@ export class Queja {
     docc : string;
     nomp : string;
     nomc : string;	
+	sedeDiacoCercana: number;
 }

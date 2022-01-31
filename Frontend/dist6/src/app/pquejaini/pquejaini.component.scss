@@ -12,17 +12,23 @@
 	 height: auto;
    
 }
- 
- 
-body {
-	/* background-image: url(diacofade3.jpg), url(imagen-grdfade2.jpg) ; ORIGINAL*/
-/*   background-image: url(/assets/img/logo-diaco-ant.jpg);
-	background-repeat: no-repeat, no-repeat;
-	background-attachment: fixed, fixed;
-	background-size: auto auto, auto auto;
-	background-position: bottom right, bottom left;
-	min-height:100vh;  */
+
+.img-header{
+  width: 200px;
+  height: 200px;
 }
+ 
+ 
+// body {
+  
+// 	/* background-image: url(diacofade3.jpg), url(imagen-grdfade2.jpg) ; ORIGINAL*/
+// /*   background-image: url(/assets/img/logo-diaco-ant.jpg);
+// 	background-repeat: no-repeat, no-repeat;
+// 	background-attachment: fixed, fixed;
+// 	background-size: auto auto, auto auto;
+// 	background-position: bottom right, bottom left;
+// 	min-height:100vh;  */
+// }
 
  
 html {
@@ -30,7 +36,8 @@ html {
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Montserrat", sans-serif;
+  // background-color: #42515a !important;
   height: 100vh;
 }
 
@@ -266,9 +273,9 @@ input[type=text]:placeholder {
   transition: width 0.2s;
 }
 
-.underlineHover:hover {
-  /*color: #1aa3ff;*/
-}
+// .underlineHover:hover {
+//   /*color: #1aa3ff;*/
+// }
 
 .underlineHover:hover:after{
   width: 100%;

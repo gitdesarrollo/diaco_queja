@@ -8,6 +8,7 @@ import gt.gob.mineco.diaco.model.DiacoConsumidor;
 import gt.gob.mineco.diaco.model.DiacoEstadoQueja;
 import gt.gob.mineco.diaco.model.DiacoMagicLink;
 import gt.gob.mineco.diaco.model.DiacoQueja;
+import gt.gob.mineco.diaco.model.DiacoConsumidor;
 import gt.gob.mineco.diaco.model.DiacoQuejaCorrelativo;
 import gt.gob.mineco.diaco.model.DiacoSede;
 import gt.gob.mineco.diaco.model.TipoColaAsignacion;
@@ -60,6 +61,12 @@ public class QuejaRepository {
         em.flush();
         return queja;
     }
+
+    // public DiacoConsumidor merge(DiacoConsumidor consumidor){
+    //     em.merge(consumidor);
+    //     em.flush();
+    //     return consumidor;
+    // }
 
     public Integer findMaxFromYear() {
         LocalDate today = LocalDate.now();

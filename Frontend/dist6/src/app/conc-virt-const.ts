@@ -1,7 +1,6 @@
-
-export const BASE_SERVER   = 'http://gestorquejas.diaco.gob.gt/';
+// export const BASE_SERVER   = 'http://gestorquejas.diaco.gob.gt/';
 //export const BASE_SERVER   = 'http://desagestorquejas.diaco.gob.gt/';
-//export const BASE_SERVER   = 'http://localhost:8080/';
+export const BASE_SERVER   = 'http://localhost:8080/';
 //export const BASE_SERVER   = 'https://dev.mineco.gob.gt/';
 
 //para servicios de dist

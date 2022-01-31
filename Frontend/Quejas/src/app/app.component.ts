@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import {Departamento} from './models/departamento';
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
