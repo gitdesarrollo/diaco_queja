@@ -28,6 +28,13 @@ public class TipoAudienciaRs {
 	public ResponseRs getTipoComConsumidor(@PathParam("idqueja") Integer idqueja,@PathParam("no_audiencia") Integer no_audiencia,@PathParam("token") String token) {
 		return areaComunService.getAudienciaxIdQueja(idqueja,no_audiencia,token);
 	}
+
+	@GET
+	@Path("/cantidad-audiencia/{idqueja}/{token}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseRs getCantidadAudiencias(@PathParam("idqueja") Integer idqueja, @PathParam("token") String token){
+		return areaComunService.getCantidadAudienciaByQueja(idqueja, token);
+	}
         
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

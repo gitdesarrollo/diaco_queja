@@ -332,11 +332,7 @@ export class SegundaAudienciaComponent implements OnInit {
 		});
 	}
 
-	LoadFrmData(isBlank:boolean){
-		/*if(this.cmb_resultado!=null)
-			this.ResultadoCtrl.setValue(this.cmb_resultado[0].id_resultado_audiencia);
-		else
-			this.ResultadoCtrl.setValue('');	*/		
+	LoadFrmData(isBlank:boolean){	
 		if(!isBlank){
 			if(typeof this.lst_audiencia["0"] === 'undefined'){
 				this.lst_programado=[];
@@ -363,7 +359,6 @@ export class SegundaAudienciaComponent implements OnInit {
 		}else{
 			this.lst_programado=[];
 		}
-		console.log(this.lst_audiencia);
 		this.GetRegistro();
 	}
 

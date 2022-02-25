@@ -76,10 +76,10 @@ export const BASE_CALLCENTER_LINK = 'http://localhost:8080/quejas_ini_6/#/pqueja
 
  */
  export const BASE_URL_REST = 'http://localhost:8080/Quejas/rs/';
- export const BASE_URL_REST_CALENDARIO = 'http://gestorquejas.diaco.gob.gt/web-quejaini/rs/quejas/calendario';
- export const BASE_VERIFICACION_DATOS_LINK = 'http://gestorquejas.diaco.gob.gt/dist6/#/consumidor/interno/';
- export const BASE_PRESENCIAL_LINK = 'http://gestorquejas.diaco.gob.gt/dist6/#/pquejaini/presencial/';
- export const BASE_CALLCENTER_LINK = 'http://gestorquejas.diaco.gob.gt/dist6/#/pquejaini/callcenter/';
+ export const BASE_URL_REST_CALENDARIO = 'http://localhost:8080/web-quejaini/rs/quejas/calendario';
+ export const BASE_VERIFICACION_DATOS_LINK = 'http://localhost:8080/dist6/#/consumidor/interno/';
+ export const BASE_PRESENCIAL_LINK = 'http://localhost:8080/dist6/#/pquejaini/presencial/';
+ export const BASE_CALLCENTER_LINK = 'http://localhost:8080/dist6/#/pquejaini/callcenter/';
 
 
 /*
@@ -123,6 +123,8 @@ export const BASE_CALLCENTER_LINK = 'https://gestorquejas.diaco.gob.gt/dist6/#/p
 export const BASE_URL_REST_FILE = BASE_URL_REST;
 export const MSG_REGISTRO_DESHABILITADO = '(Registro Deshabilitado hasta que se ingresen datos completos de la queja en la sección Verificación de Datos.)';
 
+export const GetParametro = 'tiempo_audiencia';
+
 export class List_Images {
   id_imagen_queja: number;
   id_tipo_imagen: number;
@@ -157,6 +159,18 @@ export const LSTFILTRO_ATENCIONCONSUMIDOR: BaseCmbClass[] = [
 	{ id: 402, nombre: 'Resuelto por el Proveedor' },
 	{ id: 998, nombre: 'Todos (activos e inactivos)' }
   ];
+
+export const AudienceFilterList: BaseCmbClass[] = [
+	{ id: 1, nombre: '30 minutos' },
+	{ id: 2, nombre: '45 minutos' },
+	{ id: 3, nombre: '1 hora' },
+]
+
+export const AudienceType: BaseCmbClass[] = [
+	{ id: 1, nombre: 'Primera' },
+	{ id: 2, nombre: 'Segunda' },
+]
+
 
 export const LSTFILTRO_SERVICIOSPUBLICOS: BaseCmbClass[] = [
 	{ id: 999, nombre: 'Activos' },
@@ -386,6 +400,7 @@ export class Frm4Registros {
   cedula_notificacion_pro_codigo: string;
 }
 
+
 export class FrmAudiencia {
   id_audiencia: number;
   fecha_finalizada: Date;
@@ -491,4 +506,8 @@ export class data {
 	color: string;
 	description: string;
 	user: string;
+}
+
+export class formatoCitacion {
+	citacion: string;
 }

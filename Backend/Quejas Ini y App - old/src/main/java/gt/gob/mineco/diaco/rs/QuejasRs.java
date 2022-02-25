@@ -60,7 +60,8 @@ public class QuejasRs {
         // consumidor = consumidoresService.updateConsumidor(consumidor);
         
         DiacoConsumidor id = this.consumidorDao.findById(queja.getIdConsumidor());
-        System.out.println("lo que viene del metodo" + id.getSedeDiacoCercana());
+        System.out.println("Id consumidor controlador" + queja.getIdConsumidor());
+        System.out.println("Id sede cercana metodo" + id.getSedeDiacoCercana());
         queja.setCompleto30Datos("1");
         queja.setIdDiacoSede(id.getSedeDiacoCercana());
         queja.setIdMotivoQueja(id.getIdMotivoQueja());

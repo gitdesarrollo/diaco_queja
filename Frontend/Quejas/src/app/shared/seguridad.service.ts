@@ -29,14 +29,14 @@ export class SeguridadService {
   private handleError<T> (operation = 'operation', result?: T) {
 		return (error: any): Observable<T> => {
 			console.error(error); // log to console instead
-			console.log('${operation} failed: ${error.message}');
+			// console.log('${operation} failed: ${error.message}');
 			return of(result as T);
 		};
   }
    
   ValidadorRegistros(idqueja){
 	  var localURL=this.baseUrl+'/validarregs/'+idqueja+'/'+this._submitFormService.Get_token();
-		console.log(localURL);
+		// console.log(localURL);
 		return this._http.get(localURL,this.httpOptions).pipe(map(this.extractData));  
   }
    
@@ -44,7 +44,7 @@ export class SeguridadService {
 		//console.log(this.ObjaJSON_usrpass(str_username, str_password));
 		var localURL=this.baseUrl+'/login';
 		return this._http.post<any>(localURL, this.ObjaJSON_usrpass(str_username, str_password), this.httpOptions).pipe(
-			tap((item) => console.log('Added item')),
+			tap((item) => {}),
 			catchError(this.handleError<any>('Add Data'))
 		);
   }
@@ -54,7 +54,7 @@ export class SeguridadService {
 		//console.log(this.ObjaJSON_token(token));
 		var localURL=this.baseUrl+'/logout';
 		return this._http.post<any>(localURL, this.ObjaJSON_token(token), this.httpOptions).pipe(
-			tap((item) => console.log('Added item')),
+			tap((item) => {}),
 			catchError(this.handleError<any>('Add Data'))
 		);
   }
@@ -63,14 +63,14 @@ export class SeguridadService {
 		//console.log(this.ObjaJSON_token(token));
 		var localURL=this.baseUrl+'/token';
 		return this._http.post<any>(localURL, this.ObjaJSON_token(token), this.httpOptions).pipe(
-			tap((item) => console.log('Added item')),
+			tap((item) => {}),
 			catchError(this.handleError<any>('Add Data'))
 		);
   }
     
   EmailPassword (email): Observable<any> {
 		var localURL=this.baseUrl+'/emailr/'+email;
-		console.log(localURL);
+		// console.log(localURL);
 		return this._http.get(localURL,this.httpOptions).pipe(map(this.extractData));  
   }
 	

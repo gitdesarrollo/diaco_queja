@@ -125,7 +125,7 @@ export class TablaMainAtConComponent implements OnInit {
       this._seguridadService.RedireccionarLogin();
     }
     this._seguridadService.VerifyToken(loc_token).subscribe((retvalue) => {
-      console.log('token check', retvalue);
+      // console.log('token check', retvalue);
       if (retvalue['reason'] != 'OK') {
         this._seguridadService.SesionVencida();
       }
@@ -142,7 +142,7 @@ export class TablaMainAtConComponent implements OnInit {
       frmmain['SelectedFHasta'] = null;
       frmmain['selectedNoqueja'] = '';
     } else {
-      console.log(this.inputfrmmain);
+      // console.log(this.inputfrmmain);
       frmmain['selectedFiltro'] = this.inputfrmmain['controls']['selectedFiltro'].value;
       frmmain['SelectedFDesde'] = this.inputfrmmain['controls']['SelectedFDesde'].value;
       frmmain['SelectedFHasta'] = this.inputfrmmain['controls']['SelectedFHasta'].value;
@@ -246,7 +246,7 @@ export class TablaMainAtConComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
-    dialogConfig.height = '80%';
+    dialogConfig.height = '90%';
     dialogConfig.width = '90%';
     dialogConfig.data = {
       NoQueja: NoQueja,
@@ -406,7 +406,7 @@ export class TablaMainAtConComponent implements OnInit {
     if (FormResponse.changes) {
       this.LoadServiceInfo();
     }
-    console.log(FormResponse);
+    // console.log(FormResponse);
     if (FormResponse.pagina == 1) {
       this.openArchivarQueja(+FormResponse.NoQueja, FormResponse.quejanumero);
     } else if (FormResponse.pagina == 2) {
@@ -418,7 +418,7 @@ export class TablaMainAtConComponent implements OnInit {
     if (FormResponse.changes) {
       this.LoadServiceInfo();
     }
-    console.log(FormResponse);
+    // console.log(FormResponse);
     if (FormResponse.pagina == 1) {
       this.openPrimeraAudiencia(+FormResponse.NoQueja, FormResponse.quejanumero);
     }
@@ -431,7 +431,7 @@ export class TablaMainAtConComponent implements OnInit {
   }
 
   ModalLogicVerifDatos(FormResponse) {
-    console.log(FormResponse.changes);
+    // console.log(FormResponse.changes);
     if (FormResponse.changes) {
       this.LoadServiceInfo();
     }
@@ -441,7 +441,7 @@ export class TablaMainAtConComponent implements OnInit {
     if (FormResponse.changes) {
       this.LoadServiceInfo();
     }
-    console.log(FormResponse);
+    // console.log(FormResponse);
     if (FormResponse.pagina == 1) {
       this.openMovimientoExpediente(+FormResponse.NoQueja, FormResponse.quejanumero);
     } else if (FormResponse.pagina == 2) {
@@ -466,7 +466,7 @@ export class TablaMainAtConComponent implements OnInit {
     this._maintableservice.getUsers(frmmainloc).subscribe((Data) => {
       if (Data['reason'] == 'OK') {
         tempstr = Data['value'];
-        console.log('data infor:' , JSON.parse('[' + tempstr.slice(0, -1) + ']'));
+        // console.log('data infor:' , JSON.parse('[' + tempstr.slice(0, -1) + ']'));
         if (tempstr != null && tempstr != '') {
           this.FrmMainListFD = JSON.parse('[' + tempstr.slice(0, -1) + ']');
           if (this.FrmMainListFD.length >= 2000) {
@@ -554,7 +554,7 @@ export class TablaMainAtConComponent implements OnInit {
               return true;
             }
           }catch (e) {
-            console.log('sin data');
+            // console.log('sin data');
           }
         }
       }
@@ -562,7 +562,7 @@ export class TablaMainAtConComponent implements OnInit {
   }
 
   onSelect({selected}) {
-    console.log('Select Event', selected, this.selected);
+    // console.log('Select Event', selected, this.selected);
   }
 
   singleSelectCheck = (row: any) => {

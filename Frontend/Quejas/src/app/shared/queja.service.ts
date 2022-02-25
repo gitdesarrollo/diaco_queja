@@ -27,19 +27,19 @@ export class QuejaService {
   
   getbyCodigo(codigoqueja){	  
 	  var localURL=this.baseUrl+'/searchcodigo/'+codigoqueja+'/'+this._submitFormService.Get_token();
-	  console.log(localURL);
+	//   console.log(localURL);
 	  return this._http.get(localURL,this.httpOptions).pipe(map(this.extractData));
   }
   
   getDataQueja(id){	  
 	  var localURL=this.baseUrl+'/'+id+'/'+this._submitFormService.Get_token();
-	  console.log(localURL);
+	//   console.log(localURL);
 	  return this._http.get(localURL,this.httpOptions).pipe(map(this.extractData));
   }
 
   saveEstadoResolver(id, est_resolver){	  
 	var localURL=this.baseUrl+'/est_resolver';
-	console.log(localURL);
+	// console.log(localURL);
 	return this._http.post(localURL,this.ObjaJSON_DocumentarEstado(id, est_resolver),this.httpOptions).pipe(map(this.extractData));
 }
   
@@ -50,7 +50,7 @@ export class QuejaService {
   
   saveDocumentar (id_queja, valor): Observable<any> {
 	  var valor_int;
-	  console.log(this.ObjaJSON_Documentar(id_queja, valor));
+	//   console.log(this.ObjaJSON_Documentar(id_queja, valor));
 	  var localURL=this.baseUrl+'/documentar';
 	  if(valor){
 			valor_int=1;
@@ -64,7 +64,7 @@ export class QuejaService {
   }  
   
   saveReasignar (actualizaestado, id_queja, flujo, usuario_asignado): Observable<any> {
-	  console.log(this.ObjaJSON_Reasignar(actualizaestado,id_queja, flujo, usuario_asignado));
+	//   console.log(this.ObjaJSON_Reasignar(actualizaestado,id_queja, flujo, usuario_asignado));
 	  var localURL=this.baseUrl+'/reasignar';
 		return this._http.post<any>(localURL, this.ObjaJSON_Reasignar(actualizaestado,id_queja, flujo, usuario_asignado), this.httpOptions).pipe(
 			tap((item) => console.log('Registro Guardado')),
@@ -74,8 +74,8 @@ export class QuejaService {
   
   private handleError<T> (operation = 'operation', result?: T) {
 		return (error: any): Observable<T> => {
-			console.error(error); // log to console instead
-			console.log('${operation} failed: ${error.message}');
+			// console.error(error); // log to console instead
+			// console.log('${operation} failed: ${error.message}');
 			return of(result as T);
 		};
   }

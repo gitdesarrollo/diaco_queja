@@ -19,7 +19,10 @@ import gt.gob.mineco.diaco.model.TipoProgramaAudiencia;
 @NamedQueries({
     @NamedQuery(
         name = "TipoAudiencia.findxIdQuejaNo",
-        query = "SELECT t FROM TipoAudiencia t inner join t.tipopasoqueja og where og.id_queja = :idqueja and t.es_primera_seg_audiencia = :no_audiencia") 
+        query = "SELECT t FROM TipoAudiencia t inner join t.tipopasoqueja og where og.id_queja = :idqueja and t.es_primera_seg_audiencia = :no_audiencia"),
+    @NamedQuery(
+        name = "TipoAudiencia.findCantidad",
+        query = "SELECT t FROM TipoAudiencia t inner join t.tipopasoqueja og where og.id_queja = :idqueja") 
 })
 
 public class TipoAudiencia implements Serializable {

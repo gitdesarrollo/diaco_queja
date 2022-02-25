@@ -30,59 +30,78 @@
 			</div>
 			<ng-container *ngIf="flagEditable">
 				<form (ngSubmit)="onSubmit()" [formGroup]="ProgramarForm">
-					<div class="row">
-						<div class="col-lg-1">
-							<label><b>Fecha:</b></label>
-						</div>
-						<div class="col-lg-3">
-							<input type="date" class="form-control" formControlName="fecha" id="fecha" name="fecha"
-								placeholder="dd/mm/yyyy">
-						</div>
-						<div *ngIf="FechaCtrl.invalid && (FechaCtrl.dirty && FechaCtrl.touched)" class="col-lg-12">
-							<div *ngIf="FechaCtrl.errors.required" class="alert alert-danger col-lg-12">
-								Debe ingresar información en la sección fecha
+					<div class="container-fluid">
+						
+						<div class="row">
+							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+								<label><b>Fecha:</b></label>
+								<input type="date" class="form-control" formControlName="fecha" id="fecha" name="fecha" placeholder="dd/mm/yyyy">
 							</div>
-						</div>
-						<div *ngIf="FechaCtrl.invalid && (FechaCtrl.dirty && FechaCtrl.touched)" class="col-lg-12">
-							<div *ngIf="FechaCtrl.errors.pattern" class="alert alert-danger col-lg-12">
-								Revise el formato ingresado en fecha
+							<!-- <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+							</div> -->
+							<div *ngIf="FechaCtrl.invalid && (FechaCtrl.dirty && FechaCtrl.touched)" class="col-lg-12">
+								<div *ngIf="FechaCtrl.errors.required" class="alert alert-danger col-lg-12">
+									Debe ingresar información en la sección fecha
+								</div>
 							</div>
-						</div>
-						<div class="col-lg-1">
-							<label><b>Hora:</b></label>
-						</div>
-						<div class="col-lg-2">
-							<input type="time" class="form-control" formControlName="hora" id="hora" name="hora">
-						</div>
-						<div *ngIf="HoraCtrl.invalid && (HoraCtrl.dirty && HoraCtrl.touched)" class="col-lg-12">
-							<div *ngIf="HoraCtrl.errors.required" class="alert alert-danger col-lg-12">
-								Debe ingresar información en la sección hora
+							<div *ngIf="FechaCtrl.invalid && (FechaCtrl.dirty && FechaCtrl.touched)" class="col-lg-12">
+								<div *ngIf="FechaCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+									Revise el formato ingresado en fecha
+								</div>
 							</div>
-						</div>
-						<div *ngIf="HoraCtrl.invalid && (HoraCtrl.dirty && HoraCtrl.touched)" class="col-lg-12">
-							<div *ngIf="HoraCtrl.errors.pattern" class="alert alert-danger col-lg-12">
-								Revise el formato ingresado en hora
+							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+								<label><b>Hora:</b></label>
+								<input type="time" class="form-control" formControlName="hora" id="hora" name="hora">
 							</div>
-						</div>
-						<div class="col-lg-2">
-							<ng-container *ngIf="flagBoton; else NoButton">
-								<ng-container *ngIf="flag_Programado; else noprogramado">
-									<button class="btn btn-primary" type="button" [disabled]="!ProgramarForm.valid"
-										(click)="Save_ReProgramarAudiencia()">Re-Programar</button>
+							<!-- <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+							</div> -->
+							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+								<label><b>Tiempo:</b></label>
+								<select class="form-control" formControlName="tiempo" id="tiempo" name="tiempo">
+									<option *ngFor="let x of AudienceList" [value]="x.id">{{x.nombre}}</option>
+								</select>
+							</div>
+							<!-- <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+							</div> -->
+							<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+								<label><b>Audiencia:</b></label>
+								<select class="form-control" formControlName="audiencia" id="audiencia" name="audiencia" (ngModelChange)="cambioEvento($event)" >
+									<option *ngFor="let x of AudienceListType" [value]="x.id" >{{x.nombre}}</option>
+								</select>
+							</div>
+							<!-- <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+							</div> -->
+							<div *ngIf="HoraCtrl.invalid && (HoraCtrl.dirty && HoraCtrl.touched)" class="col-lg-12">
+								<div *ngIf="HoraCtrl.errors.required" class="alert alert-danger col-lg-12">
+									Debe ingresar información en la sección hora
+								</div>
+							</div>
+							<div *ngIf="HoraCtrl.invalid && (HoraCtrl.dirty && HoraCtrl.touched)" class="col-lg-12">
+								<div *ngIf="HoraCtrl.errors.pattern" class="alert alert-danger col-lg-12">
+									Revise el formato ingresado en hora
+								</div>
+							</div>
+							<div class="col-lg-2 mt-3">
+								<ng-container *ngIf="flagBoton; else NoButton">
+									<ng-container *ngIf="flag_Programado; else noprogramado">
+										<button class="btn btn-primary" type="button" [disabled]="!ProgramarForm.valid"
+											(click)="Save_ReProgramarAudiencia()">Re-Programar</button>
+									</ng-container>
+									<ng-template #noprogramado>
+										<button class="btn btn-primary" type="button" [disabled]="!ProgramarForm.valid"
+											(click)="SaveProgramarAudiencia()">Programar</button>
+									</ng-template>
 								</ng-container>
-								<ng-template #noprogramado>
-									<button class="btn btn-primary" type="button" [disabled]="!ProgramarForm.valid"
-										(click)="SaveProgramarAudiencia()">Programar</button>
+								<ng-template #NoButton>
+									<span><i class="icon"></i></span>&nbsp;
 								</ng-template>
-							</ng-container>
-							<ng-template #NoButton>
-								<span><i class="icon"></i></span>&nbsp;
-							</ng-template>
-						</div>
-						<div *ngIf="flagTimeError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
-							La fecha y hora ingresadas deben ser mayores al dia de hoy y a la hora actual.
+							</div>
+							<div *ngIf="flagTimeError" class="alert alert-danger col-lg-12" [@EnterLeave]="'flyIn'">
+								La fecha y hora ingresadas deben ser mayores al dia de hoy y a la hora actual.
+							</div>
 						</div>
 					</div>
+
 				</form>
 
 				<div class="row">
@@ -95,7 +114,6 @@
 
 			<!--Calendario -->
 			<ng-container *ngIf="flagEditable">
-
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-lg-12">
@@ -148,8 +166,108 @@
 						</ng-template>
 					</ng-container>
 				</div>
+				<div class="d-grid gap-2 d-md-block mt-3 mb-3">
+					<button class="btn btn-success mr-3" *ngIf="btnPrimeraAudiencia" type="button" (click)="Generar4Registros()">Generar Primera Audiencia</button>
+					<button class="btn btn-success mr-3" *ngIf="btnSegundaAudiencia" type="button" (click)="GenerarSegundaAudiencia()">Generar Segunda Audiencia</button>
+				  </div>
 				<ng-container *ngIf="flagValidadorRegistros">
-					<ng-container *ngIf="flagEditable">
+					<ng-container>
+						<div class="row">
+							<div class="col-6" *ngIf="tblPrimeraAudiencia">
+								<!-- primera Audiencia -->
+								
+								<div class="card" >
+									<div class="card-header text-white bg-primary">
+										Documentos Primera Audiencia
+									</div>
+									<div class="card-body">
+										<table class="table table-striped table-bordered mt-3">
+											<thead>
+												<tr>
+												<th class="col-1">#</th>
+												<th class="col-8">Descripción</th>
+												<th class="col-md-auto">Archivo</th>
+												</tr>
+											</thead>
+											<tbody>
+											<tr>
+												<td class="col-1">1</td>
+												<td class="col-8">Consumidor</td>
+												<td class="col-md-auto text-center">
+													<a #replink (click)="openCedulaCitaCons();" [routerLink]="" class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+													<a #replink (click)="openCedulaNotifiCons();" [routerLink]="" class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+												</td>
+											</tr>
+											<tr>
+												<td class="col-1">2</td>
+												<td class="col-8">Proveedor</td>
+												<td  class="col-md-auto text-center">
+													<a #replink (click)="openCedulaCitaProv();" [routerLink]=""	class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+													<a #replink (click)="openCedulaNotifiProv();" [routerLink]="" class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							
+								
+							</div>
+							<!--  Segunda Audiencia -->
+							<div class="spinner-border" style="width: 5rem; height: 5rem;" role="status" *ngIf="loadinSegundaAudiencia; else tableSegundaAudiencia" >
+								<span class="sr-only">Loading...</span>
+							</div>
+							<ng-template #tableSegundaAudiencia>
+								<div class="col-6" >
+									<div class="card">
+										<div class="card-header text-white bg-primary">
+										  Documentos Segunda Audiencia
+										</div>
+										<div class="card-body">
+											<table class="table table-striped table-bordered mt-3">
+												<thead>
+													<tr>
+													<th class="col-1">#</th>
+													<th class="col-8">Descripción</th>
+													<th class="col-md-auto">Archivo</th>
+													</tr>
+												</thead>
+												<tbody>
+												<tr>
+													<td class="col-1">1</td>
+													<td class="col-8">Consumidor</td>
+													<td class="col-md-auto text-center">
+														<i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i>
+														<i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i>
+													</td>
+												</tr>
+												<tr>
+													<td class="col-1">2</td>
+													<td class="col-8">Proveedor</td>
+													<td  class="col-md-auto text-center">
+														<i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i>
+														<i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i>
+													</td>
+												</tr>
+												<tr>
+													<td class="col-1">3</td>
+													<td class="col-8">Resolución por Correo</td>
+													<td  class="col-md-auto text-center">
+														<i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i>
+														<i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i>
+													</td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+
+							</ng-template>
+						</div>
+					</ng-container>
+
+					<!-- <ng-container *ngIf="flagEditable">
 						<ng-container *ngIf="id_audiencia != 0">
 							<div class="row">
 								<div class="col-lg-4">
@@ -163,13 +281,14 @@
 								</div>
 							</div>
 						</ng-container>
-					</ng-container>
+					</ng-container> -->
+
 					<div class="row">
 						<div class="col-lg-1" style="height:10px;">
 							&nbsp;
 						</div>
 					</div>
-					<ng-container *ngIf="routerlink1 != ''">
+					<!-- <ng-container *ngIf="routerlink1 != ''">
 						<div class="row">
 							<div class="col-lg-6">
 								<label>Citación Consumidor: <a #replink (click)="openCedulaCitaCons();" [routerLink]=""
@@ -192,7 +311,7 @@
 										[routerLink]="" class="formlink"> {{linkdescription4}}</a></label>
 							</div>
 						</div>
-					</ng-container>
+					</ng-container> -->
 				</ng-container>
 				<ng-container *ngIf="!flagValidadorRegistros">
 					<div class="row">

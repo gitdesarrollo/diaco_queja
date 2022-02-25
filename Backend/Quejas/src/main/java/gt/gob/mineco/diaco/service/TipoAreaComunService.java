@@ -168,6 +168,8 @@ public interface TipoAreaComunService {
 
     public ResponseRs getAudienciaxIdQueja(Integer idqueja, Integer no_audiencia, String token);
 
+    public ResponseRs getCantidadAudienciaByQueja(Integer idqueja, String token);
+
     public ResponseRs saveAudiencia(FormAudiencia formReg_ComPerm);
     //Resultado Audiencia
 

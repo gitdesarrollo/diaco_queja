@@ -524,7 +524,8 @@ public class QuejaRepository {
                     + "  p.nombre title,\n"
                     + "  u.nombre usuario,\n"
                     + "  q.no_queja no_queja,\n"
-                    + "  q.anio año\n"
+                    + "  q.anio año,\n"
+                    + "  (case  when a.es_primera_seg_audiencia = 1 then 'Primera Audiencia'  when a.es_primera_seg_audiencia = 2 then 'Segunda Audiencia' end) as audiencia\n"
                     + "FROM\n"
                     + "  dbo.diaco_programa_audiencia pa,\n"
                     + "  diaco_audiencia a,\n"
@@ -552,7 +553,8 @@ public class QuejaRepository {
                     + "  p.nombre title,\n"
                     + "  u.nombre usuario,\n"
                     + "  q.no_queja no_queja,\n"
-                    + "  q.anio año\n"
+                    + "  q.anio año,\n"
+                    + "  (case  when a.es_primera_seg_audiencia = 1 then 'Primera Audiencia'  when a.es_primera_seg_audiencia = 2 then 'Segunda Audiencia' end) as audiencia\n"
                     + "FROM\n"
                     + "  dbo.diaco_programa_audiencia pa,\n"
                     + "  diaco_audiencia a,\n"
@@ -608,6 +610,7 @@ public class QuejaRepository {
                 detalleAudiencia.setUser((String) ((item[6] != null) ? item[6].toString() : ""));
                 detalleAudiencia.setNo_queja((String) ((item[7] != null) ? item[7].toString() : ""));
                 detalleAudiencia.setAño((String) ((item[8] != null) ? item[8].toString() : ""));
+                detalleAudiencia.setTipoAudiencia((String) ((item[9] != null) ? item[9].toString() : ""));
 
                 listaResultados.add(detalleAudiencia);
             }

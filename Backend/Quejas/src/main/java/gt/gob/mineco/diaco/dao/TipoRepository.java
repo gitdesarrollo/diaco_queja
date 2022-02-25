@@ -1636,6 +1636,17 @@ public class TipoRepository {
         return DataList.isEmpty() ? null : DataList.get(0);
     }
 
+    //Cantidad de Audiencias
+    @SuppressWarnings("unchecked")
+    public List<TipoAudiencia> findCantidadTiposAudiencias(Integer idqueja) {
+        this.em.getEntityManagerFactory().getCache().evict(TipoProgramaAudiencia.class);
+        this.em.getEntityManagerFactory().getCache().evict(TipoAudiencia.class);
+        return em.createNamedQuery("TipoAudiencia.findCantidad").setParameter("idqueja", idqueja).getResultList();
+        // List<TipoAudiencia> DataList = em.createNamedQuery("TipoAudiencia.findCantidad").setParameter("idqueja", idqueja).getResultList();
+        // System.out.println("Cantidad: "+ DataList);
+        // return DataList.isEmpty() ? null : DataList.get(0);
+    }
+
     public TipoAudiencia findByIdAudiencia(Integer id) {
         this.em.getEntityManagerFactory().getCache().evict(TipoAudiencia.class);
         return em.find(TipoAudiencia.class, id);

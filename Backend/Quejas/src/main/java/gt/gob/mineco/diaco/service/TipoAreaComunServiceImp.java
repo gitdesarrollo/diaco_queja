@@ -2247,6 +2247,24 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
         return response;
     }
 
+    //Cantidad de Audiencia
+    @Override
+    public ResponseRs getCantidadAudienciaByQueja(Integer idqueja, String token) {
+        ResponseRs response = new ResponseRs();
+
+        try {
+            tipoDao.TokenCheck(token);
+            response.setCode(0L);
+            response.setReason("OK");
+            response.setValue(tipoDao.findCantidadTiposAudiencias(idqueja));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setCode(1L);
+            response.setReason("ERROR");
+        }
+        return response;
+    }
+
     @Override
     public ResponseRs saveAudiencia(FormAudiencia formAudiencia) {
         ResponseRs response = new ResponseRs();
@@ -2293,6 +2311,7 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
                         current_type = 0;
                 }
             }
+            
             //actualizar estado de queja si es menor
             vTipoQueja = tipoDao.findByIdQueja(formAudiencia.getId_queja());
             if (vTipoQueja.getId_estado_queja() < current_state) {
@@ -2328,62 +2347,7 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
             vTipoAudiencia.setEs_primera_seg_audiencia(formAudiencia.getEs_primera_seg_audiencia());
             vTipoAudiencia.setTipopasoqueja(newTipoPasoQueja);
             vTipoAudiencia.setId_tipo_registro(current_type);
-            //revisa si solo esta actualizando la fecha de la reunión o si esta cerrando la reunión ya creada
-
-            /*if(formAudiencia.getFecha_programada() != null){
-                            tipoDao.saveAudiencia(vTipoAudiencia);
-                            response.setValue(vTipoAudiencia);
-                            Date loc_date=StrtoDate(formAudiencia.getFecha_programada(),formAudiencia.getHora_programada());
-                            //response.setValue(saveProgramaAudiencia(loc_date,vTipoAudiencia,formAudiencia.getId_queja()) );
-                            TipoProgramaAudiencia vTipoProgramaAudiencia = tipoDao.findTiposProgramaAudienciaxIdQueja(formAudiencia.getId_queja(), vTipoAudiencia.getEs_primera_seg_audiencia());
-                            if(vTipoProgramaAudiencia != null){
-                                vTipoProgramaAudiencia.setActivo(false);
-                                tipoDao.saveTipoProgramaAudiencia(vTipoProgramaAudiencia);
-                            }
-                            response.setValue(vTipoProgramaAudiencia);
-                            TipoProgramaAudiencia nTipoProgramaAudiencia = new TipoProgramaAudiencia();
-                            nTipoProgramaAudiencia.setActivo(true);
-                            nTipoProgramaAudiencia.setFecha_programada(loc_date);
-                            nTipoProgramaAudiencia.setTipoAudiencia(vTipoAudiencia);
-                            System.out.println(vTipoAudiencia.getId_audiencia());
-                            tipoDao.saveTipoProgramaAudiencia(nTipoProgramaAudiencia);
-                            response.setValue(nTipoProgramaAudiencia);
-                            
-                            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");  
-                            DateFormat timeFormat = new SimpleDateFormat("hh:mm aaa");  
-                            //revisar si correo esta activo en parametros de sistema
-                            TipoEmailFuente efuente=tipoDao.findByIdEmailFuente(Constants.REG_DIACO_FUENTE_EMAIL_NOTIFICACIONES_AUDIENCIA);
-                            if(efuente!=null){
-                                if(efuente.getActivo()==1){    
-                                    //mandar correo consumidor 
-                                    
-                                    
-                                    String cuerpo="Estimado Consumidor(a) / Usuario(a):<br> DIACO le comunica que la audiencia motivo de la queja "+vTipoQueja.getQuejaNumero()+
-                                    " ha sido programada para el "+dateFormat.format(loc_date)+" a las "+timeFormat.format(loc_date)+
-                                    ", por lo que se le pide tomar en cuenta que ser&aacute; necesario contar con su presencia debidamente identificado con su DPI y/o Pasaporte y/o Representaci&oacute;n Legal,"+
-                                    " Patente de Comercio (cuando aplique), "+LimpiaStringTildes(direccion_fisica)+"<br>";
-                                    String[] mailstring=GetEmailStringContribuyente(vTipoQueja.getId_consumidor());
-                                    saveEmailEnviar(mailstring,Constants.REG_DIACO_FUENTE_EMAIL_NOTIFICACIONES_AUDIENCIA,cuerpo); // fuente de email 5: notificacion audiencia
-                                    //mandar correo proveedor
-                                    mailstring=GetEmailStringProveedor(vTipoQueja.getId_proveedor());
-                                    saveEmailEnviar(mailstring,Constants.REG_DIACO_FUENTE_EMAIL_NOTIFICACIONES_AUDIENCIA,cuerpo); // fuente de email 5: notificacion audiencia
-                                }
-                            }
-                            //bitacora auto log
-                            TipoUsuario_Conf vtipousuario = tipoDao.findByIdUsuarioConf(formAudiencia.getUsuario());
-                            TipoProveedor vproveedor = tipoDao.findByIdProveedor(vTipoQueja.getId_proveedor());
-                            String txtmensaje="Audiencia Programada para "+dateFormat.format(loc_date)+", "+
-                                    timeFormat.format(loc_date);
-                            if(vtipousuario!=null){
-                                txtmensaje=txtmensaje+". Operación realizada por: "+vtipousuario.getNombre()+"("+vtipousuario.getLogin()+")";
-                            }
-                            if(vproveedor!=null){
-                                txtmensaje=txtmensaje+". Proveedor citado: "+vproveedor.getNombre()+".";
-                            }
-                            BitacoraAutomatica(formAudiencia.getId_queja(),1,formAudiencia.getUsuario(),txtmensaje,txtmensaje);
-                            
-                        }else{
-             */
+            
             if (formAudiencia.getFecha_programada() == null) {
                 if (formAudiencia.getAprobado_jefe_juridico() != null) {
                     vTipoAudiencia.setAprobado_jefe_juridico(formAudiencia.getAprobado_jefe_juridico());
@@ -2410,25 +2374,8 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
                 BitacoraAutomatica(formAudiencia.getId_queja(), 1, formAudiencia.getUsuario(), txtmensaje, txtmensaje, current_type);
             } else {
                 tipoDao.saveAudiencia(vTipoAudiencia);
-                //response.setValue(vTipoAudiencia);
             }
 
-            //Generar 4 registros
-            /*FormRegistro formregistro= new FormRegistro();
-                        formregistro.setId_queja(formAudiencia.getId_queja());
-                        formregistro.setId_audiencia(formAudiencia.getId_audiencia());
-                        formregistro.setCreado_por(formAudiencia.getUsuario());
-                        formregistro.setToken(formAudiencia.getToken());
-                        boolean result=save2Registros2NotificacionesPriv(formregistro);
-                        if(!result){
-                            response.setCode(1L);
-                            response.setReason("ERROR_REG");
-                            try{
-                                transaction.rollback();
-                            }catch(Exception ee){
-                                ee.printStackTrace();
-                            }   
-                        }*/
             response.setCode(0L);
             response.setReason("OK");
             transaction.commit();

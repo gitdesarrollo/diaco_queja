@@ -65,6 +65,8 @@ public class DetalleCalendarioDto implements Serializable {
     
     private String año;
 
+    private String tipoAudiencia;
+
     /**
      * Crea una nueva instancia de <code>DetalleCalendarioDto</code>.
      */
@@ -162,5 +164,15 @@ public class DetalleCalendarioDto implements Serializable {
     public void setAño(String año) {
         this.año = año;
     }
+
+    public void setTipoAudiencia(String tipoAudiencia){
+        this.tipoAudiencia = tipoAudiencia;
+    }
+
+    public String getTipoAudiencia(){
+        return tipoAudiencia;
+    }
+
+    
 
 }

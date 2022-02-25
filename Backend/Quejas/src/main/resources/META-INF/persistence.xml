@@ -12,6 +12,8 @@
     <class>gt.gob.mineco.diaco.model.TipoQueja</class>
     <class>gt.gob.mineco.diaco.model.TipoPasoQueja</class>
     <class>gt.gob.mineco.diaco.model.TipoProveedor</class>
+    <class>gt.gob.mineco.diaco.model.ParametroGeneral</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE"/>
       <property name="eclipselink.logging.parameters" value="true"/>

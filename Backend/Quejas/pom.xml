@@ -152,7 +152,7 @@
 		</dependency>-->
 	</dependencies>
 	<build>
-		<finalName>quejas_dev</finalName>
+		<finalName>Quejas</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
