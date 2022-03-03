@@ -38,6 +38,14 @@ public class TipoRegistrosQuejaRs {
         return tipoRegQuejaService.getFormularioQueja(id,pToken);
     }
  
+    @GET
+    @Path("/compress/{id}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getCompressFile(@PathParam("id") String id) {
+    //    return tipoRegQuejaService.getRegistroFichaQueja(idqueja);
+        return tipoRegQuejaService.getCompressFilesByQueja(id);
+    }
+ 
      @GET
     //@Path("/com-perm/{idqueja}")
     @Path("/com-perm/{pIdRegistro}/{pToken}")

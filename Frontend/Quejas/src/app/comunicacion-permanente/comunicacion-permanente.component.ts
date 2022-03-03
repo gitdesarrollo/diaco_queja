@@ -78,7 +78,6 @@ export class ComunicacionPermanenteComponent implements OnInit {
 	  via: this.viaCtrl
     });
 	this.LoadCmbVia();
-	console.log('Valor de data'+this.data.NoQueja);	
 	 this.LocalForm=[];
 	 this.routerlink='MuestraRegistro/1/1';
 	 this.GetRegistro(false);
@@ -93,7 +92,6 @@ export class ComunicacionPermanenteComponent implements OnInit {
 				tempstr=retvalue['value'];
 				if(tempstr != null)	{
 					this.lst_queja=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
-					console.log(this.lst_queja);
 					this.flagformvisible++;
 					//verificar estado para permitir edicion en formulario
 					if( this._seguridadService.EditableporFlujo(this.data.Flujo,this.lst_queja[0]['id_estado_queja']) )
@@ -111,19 +109,15 @@ export class ComunicacionPermanenteComponent implements OnInit {
 					else
 						this.flagEditable=false;
 					
-					console.log(this.flagEditable,this._seguridadService.EditableporFlujo(this.data.Flujo,this.lst_queja[0]['id_estado_queja']),this.lst_queja[0]['usuario_asignado'],this.data.Usuario);
 				}else{
-					console.log('Información de queja no pudo ser obtenida.');
 					this.flagDBError=true;
 					this.SetSecTimerInfoError();
 				}				
 			}else{
-				console.log('Rest service response ERROR.');
 				this.flagDBError=true;
 				this.SetSecTimerInfoError();
 			}		
 		},(error)=>{
-			console.log(error);
 			this.flagDBError=true;
 			this.SetSecTimerInfoError();
 		});
@@ -135,7 +129,6 @@ export class ComunicacionPermanenteComponent implements OnInit {
    
   onSubmit() {
 	  if (this.myForm.valid) {
-		console.log(this.myForm.value);
 		this.SaveData();
 	  }
   }
@@ -144,7 +137,6 @@ export class ComunicacionPermanenteComponent implements OnInit {
 		//this.myForm.get('estatus').setValue(this.FormData.estatus);
 		//this.myForm.controls['observaciones'].setValue(this.FormData.observaciones);
 		//this.myForm.controls['via'].setValue(this.FormData.via);
-	console.log(this.LocalForm);
 	//if(typeof this.LocalForm["0"] === 'undefined'){
 	if(isempty){
 		this.estatusCtrl.setValue('');
@@ -176,12 +168,10 @@ export class ComunicacionPermanenteComponent implements OnInit {
 				}
 				this.flagDBError=false;
 			}else{
-				console.log('Rest service response ERROR.');
 				this.flagDBError=true;
 				this.SetSecTimerInfoError();
 			}
 		},(error)=>{
-			console.log(error);
 			this.flagDBError=true;
 			this.SetSecTimerInfoError();
 		});
@@ -194,7 +184,6 @@ export class ComunicacionPermanenteComponent implements OnInit {
 				tempstr=Data['value'];
 				if(tempstr != null)	{
 					this.LocalForm=JSON.parse('['+tempstr.replace(/¬/g, '"').slice(0, -1) +']');
-					console.log(this.LocalForm);
 					this.LoadFrmData(false);
 				}else{
 					this.LocalForm=[];
@@ -207,7 +196,6 @@ export class ComunicacionPermanenteComponent implements OnInit {
 				this.SetSecTimerInfoError();
 			}
 		},(error)=>{
-			console.log(error);
 			this.flagDBError=true;
 			this.SetSecTimerInfoError();
 		});
@@ -217,7 +205,6 @@ export class ComunicacionPermanenteComponent implements OnInit {
 	  this.btnvisible=false;
 	  this._compermservice.addData(this.estatusCtrl.value,this.observacionesCtrl.value,this.viaCtrl.value, this.data.NoQueja, this.data.Flujo).subscribe((retvalue)=>{
 			if(retvalue['reason'] == 'OK'){
-				console.log(retvalue);
 				this.flagUpdateInfo=true;
 				this.flagReportDisponible=true;
 				this.SetSecTimerUpdate();
@@ -225,7 +212,6 @@ export class ComunicacionPermanenteComponent implements OnInit {
 				this.GetFormData(this.data.NoQueja);
 				this.BorrarInput();
 			}else{
-				console.log('Rest service response ERROR.');
 				this.flagDBError=true;
 				this.SetSecTimerInfoError();
 			}
@@ -251,14 +237,11 @@ export class ComunicacionPermanenteComponent implements OnInit {
 		});
 	}*/ 
 	openComunicacionPerm(){
-		console.log('entro a openComunicacionPerm con id reporte: '+this.routerlink);
 		this._registrosservice.getComPermanente(this.routerlink).subscribe((Data)=>{
-		console.log('entro a openRegisto');
 			this._registrosservice.FileDownLoadChoose(Data,1);
 			this.flagRegError=false;
 			this.showSpinner=false;
 		},(error)=>{
-			console.log(error);
 			this.flagRegError=true;
 			this.SetSecTimerRegistro();
 		});
@@ -272,7 +255,6 @@ export class ComunicacionPermanenteComponent implements OnInit {
   SubmitandGo(){
 	  //console.log('we got here');
 	  if (this.myForm.valid) {
-		console.log(this.myForm.value);
 		this.SaveData();
 		this.loc_pagina=1;
 		this.ngOnDestroy();
@@ -359,17 +341,14 @@ export class ComunicacionPermanenteComponent implements OnInit {
 		if(approved){
 			this._registrosservice.add_ComCon(this.data.NoQueja).subscribe((retvalue)=>{
 				if(retvalue["reason"] == 'OK'){
-					console.log(retvalue + ' jj ');
 					//this.SetSecTimerUpdateList();
 					this.flagDBError=false;
 					this.GetRegistro(true);
 				}else{
-					console.log('Rest service response ERROR.');
 					this.flagRegError=true;
 					this.SetSecTimerRegistro();
 				}				
 			},(error)=>{
-				console.log(error);
 				this.flagRegError=true;
 				this.SetSecTimerRegistro();
 			});  
@@ -387,18 +366,15 @@ export class ComunicacionPermanenteComponent implements OnInit {
 		if(approved){
 			this._registrosservice.add_ComCon1(this.data.NoQueja,id_comunicacion_consumidor).subscribe((retvalue)=>{
 				if(retvalue["reason"] == 'OK'){
-					console.log(retvalue + ' jj ');
 					//this.SetSecTimerUpdateList();
 					this.flagDBError=false;
 					this.GetRegistro(true);
 				}else{
-					console.log('Rest service response ERROR.');
 					this.flagRegError=true;
 					this.SetSecTimerRegistro();					
 				}			
 			}
 			,(error)=>{
-				console.log(error);
 				this.flagRegError=true;
 				this.SetSecTimerRegistro();
 			});
@@ -406,17 +382,14 @@ export class ComunicacionPermanenteComponent implements OnInit {
 	}
 	
 	  GetRegistro(click:boolean){
-		  console.log('noQueja es '+this.data.NoQueja);
 	  this._registrosservice.read_ComCon(this.data.NoQueja).subscribe((retvalue)=>{
 			if(retvalue["reason"] == 'OK'){
 				var tempstr=retvalue['value'];
 				if(tempstr != null)	{
-					//console.log(retvalue);
 					this.registrodata=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
 					//this.routerlink='MuestraRegistro/1/'+this.registrodata[0]['id'];
 					this.routerlink=this.registrodata[0]['id'];
 					this.linkdescription=this.registrodata[0]['codigo'];
-					console.log('registrodata ',this.registrodata);
 					if(click){
 						this.ClickAfterHalfsec();
 					}
@@ -427,13 +400,11 @@ export class ComunicacionPermanenteComponent implements OnInit {
 				}
 				this.flagformvisible++;
 			}else{
-				console.log('Rest service response ERROR.');
 				this.flagDBError=true;
 				this.SetSecTimerInfoError();
 				this.showSpinner=false;
 			}		
 		},(error)=>{
-			console.log(error);
 			this.flagDBError=true;
 			this.SetSecTimerInfoError();
 			this.showSpinner=false;

@@ -7,6 +7,8 @@ package gt.gob.mineco.diaco.service;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import gt.gob.mineco.diaco.dao.TipoRepository;
 
@@ -14,6 +16,8 @@ import gt.gob.mineco.diaco.util.ResponseRs;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -69,6 +73,7 @@ import gt.gob.mineco.diaco.model.TipoTelefono;
 import gt.gob.mineco.diaco.model.TipoUsuario;
 import gt.gob.mineco.diaco.model.Tipo_RegResArchivoConciliacion;
 import gt.gob.mineco.diaco.util.CedulaNotificacionDto;
+import gt.gob.mineco.diaco.util.FormBitacoraPdf;
 import gt.gob.mineco.diaco.util.NumerosEnLetras;
 import gt.gob.mineco.diaco.util.NumerosEnLetrasOrdinales;
 import gt.gob.mineco.diaco.util.OOoOutputStream;
@@ -83,12 +88,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import ooo.connector.BootstrapSocketConnector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
+import ooo.connector.BootstrapSocketConnector;
 /**
  *
  * @author julio
  */
+
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService {
@@ -96,14 +104,20 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
     @Inject
     private TipoRepository tipoDao;
 
+    @Inject
+    private bitacoraPdfService bitacoraPdf;
+
+    private final String URL_PATH = "D:/www/diaco_java/diaco_queja/files";
+
     //private static final String OOOEXEFOLDER;
-    private final String oooExeFolder = "/opt/libreoffice6.1/program";//PRODUCCION
+//     private final String oooExeFolder = "/opt/libreoffice6.1/program";//PRODUCCION
     //private final String oooExeFolder = "/usr/lib/libreoffice/program";
-    //private final String oooExeFolder="C:/Program Files/LibreOffice/program"; //DESARROLLO
+    private final String oooExeFolder="C:/Program Files/LibreOffice/program"; //DESARROLLO
     
      
-    /* local---*/ //private final String workingDir="/home/julio/Documents/Mineco/proyPrototipo/diacoRegistros/";
-    private final String workingDir= "/home/diaco/Documentos/FILESERVER/diacoRegistros1/"; //PRODUCCION
+    /* local---*/ 
+    private final String workingDir="D:/www/FILESERVER/diacoRegistros1/";
+//     private final String workingDir= "/home/diaco/Documentos/FILESERVER/diacoRegistros1/"; //PRODUCCION
       
     //private final String workingDir="C:/Users/jjaguilal/Documents/FILESERVER/diacoRegistros/"; //DESARROLLO
 
@@ -111,209 +125,337 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
     { OOOEXEFOLDER = "/opt/libreoffice6.1/program";
     }*/
 
+        public String CreateDirectory(String no_queja){
+                String nameDirectory = URL_PATH + '/' + no_queja;
+                File directory = new File(nameDirectory);
+                if (!directory.isDirectory()) {
+                        directory.mkdir();
+                        return no_queja;
+                }
+                else{
+
+                        return no_queja;
+                }
+        }
+
+        public Boolean setPdfDirectory(String no_queja, String name, String format, byte[] bytes){
+
+                try {
+                        String nombre_archivo = no_queja + "-" + name + ".pdf"; 
+                        String formato = format;
+                        byte[] filePdf = bytes;
+                        String fileName = nombre_archivo;
+                        
+                        String directorio = CreateDirectory(no_queja);
+                        String path = URL_PATH+"/" + directorio + "/" + fileName;
+        
+                        FileOutputStream FOS = new FileOutputStream(path);
+                        FOS.write(filePdf);
+                        FOS.close();
+        
+                        FormBitacoraPdf formBitacoraPdf = new FormBitacoraPdf();
+        
+                        formBitacoraPdf.setNo_queja(no_queja);
+                        formBitacoraPdf.setNombre_archivo(nombre_archivo);
+                        formBitacoraPdf.setFormato(formato);
+                        formBitacoraPdf.setPath(path);
+        
+                        bitacoraPdf.addBitacoraPdf(formBitacoraPdf);
+        
+                        return true;
+                        
+                } catch (Exception e) {
+                        return false;
+                }
+        }
+        static public void zipFolder(String srcFolder, String destZipFile) throws Exception {
+                ZipOutputStream zip = null;
+                FileOutputStream fileWriter = null;
+                fileWriter = new FileOutputStream(destZipFile);
+                zip = new ZipOutputStream(fileWriter);
+                addFolderToZip("", srcFolder, zip);
+                zip.flush();
+                zip.close();
+            }
+        
+            static private void addFileToZip(String path, String srcFile, ZipOutputStream zip)
+                    throws Exception {
+                File folder = new File(srcFile);
+                if (folder.isDirectory()) {
+                    addFolderToZip(path, srcFile, zip);
+                } else {
+                    byte[] buf = new byte[1024];
+                    int len;
+                    FileInputStream in = new FileInputStream(srcFile);
+                    zip.putNextEntry(new ZipEntry(path + "/" + folder.getName()));
+                    while ((len = in.read(buf)) > 0) {
+                        zip.write(buf, 0, len);
+                    }
+                }
+            }
+        
+            static private void addFolderToZip(String path, String srcFolder, ZipOutputStream zip)
+                    throws Exception {
+                File folder = new File(srcFolder);
+        
+                for (String fileName : folder.list()) {
+                    if (path.equals("")) {
+                        addFileToZip(folder.getName(), srcFolder + "/" + fileName, zip);
+                    } else {
+                        addFileToZip(path + "/" + folder.getName(), srcFolder + "/" + fileName, zip);
+                    }
+                }
+            } 
+
+        public void compressZip(String no_queja){
+                String directorioZip = URL_PATH + '/' + no_queja;
+                File carpetaComprimir = new File(directorioZip);
+                if (carpetaComprimir.exists()) {
+                        File[] ficheros = carpetaComprimir.listFiles();   
+                        for (int i = 0; i < ficheros.length; i++) {
+                                System.out.println("Nombre del fichero: " + ficheros[i].getName());
+				String extension="";
+                                for (int j = 0; j < ficheros[i].getName().length(); j++) {
+					if (ficheros[i].getName().charAt(j)=='.') {
+						extension=ficheros[i].getName().substring(j, (int)ficheros[i].getName().length());
+					}
+				} 
+                                try {
+					ZipOutputStream zous = new ZipOutputStream(new FileOutputStream(directorioZip + ficheros[i].getName().replace(extension, ".zip")));
+					
+					ZipEntry entrada = new ZipEntry(ficheros[i].getName());
+					zous.putNextEntry(entrada);
+					
+						System.out.println("Comprimiendo.....");
+						FileInputStream fis = new FileInputStream(directorioZip+entrada.getName());
+						int leer;
+						byte[] buffer = new byte[1024];
+						while (0 < (leer = fis.read(buffer))) {
+							zous.write(buffer, 0, leer);
+						}
+						fis.close();
+						zous.closeEntry();
+					zous.close();					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}	
+                                System.out.println("Directorio de salida: " + carpetaComprimir);			    
+                        }
+                }else {
+			System.out.println("No se encontró el directorio..");
+		}
+        }
+
+        public Response getCompressFilesByQueja(String idqueja){
+                ResponseBuilder response = Response.ok();
+                try {
+                        // compressZip(idqueja);
+                        zipFolder(URL_PATH+"/"+idqueja, URL_PATH+"/boleta_zip/"+idqueja+".zip");
+                        System.out.println("comprimir");
+                        return response.build();
+
+                        // ResponseBuilder response = Response.ok();
+                        // response.type("application/zip");
+                        // response.header("Content-Disposition", "attachment;filename=queja.docx");
+                        // return response.build();
+
+                        // resp.setContentType("application/zip");
+                        // resp.setContentType("application/zip");
+                        // resp.addHeader("Content-Disposition", "attachment; filename=" + ("pdf_"+PDFIndex+"_"+PDFtime+".zip"));
+                        // resp.setContentLength((int) zipFile.length());
+                } catch (Exception e) {
+                        System.out.println("error "+ e);
+                        return response.build();
+                }
+        }
+
  /*DIACO-AQ-FO-02*/
     @Override
     public Response getFormularioQueja(Integer idqueja, String pToken) {
+
         try {
-            System.out.println("JJ-Variable oooExeFolder: "+oooExeFolder);
-            tipoDao.TokenCheck(pToken);
-            TipoReg_FormularioQueja formQueja = tipoDao.findByIdFormularioQueja(idqueja);
+                // verificacion de token
+                tipoDao.TokenCheck(pToken);
+                // consulta los datos de la queja
+                TipoReg_FormularioQueja formQueja = tipoDao.findByIdFormularioQueja(idqueja);
 
-            // Initialise
-            //  String OOOEXEFOLDER = "/opt/libreoffice6.1/program";
-            XComponentContext xContext = BootstrapSocketConnector.bootstrap(oooExeFolder);
-            System.out.println("JJ-Variable xContext: "+xContext);
-            //XComponentContext xContext = Bootstrap.bootstrap();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                // se crea el contexto de la conexion a libreOffice
+                XComponentContext xContext = BootstrapSocketConnector.bootstrap(oooExeFolder);
 
-            XMultiComponentFactory xMCF = xContext.getServiceManager();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-            Object oDesktop = xMCF.createInstanceWithContext(
-                    "com.sun.star.frame.Desktop", xContext);
-            System.out.println("JJ-Variable oDesktop: "+oDesktop);
+                // se crea el multicomponente de servicios
+                XMultiComponentFactory xMCF = xContext.getServiceManager();
 
-            XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, oDesktop);
-            System.out.println("JJ-Variable xDesktop: "+xDesktop);
+                // se crea el objeto de instancia del contexto
+                Object oDesktop = xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", xContext);
 
-            // Load the Document
-            //  String workingDir = "/home/julio/Documents/Mineco/proyPrototipo/diacoRegistros/";
-            String myTemplate = workingDir + "DIACO-AQ-FO-02.docx";
+                XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, oDesktop);
 
-            if (!new File(myTemplate).canRead()) {
-                throw new RuntimeException("Cannot load template:" + new File(myTemplate));
-                
-            }
-            System.out.println("Leyendo DIACO-AQ-FO-02.docx");
-            
+                // plantilla word a utilizar
+                String myTemplate = workingDir + "DIACO-AQ-FO-02.docx";
 
+                // verifica disponibilidads de plantilla
+                if (!new File(myTemplate).canRead()) {
+                        throw new RuntimeException("Cannot load template:" + new File(myTemplate));
+                }
 
-            XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime
-                    .queryInterface(com.sun.star.frame.XComponentLoader.class, xDesktop);
-            System.out.println("JJ-Variable xCompLoader: "+xCompLoader);
+                // carga el componente
+                XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, xDesktop);
 
-            String sUrl = "file:///" + myTemplate;
-            System.out.println("JJ-Variable sUrl: "+sUrl);
+                // url del archivo
+                String sUrl = "file:///" + myTemplate;
 
-            PropertyValue[] propertyValues = new PropertyValue[0];
+                // creación de propiedades
+                PropertyValue[] propertyValues = new PropertyValue[0];
+                propertyValues = new PropertyValue[1];
 
-            propertyValues = new PropertyValue[1];
-            propertyValues[0] = new PropertyValue();
-            propertyValues[0].Name = "Hidden";
-            propertyValues[0].Value = new Boolean(true);
-            System.out.println("JJ-Variable propertyValues: "+propertyValues);
+                // seteo de valores a la propiedad 0
+                propertyValues[0] = new PropertyValue();
+                propertyValues[0].Name = "Hidden";
+                propertyValues[0].Value = new Boolean(true);
 
-            XComponent xComp = xCompLoader.loadComponentFromURL(
-                    sUrl, "_blank", 0, propertyValues);
-            System.out.println("JJ-Variable xComp: "+xComp);
+                // carga un componente especificado por una URL en el marco nuevo o existente especificado
+                XComponent xComp = xCompLoader.loadComponentFromURL(sUrl, "_blank", 0, propertyValues);
 
-            // Manipulate
-            XReplaceDescriptor xReplaceDescr = null;
-            XReplaceable xReplaceable = null;
-            System.out.println("JJ-Variable xReplaceDescr: "+xReplaceDescr);
+                // descriptores 
+                XReplaceDescriptor xReplaceDescr = null;
+                XReplaceable xReplaceable = null;
+                XTextDocument xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComp);
+                xReplaceable = (XReplaceable) UnoRuntime.queryInterface(XReplaceable.class,xTextDocument);
+                xReplaceDescr = (XReplaceDescriptor) xReplaceable.createReplaceDescriptor();
 
-            XTextDocument xTextDocument = (XTextDocument) UnoRuntime
-                    .queryInterface(XTextDocument.class, xComp);
-            System.out.println("JJ-Variable xTextDocument: "+xTextDocument);
-
-            xReplaceable = (XReplaceable) UnoRuntime
-                    .queryInterface(XReplaceable.class,
-                            xTextDocument);
-            System.out.println("JJ-Variable xReplaceable: "+xReplaceable);
-
-            xReplaceDescr = (XReplaceDescriptor) xReplaceable
-                    .createReplaceDescriptor();
-            System.out.println("JJ-Variable xReplaceDescr: "+xReplaceDescr);
-
-            xReplaceDescr.setSearchString("<num_queja>");
-            xReplaceDescr.setReplaceString(formQueja.getQuejanumero().toString() + "-" + formQueja.getAnio_queja());
-            xReplaceable.replaceAll(xReplaceDescr);
-
-            xReplaceDescr.setSearchString("<via_ingreso>");
-            xReplaceDescr.setReplaceString(formQueja.getVia_ingreso());
-            xReplaceable.replaceAll(xReplaceDescr);
-
-            xReplaceDescr.setSearchString("<nombre_cons>");
-            xReplaceDescr.setReplaceString(formQueja.getCon_nombre());
-            xReplaceable.replaceAll(xReplaceDescr);
-
-            xReplaceDescr.setSearchString("<fecha_queja>");
-            xReplaceDescr.setReplaceString(simpleDateFormat.format(formQueja.getFecha()));
-            xReplaceable.replaceAll(xReplaceDescr);
-
-            xReplaceDescr.setSearchString("<identificacion_cons>");
-            xReplaceDescr.setReplaceString(formQueja.getCon_identificacion());
-            xReplaceable.replaceAll(xReplaceDescr);
-
-            xReplaceDescr.setSearchString("<nombre_prov>");
-            xReplaceDescr.setReplaceString(formQueja.getProv_nombre());
-            xReplaceable.replaceAll(xReplaceDescr);
-
-            xReplaceDescr.setSearchString("<tel_cons>");
-            xReplaceDescr.setReplaceString(formQueja.getCon_telefono());
-            xReplaceable.replaceAll(xReplaceDescr);
-
-            xReplaceDescr.setSearchString("<nit_prov>");
-            xReplaceDescr.setReplaceString(formQueja.getProv_nit());
-            xReplaceable.replaceAll(xReplaceDescr);
-
-            xReplaceDescr.setSearchString("<email_cons>");
-            xReplaceDescr.setReplaceString(formQueja.getCon_email());
-            xReplaceable.replaceAll(xReplaceDescr);
-
-            xReplaceDescr.setSearchString("<tel_prov>");
-            xReplaceDescr.setReplaceString(formQueja.getProv_telefono());
-            xReplaceable.replaceAll(xReplaceDescr);
-
-            xReplaceDescr.setSearchString("<dir_cons>");
-            xReplaceDescr.setReplaceString(formQueja.getCon_direccion());
-            xReplaceable.replaceAll(xReplaceDescr);
-
-            if (formQueja.getProv_fechacompra() != null) {
-                xReplaceDescr.setSearchString("<fecha_compra>");
-                xReplaceDescr.setReplaceString(simpleDateFormat.format(formQueja.getProv_fechacompra()));
+                // remplazo de variables en plantilla word
+                xReplaceDescr.setSearchString("<num_queja>");
+                xReplaceDescr.setReplaceString(formQueja.getQuejanumero().toString() + "-" + formQueja.getAnio_queja());
                 xReplaceable.replaceAll(xReplaceDescr);
-            } else {
-                xReplaceDescr.setSearchString("<fecha_compra>");
-                xReplaceDescr.setReplaceString("");
+
+                xReplaceDescr.setSearchString("<via_ingreso>");
+                xReplaceDescr.setReplaceString(formQueja.getVia_ingreso());
                 xReplaceable.replaceAll(xReplaceDescr);
-            }
 
-            xReplaceDescr.setSearchString("<depto_cons>");
-            xReplaceDescr.setReplaceString(formQueja.getCon_dpto());
-            xReplaceable.replaceAll(xReplaceDescr);
+                xReplaceDescr.setSearchString("<nombre_cons>");
+                xReplaceDescr.setReplaceString(formQueja.getCon_nombre());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            xReplaceDescr.setSearchString("<dir_prov>");
-            xReplaceDescr.setReplaceString(formQueja.getProv_direccion());
-            xReplaceable.replaceAll(xReplaceDescr);
+                xReplaceDescr.setSearchString("<fecha_queja>");
+                xReplaceDescr.setReplaceString(simpleDateFormat.format(formQueja.getFecha()));
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            xReplaceDescr.setSearchString("<zona_cons>");
-            xReplaceDescr.setReplaceString(formQueja.getCon_zona());
-            xReplaceable.replaceAll(xReplaceDescr);
+                xReplaceDescr.setSearchString("<identificacion_cons>");
+                xReplaceDescr.setReplaceString(formQueja.getCon_identificacion());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            xReplaceDescr.setSearchString("<depto_prov>");
-            xReplaceDescr.setReplaceString(formQueja.getProv_departamento());
-            xReplaceable.replaceAll(xReplaceDescr);
+                xReplaceDescr.setSearchString("<nombre_prov>");
+                xReplaceDescr.setReplaceString(formQueja.getProv_nombre());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            xReplaceDescr.setSearchString("<municipio_cons>");
-            xReplaceDescr.setReplaceString(formQueja.getCon_municipio());
-            xReplaceable.replaceAll(xReplaceDescr);
+                xReplaceDescr.setSearchString("<tel_cons>");
+                xReplaceDescr.setReplaceString(formQueja.getCon_telefono());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            xReplaceDescr.setSearchString("<zona_prov>");
-            xReplaceDescr.setReplaceString(formQueja.getProv_zona());
-            xReplaceable.replaceAll(xReplaceDescr);
+                xReplaceDescr.setSearchString("<nit_prov>");
+                xReplaceDescr.setReplaceString(formQueja.getProv_nit());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            xReplaceDescr.setSearchString("<municipio_prov>");
-            xReplaceDescr.setReplaceString(formQueja.getProv_municipio());
-            xReplaceable.replaceAll(xReplaceDescr);
+                xReplaceDescr.setSearchString("<email_cons>");
+                xReplaceDescr.setReplaceString(formQueja.getCon_email());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            xReplaceDescr.setSearchString("<detalle_queja>");
-            xReplaceDescr.setReplaceString(formQueja.getQueja());
-            xReplaceable.replaceAll(xReplaceDescr);
+                xReplaceDescr.setSearchString("<tel_prov>");
+                xReplaceDescr.setReplaceString(formQueja.getProv_telefono());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            xReplaceDescr.setSearchString("<posible_solucion>");
-            xReplaceDescr.setReplaceString(formQueja.getSolucion());
-            xReplaceable.replaceAll(xReplaceDescr);
+                xReplaceDescr.setSearchString("<dir_cons>");
+                xReplaceDescr.setReplaceString(formQueja.getCon_direccion());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            OOoOutputStream output = new OOoOutputStream();
-            System.out.println("Exportando a PDF");
+                if (formQueja.getProv_fechacompra() != null) {
+                        xReplaceDescr.setSearchString("<fecha_compra>");
+                        xReplaceDescr.setReplaceString(simpleDateFormat.format(formQueja.getProv_fechacompra()));
+                        xReplaceable.replaceAll(xReplaceDescr);
+                } else {
+                        xReplaceDescr.setSearchString("<fecha_compra>");
+                        xReplaceDescr.setReplaceString("");
+                        xReplaceable.replaceAll(xReplaceDescr);
+                }
 
-            // save as a PDF 
-            XStorable xStorable = (XStorable) UnoRuntime
-                    .queryInterface(XStorable.class, xComp);
+                xReplaceDescr.setSearchString("<depto_cons>");
+                xReplaceDescr.setReplaceString(formQueja.getCon_dpto());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            propertyValues = new PropertyValue[2];
-            // Setting the flag for overwriting
-            propertyValues[0] = new PropertyValue();
-            propertyValues[1] = new PropertyValue();
+                xReplaceDescr.setSearchString("<dir_prov>");
+                xReplaceDescr.setReplaceString(formQueja.getProv_direccion());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            propertyValues[0].Name = "OutputStream";
-            propertyValues[0].Value = output;
-            // Setting the filter name
+                xReplaceDescr.setSearchString("<zona_cons>");
+                xReplaceDescr.setReplaceString(formQueja.getCon_zona());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            propertyValues[1].Name = "FilterName";
-            propertyValues[1].Value = "writer_pdf_Export";
+                xReplaceDescr.setSearchString("<depto_prov>");
+                xReplaceDescr.setReplaceString(formQueja.getProv_departamento());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            // Appending the favoured extension to the origin document name
-            xStorable.storeToURL("private:stream", propertyValues);
+                xReplaceDescr.setSearchString("<municipio_cons>");
+                xReplaceDescr.setReplaceString(formQueja.getCon_municipio());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            // shutdown
-            //xDesktop.terminate();
-            XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
-            xcloseable.close(false);
+                xReplaceDescr.setSearchString("<zona_prov>");
+                xReplaceDescr.setReplaceString(formQueja.getProv_zona());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+                xReplaceDescr.setSearchString("<municipio_prov>");
+                xReplaceDescr.setReplaceString(formQueja.getProv_municipio());
+                xReplaceable.replaceAll(xReplaceDescr);
 
-            ResponseBuilder response = Response.ok((Object) inStream);
-            //response.header("Content-Disposition", "attachment;filename=queja.pdf");
-            response.header("Content-Disposition", "attachment;filename=queja.docx");
-            return response.build();
+                xReplaceDescr.setSearchString("<detalle_queja>");
+                xReplaceDescr.setReplaceString(formQueja.getQueja());
+                xReplaceable.replaceAll(xReplaceDescr);
+
+                xReplaceDescr.setSearchString("<posible_solucion>");
+                xReplaceDescr.setReplaceString(formQueja.getSolucion());
+                xReplaceable.replaceAll(xReplaceDescr);
+
+                // *********************************************************
+
+                OOoOutputStream output = new OOoOutputStream();
+                XStorable xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, xComp);
+
+                propertyValues = new PropertyValue[2];
+                propertyValues[0] = new PropertyValue();
+                propertyValues[1] = new PropertyValue();
+
+                propertyValues[0].Name = "OutputStream";
+                propertyValues[0].Value = output;
+
+                propertyValues[1].Name = "FilterName";
+                propertyValues[1].Value = "writer_pdf_Export";
+
+                xStorable.storeToURL("private:stream", propertyValues);
+
+                XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
+                xcloseable.close(false);
+
+                ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
+                //     construcción del pdf, utilizando itextpdf       
+
+                String no_queja = formQueja.getQuejanumero().toString() + "-" + formQueja.getAnio_queja();
+                if (setPdfDirectory(no_queja,"caratula","DIACO-AQ-FO-02", output.toByteArray())){
+                        System.out.println("guardado");
+                }
+
+                ResponseBuilder response = Response.ok((Object) inStream);
+                response.header("Content-Disposition", "attachment;filename=queja.docx");
+                return response.build();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error de obtener registro"+e);
-            ResponseBuilder response = Response.serverError();
-            return response.build();
+                e.printStackTrace();
+                System.out.println("Error de obtener registro"+e);
+                ResponseBuilder response = Response.serverError();
+                return response.build();
         }
     }
 
@@ -323,12 +465,8 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             tipoDao.TokenCheck(pToken);
             //TipoReg_FormularioQueja formQueja = tipoDao.findByIdFormularioQueja(idqueja);
             TipoReg_ComPerm regComPerm = tipoDao.findByIdComunicacionPermanente(pIdRegistro);
-            System.out.println("JJ: Variables: pIdRegistro="+pIdRegistro);
 
-            // Initialise
-            // String oooExeFolder = "/opt/libreoffice6.1/program";
             XComponentContext xContext = BootstrapSocketConnector.bootstrap(oooExeFolder);
-            //XComponentContext xContext = Bootstrap.bootstrap();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
             XMultiComponentFactory xMCF = xContext.getServiceManager();
@@ -339,8 +477,6 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
                     XDesktop.class, oDesktop);
 
-            // Load the Document
-            // String workingDir = "/home/julio/Documents/Mineco/proyPrototipo/diacoRegistros/";
             String myTemplate = workingDir + "DIACO-AQ-FO-15.docx";
 
             if (!new File(myTemplate).canRead()) {
@@ -361,15 +497,12 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
 
             XComponent xComp = xCompLoader.loadComponentFromURL(
                     sUrl, "_blank", 0, propertyValues);
-//xComp.dispose();
 
-            // Manipulate
             XReplaceDescriptor xReplaceDescr = null;
             XReplaceable xReplaceable = null;
 
             XTextDocument xTextDocument = (XTextDocument) UnoRuntime
                     .queryInterface(XTextDocument.class, xComp);
-            //xTextDocument.dispose();
 
             xReplaceable = (XReplaceable) UnoRuntime
                     .queryInterface(XReplaceable.class,
@@ -386,7 +519,6 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             xReplaceDescr.setReplaceString(String.valueOf(regComPerm.getQuejanumero() + "-" + regComPerm.getAnio_queja()));
             xReplaceable.replaceAll(xReplaceDescr);
 
-            // mail merge the signatory
             xReplaceDescr.setSearchString("<fecha_asignacion>");
             xReplaceDescr.setReplaceString(simpleDateFormat.format(regComPerm.getFecha_creacion()));
 
@@ -468,6 +600,13 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
 
+            //     construcción del pdf, utilizando itextpdf     
+            
+            String no_queja = regComPerm.getQuejanumero() + "-" + regComPerm.getAnio_queja();
+                if (setPdfDirectory(no_queja,"comunicacion-permanente","DIACO-AQ-FO-15", output.toByteArray())){
+                        System.out.println("guardado");
+                }
+
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + regComPerm.getId_queja() + ".pdf");
             return response.build();
@@ -481,6 +620,9 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
 
     @Override
     public Response getCedulaCitacionCons(Integer pId_audiencia, String pToken) {
+            String no_queja = "";
+            String nombre_archivo = "";
+            String formato = "";
         try {
 
             tipoDao.TokenCheck(pToken);
@@ -516,9 +658,17 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
                   if (vTipoConsumidor.getTipo_consumidor()==7)
                    {
                       myTemplate = workingDir + "DIACO-AQ-FO-05_cons_jur.docx";
+
+                        no_queja = cedCitacion.getQuejanumero() + "-" + cedCitacion.getAnio_queja();
+                        nombre_archivo = "citacion-consumidor-juridico"; 
+                        formato = "DIACO-AQ-FO-05-CONS-JURIDICO";
                    } 
                   else
                    {  myTemplate = workingDir + "DIACO-AQ-FO-05_cons.docx";
+
+                        no_queja = cedCitacion.getQuejanumero() + "-" + cedCitacion.getAnio_queja();
+                        nombre_archivo = "citacion-consumidor"; 
+                        formato = "DIACO-AQ-FO-05-CONSUMIDOR";
                    }     
             
             
@@ -641,6 +791,13 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
 
+            //     construcción del pdf, utilizando itextpdf       
+
+                if (setPdfDirectory(no_queja,nombre_archivo,formato, output.toByteArray())){
+                        System.out.println("guardado");
+                }
+        
+
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + cedCitacion.getId_queja() + ".pdf");
             return response.build();
@@ -736,6 +893,7 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
 
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=DIACO-AQ-FO-06_doc.doc");
@@ -994,6 +1152,14 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
 
+            //     construcción del pdf, utilizando itextpdf       
+
+            String no_queja = cedCitacionProv.getQuejanumero() + "-" + cedCitacionProv.getAnio_queja();
+
+            if (setPdfDirectory(no_queja,"citacion-proveedor","DIACO-AQ-FO-05", output.toByteArray())){
+                System.out.println("guardado");
+            }
+            
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + cedCitacionProv.getId_queja() + ".pdf");
             return response.build();
@@ -1152,6 +1318,13 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
 
+            //     construcción del pdf, utilizando itextpdf       
+
+            String no_queja = notifiCons.getQuejanumero() + "-" + notifiCons.getAnio_queja();
+            if (setPdfDirectory(no_queja,"notificacion-consumidor","DIACO-AQ-FO-12", output.toByteArray())){
+                System.out.println("guardado");
+            }
+            
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + notifiCons.getId_queja() + ".pdf");
             return response.build();
@@ -1310,6 +1483,15 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
+            //     construcción del pdf, utilizando itextpdf       
+
+            String no_queja = notiProv.getQuejanumero() + "-" + notiProv.getAnio_queja();
+            if (setPdfDirectory(no_queja,"notificacion-proveedor","DIACO-AQ-FO-12", output.toByteArray())){
+                System.out.println("guardado");
+            }
+
+
             // seria interesante y de probar lo del StreamingOutput
             // en https://stackoverflow.com/questions/29712554/how-to-download-a-file-using-a-java-rest-service-and-a-data-stream
 
@@ -1448,6 +1630,11 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
+            String no_queja = resArchivo.getNo_queja() + "-" + vTipoQueja.getAnio();
+            if (setPdfDirectory(no_queja,"resolucion-archivo-conciliacion","DIACO-AQ-FO-08", output.toByteArray())){
+                System.out.println("guardado");
+            }
 
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + resArchivo.getIdQueja() + ".pdf");
@@ -1598,6 +1785,11 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
 
+            String no_queja = fichaQueja.getQuejanumero() + "-" + fichaQueja.getAnio_queja();
+            if (setPdfDirectory(no_queja,"ficha_queja","ficha_queja", output.toByteArray())){
+                System.out.println("guardado");
+            }
+
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + fichaQueja.getId_queja() + ".pdf");
             return response.build();
@@ -1727,6 +1919,11 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
+            String no_queja = visitaCampo.getQuejanumero() + "-" + visitaCampo.getAnio_queja();
+            if (setPdfDirectory(no_queja,"resolucion-archivo-visita-campo","DIACO-AQ-FO-09", output.toByteArray())){
+                System.out.println("guardado");
+            }
 
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + visitaCampo.getId_queja() + ".pdf");
@@ -1859,6 +2056,11 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
+            String no_queja = String.valueOf(visitaCampo.getQuejanumero());
+            if (setPdfDirectory(no_queja,"acta-incomparecencia","DIACO-VQ-FO-07", output.toByteArray())){
+                System.out.println("guardado");
+            }
 
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + visitaCampo.getIdQueja() + ".pdf");
@@ -2003,6 +2205,11 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
 
+            String no_queja = String.valueOf(vTipoReg_CedulaNotificacionResJuridico.getQuejanumero()) + "-"+vTipoReg_CedulaNotificacionResJuridico.getAnio();
+            if (setPdfDirectory(no_queja,"cedula-notificacion-resolucion-jur","DIACO-AS-FO-04", output.toByteArray())){
+                System.out.println("guardado");
+            }
+
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + vTipoReg_CedulaNotificacionResJuridico.getIdQueja() + ".pdf");
             return response.build();
@@ -2141,6 +2348,14 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
+            //     construcción del pdf, utilizando itextpdf       
+
+            String no_queja = tipoReg_CedulaNotificacionCitacionJuridico.getQuejanumero() + "-" + vTipoQueja.getAnio();
+            if (setPdfDirectory(no_queja,"notificacion-citacion-prov","DIACO-AS-FO-05", output.toByteArray())){
+                System.out.println("guardado");
+            }
+
 
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + tipoReg_CedulaNotificacionCitacionJuridico.getIdQueja() + ".pdf");
@@ -2292,6 +2507,14 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
+            //     construcción del pdf, utilizando itextpdf       
+
+            String no_queja = vTIpoReg_CedulaCitacionConJur.getQuejanumero() + "-" + vTIpoReg_CedulaCitacionConJur.getAnioQueja();
+            if (setPdfDirectory(no_queja,"cedula-citacion-con","DIACO-AS-FO-08", output.toByteArray())){
+                System.out.println("guardado");
+        }
+
 
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + vTIpoReg_CedulaCitacionConJur.getIdQueja() + ".pdf");
@@ -2445,6 +2668,14 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
 
+            //     construcción del pdf, utilizando itextpdf       
+
+            String no_queja = vTipoReg_CedulaCitacionProJur.getQuejanumero() + "-" + vTipoReg_CedulaCitacionProJur.getAnioQueja();
+            if (setPdfDirectory(no_queja,"cedula-citacion-prov","DIACO-AS-FO-08", output.toByteArray())){
+                System.out.println("guardado");
+        }
+
+            
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + vTipoReg_CedulaCitacionProJur.getIdQueja() + ".pdf");
             return response.build();
@@ -2577,7 +2808,14 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
 
-            ResponseBuilder response = Response.ok((Object) inStream);
+            //     construcción del pdf, utilizando itextpdf       
+
+            String no_queja = tipoReg_RegCedulaNotificacionCitCorreo.getQuejanumero()+"-"+vTipoQueja.getAnio();
+            if (setPdfDirectory(no_queja,"notificacion-citacion-correo","DIACO-AS-FO-10", output.toByteArray())){
+                System.out.println("guardado");
+        }
+
+        ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + tipoReg_RegCedulaNotificacionCitCorreo.getIdQueja() + ".pdf");
             return response.build();
 
@@ -2706,6 +2944,14 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
+            //     construcción del pdf, utilizando itextpdf       
+
+            String no_queja = tipoReg_CedulaNotificacionResCorreo.getQuejanumero() +"-"+vTipoQueja.getAnio();
+            if (setPdfDirectory(no_queja,"notificacion-resolucion-correo","DIACO-AS-FO-11", output.toByteArray())){
+                System.out.println("guardado");
+        }
+            
 
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + tipoReg_CedulaNotificacionResCorreo.getIdQueja() + ".pdf");
@@ -2841,6 +3087,11 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
+            String no_queja = resArchivo.getNo_queja() + "-" + vTipoQueja.getAnio();
+            if (setPdfDirectory(no_queja,"resolucion-archivo-unica-audiencia","DIACO-AQ-FO-11", output.toByteArray())){
+                System.out.println("guardado");
+            }
 
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=ComPerm" + resArchivo.getIdQueja() + ".pdf");
@@ -2989,6 +3240,11 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
 
+            String no_queja = vTipoQueja.getNo_queja() + "-" + vTipoQueja.getAnio();
+            if (setPdfDirectory(no_queja,"caratula-sansionatorio","DIACO-AS-FO-12", output.toByteArray())){
+                System.out.println("guardado");
+            }
+
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=caratula.pdf");
             return response.build();
@@ -3119,6 +3375,11 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
+            String no_queja = String.valueOf(vTipoReg_ResolucionAperturaAPrueba.getQuejanumero()) + "-" + vTipoQueja.getAnio();
+            if (setPdfDirectory(no_queja,"resolucion-apertura-prueba","DIACO-AS-FO-01", output.toByteArray())){
+                System.out.println("guardado");
+            }
 
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=aperturaPrueba.pdf");
@@ -3264,6 +3525,12 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
 
+            String no_queja = String.valueOf(vTipoReg_ResolucionFinal.getQuejanumero()) + "-" + vTipoQueja.getAnio();
+            if (setPdfDirectory(no_queja,"resolucion-final-archivo","DIACO-AS-FO-02", output.toByteArray())){
+                System.out.println("guardado");
+            }
+
+
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=resolucionFInal.pdf");
             return response.build();
@@ -3404,6 +3671,11 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
+            String no_queja = String.valueOf(vTipoReg_DeclaracionRebeldia.getQuejanumero()) + "-" + vTipoReg_DeclaracionRebeldia.getAnio();
+            if (setPdfDirectory(no_queja,"declaratoria-rebeldia-jur","DIACO-AS-FO-07", output.toByteArray())){
+                System.out.println("guardado");
+            }
 
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=aperturaPrueba.pdf");
@@ -3611,6 +3883,11 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
             XCloseable xcloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xComp);
             xcloseable.close(false);
             ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
+
+            String no_queja = String.valueOf(resMovExp.getNo());
+            if (setPdfDirectory(no_queja,"formulario-movimiento","DIACO-AQ-FO-03", output.toByteArray())){
+                System.out.println("guardado");
+            }
 
             ResponseBuilder response = Response.ok((Object) inStream);
             response.header("Content-Disposition", "attachment;filename=MovReg.pdf");

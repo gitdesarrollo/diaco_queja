@@ -10,6 +10,8 @@ import { QuejaService } from '../shared/queja.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import { SubmitFormService } from "../shared/submit-form.service";
 import { SeguridadService } from "../shared/seguridad.service";
+import swal from 'sweetalert2'
+
 
 @Component({
   selector: 'app-verif-datos',
@@ -43,8 +45,12 @@ export class VerifDatosComponent implements OnInit {
   flagMainUpdate: boolean;
   flagValidadorRegistros: boolean;
   msg_deshabilitado;
+  closeResult: string;
+  cargarIcono:boolean;
+  cargarIconoPdf:boolean;
+  downloadFile:boolean;
 
-  constructor( @Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<VerifDatosComponent>, private _compermservice:CompermanenteService, private _verifDatosService:VerifDatosService, private _quejaService:QuejaService,private _registrosservice:RegistrosService, private _submitFormService:SubmitFormService, private _seguridadService:SeguridadService ) { 
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<VerifDatosComponent>, private _compermservice:CompermanenteService, private _verifDatosService:VerifDatosService, private _quejaService:QuejaService,private _registrosservice:RegistrosService, private _submitFormService:SubmitFormService, private _seguridadService:SeguridadService ) { 
 		this.flaglink=false;
 		this.flagIntUsuario = false;
 		this.flagUpdateInfo = false;
@@ -60,7 +66,10 @@ export class VerifDatosComponent implements OnInit {
 		this.flagformvisible=0;
 		this.linkdescription='Ver Detalles';
 		this.msg_deshabilitado=MSG_REGISTRO_DESHABILITADO;
-  }
+		this.cargarIcono = false
+		this.cargarIconoPdf = false
+		this.downloadFile = true
+   }
 
   ngOnInit() {
 		this.QuejaCheck();
@@ -81,47 +90,53 @@ export class VerifDatosComponent implements OnInit {
 				}
 				this.flagformvisible++;
 			}else{
-				console.log('Rest service response ERROR.');
 				this.flagInfoError=true;
 				this.SetSecTimerInfoError();
 			}
 		},(error)=>{
-			console.log(error);
 			this.flagInfoError=true;
 			this.SetSecTimerInfoError();
 		});
 	}
 
+
   AgregarInteraccion(){
-		var r = confirm("¿Esta seguro que desea enviar un correo solicitando al consumidor ingresar información adicional?");
-		if (r){
+		swal.fire({
+			icon: 'warning',
+			title: '¿Está seguro que desea un correo electrónico al consumidor?',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Si',
+			cancelButtonText: 'Cancelar'
+		}).then((response)  => {
+			if (response.value){
+				this.cargarIcono = !this.cargarIcono
 				this.flagBoton=false;
 				//this.SetSecTimerBoton();
 				this._verifDatosService.addDataInt(this.data.NoQueja).subscribe((retvalue)=>{
-					console.log(retvalue);
 					if(retvalue["reason"] == 'OK' || retvalue["reason"] == 'EMAILFAIL'){
-						console.log(retvalue);
 						if(retvalue["reason"] == 'OK'){
 							this.flagEmailSent=true;
 							this.SetSecTimerMailOk();
+							this.cargarIcono = !this.cargarIcono
+							this.downloadFile = true
 						}else{
 							this.flagEmailError=true;
 							this.SetSecTimerMailError();
 						}
 						this.LoadFrmInfo();
 					}else{
-						console.log('Rest service response ERROR.');
 						this.flagInfoError=true;
 						this.SetSecTimerInfoError();
 					}
 					this.SetSecTimerBoton();	
 				},(error)=>{
-					console.log(error);
 					this.flagInfoError=true;
 					this.SetSecTimerBoton();
 				});
-		}		
-		//saveinteraccion
+			}
+		})		
   }
 
   VericarDatos(){
@@ -156,7 +171,6 @@ export class VerifDatosComponent implements OnInit {
 				tempstr=retvalue['value'];
 				if(tempstr != null)	{
 					this.lst_queja=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
-					console.log(this.lst_queja);
 					this.flagformvisible++;
 					this.lbl_numqueja=this.lst_queja[0]['quejanumero'];
 					//ver si es verificador, en ese caso siempre puede editar
@@ -181,17 +195,14 @@ export class VerifDatosComponent implements OnInit {
 							this.flagEditable=false;
 					}
 				}else{
-					console.log('Información de queja no pudo ser obtenida.');
 					this.flagInfoError=true;
 					this.SetSecTimerInfoError();
 				}				
 			}else{
-				console.log('Rest service response ERROR.');
 				this.flagInfoError=true;
 				this.SetSecTimerInfoError();
 			}		
 		},(error)=>{
-			console.log(error);
 			this.flagInfoError=true;
 			this.SetSecTimerInfoError();
 		});	
@@ -210,17 +221,13 @@ export class VerifDatosComponent implements OnInit {
 					this.flagIntUsuario=false;
 				}
 				this.flagInfoError=false;
-				console.log('*'+tempstr+'*');
-				console.log(this.lst_int);
 				this.flagformvisible++;
 				this.SetSecTimerVarLoad();
 			}else{
-				console.log('Rest service response ERROR.');
 				this.flagInfoError=true;
 				this.SetSecTimerInfoError();
 			}
 		},(error)=>{
-			console.log(error);
 			this.flagInfoError=true;
 			this.SetSecTimerInfoError();
 		});
@@ -231,55 +238,53 @@ export class VerifDatosComponent implements OnInit {
 		this._verifDatosService.updFlujoGuia(this.data.NoQueja, this.data.Flujo).subscribe((Data)=>{
 			if(Data['reason'] == 'OK'){
 				this.flagMainUpdate=true;
-				console.log('Flujo actualizado');
 			}else{
-				console.log('Rest service response ERROR Flujo.');
 			}
 		},(error)=>{
-			console.log(error);
 		});
 	}
 	
 	openFormularioQuejaRegistro(){
-		console.log('entro a getFormularioQuejaRegistro');
+		
 	 	this._registrosservice.getFormularioQuejaRegistro(this.data.NoQueja).subscribe((Data)=>{
-		console.log('entro a openRegisto');
+			 console.log("datos pdf", Data)
 			this._registrosservice.FileDownLoadChoose(Data,1);
 				this.flagInfoError=false;
 		},(error)=>{
-			console.log(error);
 			this.flagInfoError=true;
 			//this.SetSecTimerInfoError();
 		});
 	} 
 
 	GenerarRegistro(){
-		var approved=false;
-		if(this.linkdescription != ''){
-			if(confirm("¿Está seguro que quiere actualizar este registro con la información mas reciente?")) {
-				approved=true;
-			}
-		}else{
-			approved=true;
-		}
-		if(approved){
-			this._registrosservice.add_FormQueja(this.data.NoQueja).subscribe((retvalue)=>{
-				if(retvalue["reason"] == 'OK'){
-					console.log(retvalue);
-					//this.SetSecTimerUpdateList();
-					this.flagInfoError=false;
-					this.GetRegistro(true);
-				}else{
-					console.log('Rest service response ERROR.');
+		swal.fire({
+			icon: 'warning',
+			title: '¿Está seguro que quiere actualizar este registro con la información mas reciente?',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Si',
+			cancelButtonText: 'Cancelar'
+		}).then((response)  => {
+			if (response.value){
+				this.cargarIconoPdf = !this.cargarIconoPdf
+				this._registrosservice.add_FormQueja(this.data.NoQueja).subscribe((retvalue)=>{
+					if(retvalue["reason"] == 'OK'){
+						this.flagInfoError=false;
+						this.GetRegistro(true);
+						this.cargarIconoPdf = !this.cargarIconoPdf
+					}else{
+						this.flagInfoError=true;
+						this.SetSecTimerInfoError();
+						this.cargarIconoPdf = !this.cargarIconoPdf
+					}				
+				},(error)=>{
 					this.flagInfoError=true;
 					this.SetSecTimerInfoError();
-				}				
-			},(error)=>{
-				console.log(error);
-				this.flagInfoError=true;
-				this.SetSecTimerInfoError();
-			});  
-		}
+					this.cargarIconoPdf = !this.cargarIconoPdf
+				}); 
+			}
+		})	
 	}
 	
 	  GetRegistro(click:boolean){
@@ -287,12 +292,10 @@ export class VerifDatosComponent implements OnInit {
 			if(retvalue["reason"] == 'OK'){
 				var tempstr=retvalue['value'];
 				if(tempstr != null)	{
-					//console.log(retvalue);
 					this.registrodata=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
 					//this.routerlink='MuestraRegistro/1/'+this.registrodata[0]['id'];
 					this.routerlink=this.registrodata[0]['id'];
 					this.linkregistro=this.registrodata[0]['codigo'];
-					console.log(this.registrodata);
 					if(click)
 						this.ClickAfter3sec();
 				}else{
@@ -300,12 +303,10 @@ export class VerifDatosComponent implements OnInit {
 					this.linkregistro='';
 				}
 			}else{
-				console.log('Rest service response ERROR.');
 				this.flagInfoError=true;
 				this.SetSecTimerInfoError();
 			}		
 		},(error)=>{
-			console.log(error);
 			this.flagInfoError=true;
 			this.SetSecTimerInfoError();
 		});
@@ -332,7 +333,6 @@ export class VerifDatosComponent implements OnInit {
 		const subscribe = source.subscribe(val => this.TimerForm() );
 	}
 	TimerForm(){
-		console.log(this.flagformvisible);
 		if(this.flagformvisible<3){
 			this.loaderror=true;	
 			this.flagformvisible=-1;

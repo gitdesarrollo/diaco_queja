@@ -322,35 +322,36 @@ export class QuejaComponent implements OnInit {
         //queja = this.quejasService.createQueja(queja, this.uploader).susbribe;
         this.quejasService.saveSedeCercana(consumidor).subscribe(
             response => {
-                console.log("Ingreso de sede cercana ", response)
-            }
-        )
-
-        this.quejasService.saveData(queja).subscribe(
-            (retvalue) => {
-                if (retvalue) {
-                    var tempstr = retvalue['value'];
-                    if (tempstr != null && tempstr != '') {
-                        //this.registrodata=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
-                        this.vanio = tempstr.anio;
-                        this.vsecuencia = tempstr.noQueja;
-                        this.vidqueja = tempstr.idQueja;
-                        this.completado = true;
-                        this.success = true;
-                    } else {
-                        ////console.log('no llego');
-                    }
-                } else {
-                    ////console.log('Rest service response ERROR.');
-                }
-
-                this.quejasService.dynamicAssignment(queja).subscribe(
-                    (response) => {
-                        console.log('respuesta de asignacion: ', response);
+                console.log("REspuesta de ingreso" + response)
+                this.quejasService.saveData(queja).subscribe(
+                    (retvalue) => {
+                        if (retvalue) {
+                            var tempstr = retvalue['value'];
+                            if (tempstr != null && tempstr != '') {
+                                //this.registrodata=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
+                                this.vanio = tempstr.anio;
+                                this.vsecuencia = tempstr.noQueja;
+                                this.vidqueja = tempstr.idQueja;
+                                this.completado = true;
+                                this.success = true;
+                            } else {
+                                ////console.log('no llego');
+                            }
+                        } else {
+                            ////console.log('Rest service response ERROR.');
+                        }
+        
+                        this.quejasService.dynamicAssignment(queja).subscribe(
+                            (response) => {
+                                console.log('respuesta de asignacion: ', response);
+                            }
+                        );
                     }
                 );
             }
-        );
+        )
+
+        
 
         
 

@@ -91,6 +91,8 @@ import { CatSucursalComponent } from './cat-sucursal/cat-sucursal.component';
 import {FullCalendarModule} from 'primeng/fullcalendar';
 import { TablaMainCalendarioComponent } from './tabla-main-calendario/tabla-main-calendario.component';
 
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 
 
 
@@ -175,6 +177,7 @@ import { TablaMainCalendarioComponent } from './tabla-main-calendario/tabla-main
 		TablaMainCalendarioComponent
   ],
   imports: [
+	NgbModule,
     BrowserModule,
     AppRoutingModule,
 	FormsModule,

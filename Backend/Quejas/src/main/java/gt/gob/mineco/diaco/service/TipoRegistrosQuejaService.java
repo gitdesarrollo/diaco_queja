@@ -21,6 +21,7 @@ public interface TipoRegistrosQuejaService {
         public Response getCedulaCitacionCons(Integer pId_audiencia,String pToken) ;
         public Response getCedulaCitacionProv(Integer pId_audiencia,String pToken) ;
         public Response getFormularioQueja(Integer idqueja,String pToken);
+        public Response getCompressFilesByQueja(String idqueja);
         public Response getCedulaNotificacionCons(Integer pId_audiencia,String pToken);
         public Response getCedulaNotificacionProv(Integer pId_audiencia,String pToken);
         public Response getFichaQueja(Integer pIdqueja,String pToken);

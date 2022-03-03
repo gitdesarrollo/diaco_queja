@@ -296,7 +296,7 @@ export class AudienciaService {
 		// console.log('json enviado '+frmData);
 		return this._http.post<any>(this.baseUrlCalendario, frmData, this.httpOptions).pipe(
 			tap((item) => {
-			
+			console.log("valores devueltos ", item)
 			})
 			,
 			catchError(this.handleError<any>('Registro Guardado'))
@@ -321,7 +321,6 @@ export class AudienciaService {
 
 	//se obtiene el calendario de la fecha actual a 60 dias mas
 	ValidarFecha(usuarioOperacion, idQueja, fechaInicio, fechaFin) {
-
 		var frmData = this.ObjaJSON_ValidaFecha(usuarioOperacion, idQueja, fechaInicio, fechaFin);
 		return this.ObtenerCalendario(frmData);
 

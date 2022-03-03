@@ -48,7 +48,7 @@ export class MainTableService {
 	  }
 	  
 	  var localURL = this.baseUrl+'/customfilter';
-	  console.log('filtro: '+varfiltro+', desde: '+vardesde+', hasta: '+varhasta+', url: '+localURL+', queja: '+varnoqueja);
+	//   console.log('filtro: '+varfiltro+', desde: '+vardesde+', hasta: '+varhasta+', url: '+localURL+', queja: '+varnoqueja);
 	  return this._http.put<any>(localURL, this.getStructVMQ(varfiltro,vardesde,varhasta,varnoqueja), this.httpOptions).pipe(
 			//tap((item) => console.log('Edit item')),
 			catchError(this.handleError<any>('Edit Data'))
@@ -75,7 +75,7 @@ export class MainTableService {
 	  }
 	  
 	  var localURL = this.baseUrl+'/customfilterSP';
-	  console.log('filtro: '+varfiltro+', desde: '+vardesde+', hasta: '+varhasta+', url: '+localURL+', queja: '+varnoqueja);
+	//   console.log('filtro: '+varfiltro+', desde: '+vardesde+', hasta: '+varhasta+', url: '+localURL+', queja: '+varnoqueja);
 	  return this._http.put<any>(localURL, this.getStructVMQ(varfiltro,vardesde,varhasta,varnoqueja), this.httpOptions).pipe(
 			//tap((item) => console.log('Edit item')),
 			catchError(this.handleError<any>('Edit Data'))
@@ -102,7 +102,7 @@ export class MainTableService {
 	  }
 	  
 	  var localURL = this.baseUrl+'/customfilterVyV';
-	  console.log('filtro: '+varfiltro+', desde: '+vardesde+', hasta: '+varhasta+', url: '+localURL+', queja: '+varnoqueja);
+	//   console.log('filtro: '+varfiltro+', desde: '+vardesde+', hasta: '+varhasta+', url: '+localURL+', queja: '+varnoqueja);
 	  return this._http.put<any>(localURL, this.getStructVMQ(varfiltro,vardesde,varhasta,varnoqueja), this.httpOptions).pipe(
 			//tap((item) => console.log('Edit item')),
 			catchError(this.handleError<any>('Edit Data'))
@@ -129,7 +129,7 @@ export class MainTableService {
 	  }
 	  
 	  var localURL = this.baseUrl+'/customfilterJuridico';
-	  console.log('filtro: '+varfiltro+', desde: '+vardesde+', hasta: '+varhasta+', url: '+localURL+', queja: '+varnoqueja);
+	//   console.log('filtro: '+varfiltro+', desde: '+vardesde+', hasta: '+varhasta+', url: '+localURL+', queja: '+varnoqueja);
 	  return this._http.put<any>(localURL, this.getStructVMQ(varfiltro,vardesde,varhasta,varnoqueja), this.httpOptions).pipe(
 			//tap((item) => console.log('Edit item')),
 			catchError(this.handleError<any>('Edit Data'))
@@ -147,7 +147,7 @@ export class MainTableService {
 	  }
 	  
 	  var localURL = this.baseUrl+'/custombusqueda';
-	  console.log(this.getStructVB(id_flujo, id_consumidor, id_proveedor, noqueja, vardesde, varhasta, estado));
+	//   console.log(this.getStructVB(id_flujo, id_consumidor, id_proveedor, noqueja, vardesde, varhasta, estado));
 	  return this._http.put<any>(localURL, this.getStructVB(id_flujo, id_consumidor, id_proveedor, noqueja, vardesde, varhasta, estado), this.httpOptions).pipe(
 			//tap((item) => console.log('Edit item')),
 			catchError(this.handleError<any>('Edit Data'))
@@ -245,7 +245,7 @@ export class MainTableService {
   private handleError<T> (operation = 'operation', result?: T) {
 		return (error: any): Observable<T> => {
 			console.error(error); // log to console instead
-			console.log('${operation} failed: ${error.message}');
+			// console.log('${operation} failed: ${error.message}');
 			return of(result as T);
 		};
   }

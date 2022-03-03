@@ -22,13 +22,13 @@ export class ConfirmarAccionService {
   
   getAll(id_usuario){	
 	  let localUrl=this.baseUrl+'/'+id_usuario+'/'+this._submitFormService.Get_token();
-	  console.log(localUrl);
+	//   console.log(localUrl);
 	  return this._http.get(localUrl,this.httpOptions).pipe(map(this.extractData));
   }
 
   getFechaAceptacion(id_usuario, id_queja){	
 	let localUrl=this.baseUrl+'/ultima_aceptacion';
-	console.log(localUrl);
+	// console.log(localUrl);
 	return this._http.post(localUrl,this.ObjaJSON_add2(id_usuario, id_queja),this.httpOptions).pipe(map(this.extractData));
 }
 
@@ -40,15 +40,15 @@ export class ConfirmarAccionService {
   private handleError<T> (operation = 'operation', result?: T) {
 		return (error: any): Observable<T> => {
 			console.error(error); // log to console instead
-			console.log('${operation} failed: ${error.message}');
+			// console.log('${operation} failed: ${error.message}');
 			return of(result as T);
 		};
   }
     
   addData (id_usuario, queja_list): Observable<any> {
-		console.log(this.ObjaJSON_add(id_usuario, queja_list));
+		// console.log(this.ObjaJSON_add(id_usuario, queja_list));
 		return this._http.post<any>(this.baseUrl, this.ObjaJSON_add(id_usuario, queja_list), this.httpOptions).pipe(
-			tap((item) => console.log('Added item')),
+			tap((item) => {}),
 			catchError(this.handleError<any>('Add Data'))
 		);
   }

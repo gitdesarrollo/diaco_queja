@@ -61,30 +61,30 @@
 							<div class="collapse multi-collapse" id="multiCollapseExample1">
 								<div class="card card-body">
 									<div class="col-md-8 mx-auto">
-
+	
 										<ul class="list-unstyled">
-											<ng-container *ngIf="portallinkgrid[0]['activo']=='1'; else NoLink0">
+											<ng-container *ngFor="let x of portallinkgrid">
 												<li>
-													<a href="{{portallinkgrid[0]['link']}}" target="_blank"
-														class="footer-link">{{portallinkgrid[0]['nombre']}}</a>
+													<a href="{{x.link}}" target="_blank"
+														class="footer-link">{{x.nombre}}</a>
 												</li>
 											</ng-container>
-											<ng-template NoLink0>
+											<!-- <ng-template NoLink0>
 												<li>
 													&nbsp;
 												</li>
-											</ng-template>
-											<ng-container *ngIf="portallinkgrid[1]['activo']=='1'; else NoLink1">
+											</ng-template> -->
+											<!-- <ng-container *ngIf="portallinkgrid[1]['activo']=='1'; else NoLink1">
 												<li>
 													<a href="{{portallinkgrid[1]['link']}}" target="_blank"
 														class="footer-link">{{portallinkgrid[1]['nombre']}}</a>
 												</li>
-											</ng-container>
-											<ng-template NoLink1>
+											</ng-container> -->
+											<!-- <ng-template NoLink1>
 												<li>
 													&nbsp;
 												</li>
-											</ng-template>
+											</ng-template> -->
 										</ul>
 		
 									</div>
@@ -93,7 +93,7 @@
 									<hr class="clearfix w-100 d-md-none">
 		
 									<!-- Grid column -->
-									<div class="col-md-8 mx-auto">
+									<!-- <div class="col-md-8 mx-auto">
 		
 										<ul class="list-unstyled">
 											<ng-container *ngIf="portallinkgrid[2]['activo']=='1'; else NoLink2">
@@ -120,13 +120,13 @@
 											</ng-template>
 										</ul>
 		
-									</div>
+									</div> -->
 									<!-- Grid column -->
 		
 									<hr class="clearfix w-100 d-md-none">
 		
 									<!-- Grid column -->
-									<div class="col-md-8 mx-auto">
+									<!-- <div class="col-md-8 mx-auto">
 		
 										<ul class="list-unstyled">
 											<ng-container *ngIf="portallinkgrid[4]['activo']=='1'; else NoLink4">
@@ -153,13 +153,13 @@
 											</ng-template>
 										</ul>
 		
-									</div>
+									</div> -->
 									<!-- Grid column -->
 		
 									<hr class="clearfix w-100 d-md-none">
 		
 									<!-- Grid column -->
-									<div class="col-md-8 mx-auto">
+									<!-- <div class="col-md-8 mx-auto">
 		
 										<ul class="list-unstyled">
 											<ng-container *ngIf="portallinkgrid[6]['activo']=='1'; else NoLink6">
@@ -186,7 +186,7 @@
 											</ng-template>
 										</ul>
 		
-									</div>
+									</div> -->
 								</div>
 							</div>
 							</div>

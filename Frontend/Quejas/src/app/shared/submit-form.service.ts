@@ -51,7 +51,7 @@ export class SubmitFormService {
   }
   
   SetInitial(formsubmit){
-		console.log(formsubmit);
+		// console.log(formsubmit);
 		this.Limpiar();
 		this.srv_username = formsubmit['username'];
 		this.srv_token = formsubmit['token'];
@@ -159,7 +159,7 @@ export class SubmitFormService {
 		return this.aconf_catalogos;
   }
   Get_Conf_Presencial(){
-	console.log('Rol: ', this.aconf_callcenter)
+	// console.log('Rol: ', this.aconf_callcenter)
 		return this.aconf_presencial;
   }
 
@@ -172,7 +172,7 @@ export class SubmitFormService {
   
   LoadUserid(formsubmit){
 	  this.srv_userid=parseInt(formsubmit['userid'], 10);
-	  console.log('userid: ',this.srv_userid);
+	//   console.log('userid: ',this.srv_userid);
   }
   
   LoadAtCon(formsubmit){
@@ -219,7 +219,7 @@ export class SubmitFormService {
 				this.srv_servicios_publicos=rol;
 		}
 	}
-	console.log('rol serv pub: ',this.srv_servicios_publicos);
+	// console.log('rol serv pub: ',this.srv_servicios_publicos);
   }
   
   LoadVyV(formsubmit){
@@ -241,7 +241,7 @@ export class SubmitFormService {
 				this.srv_verificacion_vigilancia=rol;
 		}
 	}
-	console.log('rol v y v: ',this.srv_verificacion_vigilancia);
+	// console.log('rol v y v: ',this.srv_verificacion_vigilancia);
   }
   
   LoadJuridico(formsubmit){
@@ -263,7 +263,7 @@ export class SubmitFormService {
 				this.srv_juridico=rol;
 		}
 	}
-	console.log('roljuridico: ',this.srv_juridico);
+	// console.log('roljuridico: ',this.srv_juridico);
   }
   LoadConf(formsubmit){
 	  /*0-ninguno  1-normal  2-revisor  3-administrador*/
@@ -316,6 +316,6 @@ export class SubmitFormService {
 			this.aconf_colas=0;
 		}
 	}
-	console.log('Catalogos: ',this.aconf_catalogos);
+	// console.log('Catalogos: ',this.aconf_catalogos);
   }
 }

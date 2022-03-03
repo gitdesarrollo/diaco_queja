@@ -5,6 +5,7 @@ import { SubmitFormService } from "../shared/submit-form.service";
 import { CatalogoService } from "../shared/catalogo.service";
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { timer } from 'rxjs';
+import { linkPanel } from '../atencion-consumidor-const'
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
   flagErrorEmail:boolean;
   flagemailsent:boolean;
   flagErrorAccess:boolean;
-  flagActiveScreen; portallinkgrid=[];
+  flagActiveScreen; 
+  portallinkgrid =[];
   flagPortalLinks:boolean;
 
   constructor(private router: Router, private _seguridadService:SeguridadService, private _submitFormService:SubmitFormService, private _catalogoService:CatalogoService) { 
@@ -34,9 +36,10 @@ export class LoginComponent implements OnInit {
 		this.flagErrorAccess=false;
 		this.flagPortalLinks=false;
 		this.flagActiveScreen=1;
-  }
-
-  ngOnInit() {
+	}
+	
+	ngOnInit() {
+	  this.portallinkgrid=[]
 	  this.UsrNameCtrl =  new FormControl('',Validators.required);
 	  this.PsswordCtrl =  new FormControl('',Validators.required);
 	  this.myForm = new FormGroup({
@@ -53,12 +56,12 @@ export class LoginComponent implements OnInit {
 
   GotoAS1(){
 	  this.flagActiveScreen=1;
-	  console.log(this.flagActiveScreen);
+	//   console.log(this.flagActiveScreen);
   }
 
   GotoAS2(){
 	  this.flagActiveScreen=2;
-	  console.log(this.flagActiveScreen);
+	//   console.log(this.flagActiveScreen);
   }
 
   ClaveCorreo(){
@@ -68,17 +71,17 @@ export class LoginComponent implements OnInit {
 					this.flagemailsent=true;
 					this.SetSecTimerPasswordEmail();
 				}else{
-					console.log('Rest service response ERROR.');
+					// console.log('Rest service response ERROR.');
 					this.flagErrorEmail=true;
 					this.SetSecTimerPasswordError();
 				}		
 			},(error)=>{
-				console.log(error);
+				// console.log(error);
 				this.flagErrorEmail=true;
 				this.SetSecTimerPasswordError();
 		  });
 	  }
-	  console.log(this.flagActiveScreen);
+	//   console.log(this.flagActiveScreen);
   }
 
   SaveUserMove(frmsubmit){
@@ -110,15 +113,15 @@ export class LoginComponent implements OnInit {
 						this.flagDBError=false;
 						this.SaveUserMove(lst_login[0]);
 					}else{
-						console.log('Rest service sin respuesta');
+						// console.log('Rest service sin respuesta');
 						this.flagDBError=true;
 					}				
 				}else{
-					console.log('Rest service response ERROR.');
+					// console.log('Rest service response ERROR.');
 					this.flagDBError=true;
 				}		
 			},(error)=>{
-				console.log(error);
+				// console.log(error);
 				this.flagDBError=true;
 			});
 		}
@@ -129,31 +132,26 @@ export class LoginComponent implements OnInit {
 		this._catalogoService.getPortalLinks().subscribe((Data)=>{
 			if(Data['reason'] == 'OK'){
 				tempstr=JSON.parse('['+Data["value"].slice(0, -1) +']');
-				console.log(tempstr);
+				
 				if(tempstr != null && tempstr != '')	{
 					for(var i=0;i<=7;i++){
-						if(tempstr[i]){
-							this.portallinkgrid[i]=[];
-							this.portallinkgrid[i]['link']=tempstr[i]['link'];
-							this.portallinkgrid[i]['nombre']=tempstr[i]['nombre'];
-							this.portallinkgrid[i]['activo']=tempstr[i]['activo'];
-						}else{
-							this.portallinkgrid[i]=[];
-							this.portallinkgrid[i]['link']='';
-							this.portallinkgrid[i]['nombre']='';
-							this.portallinkgrid[i]['activo']='';
-						}
+						this.portallinkgrid.push({
+							'link': tempstr[i]['link'],
+							'nombre': tempstr[i]['nombre'],
+							'activo': tempstr[i]['activo']
+						});
 					}
-					console.log(this.portallinkgrid);
+					
 					this.flagPortalLinks=true;
 				}
+				
 				this.flagDBError=false;
 			}else{
-				console.log('Rest service response ERROR.');
+				// console.log('Rest service response ERROR.');
 				this.flagDBError=true;
 			}
 		},(error)=>{
-			console.log(error);
+			// console.log(error);
 			this.flagDBError=true;
 		});
 	}	

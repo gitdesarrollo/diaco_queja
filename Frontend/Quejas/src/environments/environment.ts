@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'Quejass/*'
+  apiUrl: 'Quejas/*'
   // apiUrl: 'quejas_dev/*'
 };

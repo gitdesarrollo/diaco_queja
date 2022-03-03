@@ -512,6 +512,7 @@ export class RegistrosService {
 
 	ObjaJSON_add_com(idqueja, idconmunicacionconsumidor) {
 		var locarray = { id_queja: idqueja, id_comunicacion_consumidor: idconmunicacionconsumidor, creado_por: this._submitFormService.Get_userid(), token: this._submitFormService.Get_token()};
+		console.log("variables ", locarray)
 		return JSON.stringify(locarray);
 	}
 

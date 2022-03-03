@@ -191,12 +191,12 @@ export class MainAtencionConsumidorComponent implements OnInit {
 	}
 
 	GoToVerificacion(){
-		console.log('VyV');
+		// console.log('VyV');
 		this.router.navigate(['/mainVyV']);
 	}
 		
 	GoToJuridico(){
-		console.log('Juridico');
+		// console.log('Juridico');
 		this.router.navigate(['/mainJuridico']);
 	}		
 		
@@ -252,7 +252,7 @@ export class MainAtencionConsumidorComponent implements OnInit {
 		  this._seguridadService.RedireccionarLogin();
 	  }else{
 		  this._seguridadService.VerifyToken(loc_token).subscribe((retvalue)=>{
-				console.log('token check',retvalue);
+				// console.log('token check',retvalue);
 				if(retvalue["reason"] != 'OK'){
 					this._seguridadService.SesionVencida();
 				}		
@@ -264,11 +264,11 @@ export class MainAtencionConsumidorComponent implements OnInit {
 	
 	CerrarSesion(){
 		let loc_token=this._submitFormService.Get_token();
-		console.log(loc_token);
+		// console.log(loc_token);
 		if(loc_token == '')
 			this._seguridadService.RedireccionarLogin();
 		this._seguridadService.Logout(loc_token).subscribe((retvalue)=>{
-			console.log('cerrar sesion',retvalue);
+			// console.log('cerrar sesion',retvalue);
 			this._seguridadService.RedireccionarLogin();		
 		},(error)=>{
 			this._seguridadService.RedireccionarLogin();
@@ -284,14 +284,14 @@ export class MainAtencionConsumidorComponent implements OnInit {
 				}else{
 					this.flagAccionPendiente=false;
 				}
-				console.log(this.flagAccionPendiente);
+				// console.log(this.flagAccionPendiente);
 			}else{
-				console.log('Rest service response ERROR.');
+				// console.log('Rest service response ERROR.');
 				this.flagInfoError=true;
 				this.SetSecTimerInfoError();
 			}		
 		},(error)=>{
-			console.log(error);
+			// console.log(error);
 			this.flagInfoError=true;
 			this.SetSecTimerInfoError();
 		});
@@ -380,7 +380,7 @@ export class MainAtencionConsumidorComponent implements OnInit {
 		
 		this.MtDialogBusqueda = this.dialog.open(BusquedaComponent,dialogConfig);	
 		this.MtDialogBusqueda.afterClosed().subscribe(result => {
-			console.log(result);
+			// console.log(result);
 			this.BusquedaLogic(result);
 		});
 	}
@@ -410,7 +410,7 @@ export class MainAtencionConsumidorComponent implements OnInit {
 		
 		this.MtDialogConfUsuario = this.dialog.open(ConfUsuarioComponent,dialogConfig);	
 		this.MtDialogConfUsuario.afterClosed().subscribe(result => {
-			console.log('Result: ' , result);
+			// console.log('Result: ' , result);
 			this.ModalLogicConfUsuario(result);
 		});
 	}
@@ -427,7 +427,7 @@ export class MainAtencionConsumidorComponent implements OnInit {
 		
 		this.MtDialogConfUsuarioPP = this.dialog.open(ConfUsuarioConcPreviaComponent,dialogConfig);	
 		this.MtDialogConfUsuarioPP.afterClosed().subscribe(result => {
-			console.log(result);
+			// console.log(result);
 			this.ModalLogicConfUsuarioPP(result);
 		});
 	}
@@ -444,7 +444,7 @@ export class MainAtencionConsumidorComponent implements OnInit {
 		
 		this.MtDialogUsuarioDetalle = this.dialog.open(UsuarioDetalleComponent,dialogConfig);	
 		this.MtDialogUsuarioDetalle.afterClosed().subscribe(result => {
-			console.log(result);
+			// console.log(result);
 			this.ModalLogicUsuarioDetalle(result);
 		});
 	}
@@ -461,7 +461,7 @@ export class MainAtencionConsumidorComponent implements OnInit {
 		
 		this.MtDialogUsuarioDetallePP = this.dialog.open(UsuarioDetalleConcPreviaComponent,dialogConfig);	
 		this.MtDialogUsuarioDetallePP.afterClosed().subscribe(result => {
-			console.log(result);
+			// console.log(result);
 			this.ModalLogicUsuarioDetallePP(result);
 		});
 	}
@@ -491,7 +491,7 @@ export class MainAtencionConsumidorComponent implements OnInit {
 		
 		this.MtDialogConfMov = this.dialog.open(MovimientoConfirmarComponent,dialogConfig);	
 		this.MtDialogConfMov.afterClosed().subscribe(result => {
-			console.log(result);
+			// console.log(result);
 			this.ModalLogicMovimiento(result);
 		});
 	}
@@ -779,7 +779,7 @@ export class MainAtencionConsumidorComponent implements OnInit {
 	}
 
 	ModalLogicConfUsuario(FormResponse){
-		console.log(FormResponse);
+		// console.log(FormResponse);
 		if(FormResponse.changes){
 			this.openUsuarioDetalle(FormResponse.quejanumero);
 		}
@@ -792,7 +792,7 @@ export class MainAtencionConsumidorComponent implements OnInit {
 	}
 
 	ModalLogicConfUsuarioPP(FormResponse){
-		console.log(FormResponse);
+		// console.log(FormResponse);
 		if(FormResponse.changes){
 			this.openUsuarioDetallePP(FormResponse.quejanumero, FormResponse.NoQueja);
 		}
