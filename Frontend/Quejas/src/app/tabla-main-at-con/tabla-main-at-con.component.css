@@ -30,6 +30,13 @@
 	height: 50px;
 }
 
+.icon-download {
+	margin-right: 8px;
+	margin-top: 8px;
+	width: 50px;
+	height: 50px;
+}
+
 .hr-dashboard{
 	border: 1.5px solid #00284d;
 	background-color: #00284d;
@@ -83,6 +90,10 @@ select {
 .btn-apgreen{
 	background-color:#006600 !important;
 	color:white !important;
+}
+.btn-danger{
+	background-color:#fff !important;
+	color:#000 !important;
 }
 
 .btn-calendario{

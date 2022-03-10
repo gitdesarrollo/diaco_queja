@@ -264,6 +264,7 @@ public class TipoQueja_MainAtCon implements Serializable {
             queja.addProperty("nombre_departamento",this.tipoDepartamento.getNombre_departamento());
         if(this.tipoMunicipio!=null)
             queja.addProperty("nombre_municipio",this.tipoMunicipio.getNombre_municipio());
+        queja.addProperty("anio", this.anio);
         queja.addProperty("quejanumero",this.getQuejaNumero());
         queja.addProperty("detalle_queja",checknull.cknull(this.detalle_queja));
         queja.addProperty("solicita_que",checknull.cknull(this.solicita_que));

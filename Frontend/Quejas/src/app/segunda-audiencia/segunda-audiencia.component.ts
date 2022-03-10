@@ -79,6 +79,11 @@ export class SegundaAudienciaComponent implements OnInit {
 	//variables del calendario
 	events: data[];
 	options: any;
+	btnPrimeraAudiencia: boolean;
+	btnSegundaAudiencia: boolean;
+	tblPrimeraAudiencia: boolean;
+	tblSegundaAudiencia: boolean;
+	registrosJuridico: string[];
 	
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private _audienciaService:AudienciaService, private _quejaService: QuejaService, private _catalogoService: CatalogoService, public dialogRef: MatDialogRef<SegundaAudienciaComponent>, private _registrosservice:RegistrosService, private datePipe: DatePipe, private _seguridadService:SeguridadService) { 
 		this.flagInsertInfo=false;
@@ -101,6 +106,10 @@ export class SegundaAudienciaComponent implements OnInit {
 		this.flagBoton3=true;
 		this.msg_deshabilitado=MSG_REGISTRO_DESHABILITADO;
 		this.loc_pagina=0;
+		this.btnPrimeraAudiencia = false;
+		this.btnSegundaAudiencia = false;
+		this.tblPrimeraAudiencia = false;
+		this.tblSegundaAudiencia = false;
   }
 
   ngOnInit() {
@@ -116,16 +125,16 @@ export class SegundaAudienciaComponent implements OnInit {
 		resultado: this.ResultadoCtrl,
 	});
 	this.registros=[];
+	this.registrosJuridico = []
 	this.Leer4Registros(true);
+	this.LeerRegistrosJuridico(true);
 	this.LoadCmb();
 	this.GetAudienciaList();
-	console.log(this.data);
 	this.GetQuejaList();
 	this.SetSecTimerForm();
 	this.ValidadorRegistros();
 	
 		//calendario
-		console.log('A validar calendario');
 		this.validarCalendario();
 
 		this.options = {
@@ -140,22 +149,23 @@ export class SegundaAudienciaComponent implements OnInit {
 			header: {
 				left: 'prev,next',
 				center: 'title',
-				right: 'month,agendaWeek,agendaDay'
+				right: 'dayGridMonth,timeGridWeek,timeGridDay'
+				// right: 'month,agendaWeek,agendaDay'
 			},
 			dateClick: (e) => {
-				console.log('dateclick: '+e)
 
 			},
 			eventClick: function (info) {
-				console.log("eventClick");
-				console.log(info);
 				swal.fire({
 					icon: 'info',
 					html:
-						'No. Queja: <b>' + info.event.extendedProps.no_queja +'-'+info.event.extendedProps.año+ '</b>, ' +
-						'Descripción de Queja: <b>' + info.event.extendedProps.description + '</b>, ' +
-						'Auxiliar: <b>' + info.event.extendedProps.user + '</b> ',
-					title: '<strong>Proveedor <u>' + info.event.title + '</u></strong>',
+						'<div style="text-align: left;">' +
+						'No. Queja: <b>' + info.event.extendedProps.no_queja + '-' + info.event.extendedProps.año + '</b><br> ' +
+						'Descripción de Queja: <b>' + info.event.extendedProps.description + '</b><br> ' +
+						'Auxiliar: <b>' + info.event.extendedProps.user + '</b> <br>' +
+						'Audiencia: <b>' + info.event.extendedProps.tipoAudiencia + '</b> <br>' +
+						'</div>',
+						title: '<strong>No. Queja <u>' + info.event.extendedProps.no_queja + '-' + info.event.extendedProps.año + '</u></strong>',
 					showConfirmButton: true
 					//timer: 1500
 				})
@@ -172,8 +182,6 @@ export class SegundaAudienciaComponent implements OnInit {
 	validarCalendario() {
 		var today = new Date(Date.now());
 		var fin = moment(today).add(60, 'day').format('LLL');
-		console.log(' validarCalendario today ' + today);
-		console.log(' validarCalendario fin ' + fin);
 
 		if(this.HoraCtrl.value!=null){
 			var td = new Date(this.convertDate());
@@ -182,33 +190,89 @@ export class SegundaAudienciaComponent implements OnInit {
 		}
 		
 		if (today > td) {
-			console.log(today, td);
 			this.flagTimeError = true;
 			this.SetSecTimerTimeError();
 		} else {
-			console.log('validarCalendario');
-			console.log('data');
-			console.log(this.data);
 			this._audienciaService.ValidarCalendario(this.data.Usuario, this.data.NoQueja, today, fin).subscribe((retvalue
 			) => {
 				if (retvalue["reason"] == 'OK') {
 					this.events = retvalue['value'] as data[];
-					console.log('respuesta validacion calendario');
-					console.log(retvalue);
 
 				} else {
-					console.log('Rest service response ERROR.');
 
 				}
 
 			}, (error) => {
-				console.log(error);
 
 			});
 
 		}
 	}
 
+
+	LeerRegistrosJuridico(blank: boolean){
+		let empty=false;
+		this.registrosJuridico = []
+		if(blank){
+		}else{
+			if(typeof this.registros["0"] === 'undefined')
+				empty=true;
+			if(!empty){
+				if(this.registros[0]['cedula_citacion_jur_con_id'] != null){
+					this.tblSegundaAudiencia = true
+					this.registrosJuridico.push('MuestraRegistro/3/'+this.registros[0]['cedula_citacion_jur_con_id']);
+					// this.linkdescription1=this.registros[0]['cedula_citacion_jur_con_codigo'];
+				}
+				if(this.registros[0]['cedula_citacion_jur_pro_id'] != null){
+					this.registrosJuridico.push('MuestraRegistro/4/'+this.registros[0]['cedula_citacion_jur_pro_id']);
+					// this.linkdescription2=this.registros[0]['cedula_citacion_jur_pro_codigo'];
+				}
+
+                if(this.registros[0]['cedula_notificacion_citacion_jur_con_id'] != null){
+					this.registrosJuridico.push('MuestraRegistro/4/'+this.registros[0]['cedula_notificacion_citacion_jur_con_id']);
+					// this.linkdescription3=this.registros[0]['cedula_notificacion_citacion_jur_con_codigo'];
+				}
+                if(this.registros[0]['cedula_notificacion_citacion_jur_pro_id'] != null){
+					this.registrosJuridico.push('MuestraRegistro/4/'+this.registros[0]['cedula_notificacion_citacion_jur_pro_id']);
+					// this.linkdescription4=this.registros[0]['cedula_notificacion_citacion_jur_pro_codigo'];
+				}
+
+				if(this.registros[0]['cedula_notificacion_re_correo_id'] != null){
+					this.registrosJuridico.push('MuestraRegistro/5/'+this.registros[0]['cedula_notificacion_re_correo_id']);
+					// this.linkdescription5=this.registros[0]['cedula_notificacion_re_correo_codigo'];
+				}
+				if(this.registros[0]['cedula_notificacion_cit_correo_id'] != null){
+					this.registrosJuridico.push('MuestraRegistro/6/'+this.registros[0]['cedula_notificacion_cit_correo_id']);
+					// this.linkdescription6=this.registros[0]['cedula_notificacion_cit_correo_codigo'];
+				}
+			}
+			
+		}
+		// this.MostrarMensaje("array ", this.registrosJuridico )
+		
+	}
+
+	getTotalAudiencia(){
+		let temp = ''
+		this._audienciaService.getTotalAudiencia(this.data.NoQueja).subscribe(response => {
+			if (response['value']){
+				this.lst_audiencia = JSON.parse('[' + response["value"].slice(0, -1) + ']');
+				this.lst_audiencia.forEach(v => {
+					if(Number(v.es_primera_seg_audiencia) === 1){
+						this.btnPrimeraAudiencia = true
+						// this.tblPrimeraAudiencia = true
+					}
+					
+					if(Number(v.es_primera_seg_audiencia) == 2){
+						this.btnSegundaAudiencia = true
+						// this.tblSegundaAudiencia = true
+					}
+					
+				})
+			}
+		}, (err) => {
+		})
+	}
 
   ValidadorRegistros(){
 		let tempstr=null;
@@ -221,12 +285,10 @@ export class SegundaAudienciaComponent implements OnInit {
 				}
 				this.flagformvisible++;
 			}else{
-				console.log('Rest service response ERROR.');
 				this.flagInfoError=true;
 				this.SetSecTimerInfoError();
 			}
 		},(error)=>{
-			console.log(error);
 			this.flagInfoError=true;
 			this.SetSecTimerInfoError();
 		});
@@ -257,7 +319,6 @@ export class SegundaAudienciaComponent implements OnInit {
 			this.lbl_dpto=this.lst_queja[0].nombre_departamento;
 			this.lbl_muni=this.lst_queja[0].nombre_municipio;
 			this.lbl_sede=this.lst_queja[0].nombre_sede;
-			console.log(this.lst_queja[0]);
 	  }
   }
 
@@ -273,15 +334,12 @@ export class SegundaAudienciaComponent implements OnInit {
 				}else{
 					this.cmb_resultado=[];
 				}
-				console.log('cmb_resultado'+this.cmb_resultado);
 				this.flagInfoError=false;
 			}else{
-				console.log('Rest service response ERROR.');
 				this.flagInfoError=true;
 				this.SetSecTimerInfoError();
 			}
 		},(error)=>{
-			console.log(error);
 			this.flagInfoError=true;
 			this.SetSecTimerInfoError();
 		});
@@ -294,12 +352,8 @@ export class SegundaAudienciaComponent implements OnInit {
 				tempstr=retvalue['value'];
 				if(tempstr != null)	{
 					this.lst_queja=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
-					console.log(this.lst_queja);
 					this.LoadFrmDataQueja(false);
 					this.flagformvisible++;
-					console.log(this.data.Flujo);
-					console.log(this.lst_queja[0]['id_estado_queja']);
-					console.log(this._seguridadService.EditableporFlujo(this.data.Flujo,this.lst_queja[0]['id_estado_queja']));
 					if(this._seguridadService.EditableporFlujo(this.data.Flujo,this.lst_queja[0]['id_estado_queja']))
 						//si es rol 3 administrador, puede editar
 						if(this.data.Rol == 3)
@@ -314,25 +368,23 @@ export class SegundaAudienciaComponent implements OnInit {
 					else
 						this.flagEditable=false;
 				}else{
-					console.log('InformaciÃ³n de queja no pudo ser obtenida.');
 					this.flagInfoError=true;
 					this.SetSecTimerInfoError();
 					this.LoadFrmDataQueja(true);
 				}				
 			}else{
-				console.log('Rest service response ERROR.');
 				this.flagInfoError=true;
 				this.SetSecTimerInfoError();
 				this.LoadFrmDataQueja(true);
 			}		
 		},(error)=>{
-			console.log(error);
 			this.flagInfoError=true;
 			this.SetSecTimerInfoError();
 		});
 	}
 
 	LoadFrmData(isBlank:boolean){	
+		
 		if(!isBlank){
 			if(typeof this.lst_audiencia["0"] === 'undefined'){
 				this.lst_programado=[];
@@ -342,12 +394,16 @@ export class SegundaAudienciaComponent implements OnInit {
 					this.lst_programado=[];
 				}else{
 					this.lst_programado=this.lst_audiencia["0"].ProgramaAudiencia;
+					
 					//flag was here
 					let lastindex=this.lst_programado.length-1;
 					//ObjectsArr[ObjectsArr.length - 1]
-					console.log(this.lst_programado[lastindex]);
 					if(lastindex>-1){
 						this.flag_Programado=true;
+
+						this.tblPrimeraAudiencia = true
+						this.tblSegundaAudiencia = true
+
 						if(this.lst_programado[lastindex].id_resultado_audiencia != null && this.lst_programado[lastindex].id_resultado_audiencia != ''){
 							this.ResultadoCtrl.setValue(this.lst_programado[lastindex].id_resultado_audiencia);
 							this.flag_Resultado=true;
@@ -360,32 +416,29 @@ export class SegundaAudienciaComponent implements OnInit {
 			this.lst_programado=[];
 		}
 		this.GetRegistro();
+		this.GetRegistroJuridico()
 	}
 
 	GetAudienciaList(){
 	  let tempstr='';
-	  this._audienciaService.getData(this.data.NoQueja,2).subscribe((retvalue)=>{
+	  this._audienciaService.getData(this.data.NoQueja,1).subscribe((retvalue)=>{
 			if(retvalue["reason"] == 'OK'){
 				tempstr=retvalue['value'];
 				if(tempstr != null)	{
 					this.lst_audiencia=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
-					console.log(this.lst_audiencia);
 					this.LoadFrmData(false);
+					this.getTotalAudiencia()
 				}else{
 					this.LoadFrmData(true);
-					/*console.log('InformaciÃ³n de queja no pudo ser obtenida.');
-					this.flagInfoError=true;
-					this.SetSecTimerInfoError();*/
+					
 				}				
 				this.flagformvisible++;
 			}else{
 				this.LoadFrmData(true);
-				console.log('Rest service response ERROR.');
 				this.flagInfoError=true;
 				this.SetSecTimerInfoError();
 			}		
 		},(error)=>{
-			console.log(error);
 			this.flagInfoError=true;
 			this.SetSecTimerInfoError();
 		});
@@ -410,7 +463,6 @@ export class SegundaAudienciaComponent implements OnInit {
 		var today = new Date(Date.now());
 		var td = new Date(this.convertDate());
 		if(today > td){
-			console.log(today,td);
 			this.flagTimeError=true;
 			this.SetSecTimerTimeError();
 		}else{	
@@ -423,24 +475,18 @@ export class SegundaAudienciaComponent implements OnInit {
 				 * alruanoe
 				 * Se agrega validación de fecha a programar
 				 */
-				console.log("fecha " + this.FechaCtrl.value);
-				console.log("hora " + this.HoraCtrl.value);
 				var today = new Date(this.FechaCtrl.value + "T" + this.HoraCtrl.value);
 				let resultado: boolean;
 
 				resultado = true;
 				var fin = moment(today).add(1, 'hour').format('LLL');
 				var inicio = moment(today).add(0, 'hour').format('LLL');
-				console.log('fin ' + fin);
 				var td = new Date(this.convertDate());
 				if (today > td) {
-					console.log(today, td);
 					this.flagTimeError = true;
 					this.SetSecTimerTimeError();
 				} else {
-					console.log('ValidarFecha');
-					console.log('data');
-					console.log(this.data);
+					
 
 					this._audienciaService.ValidarFecha(this.data.Usuario, this.data.NoQueja, inicio, fin).subscribe((retvalue
 					) => {
@@ -448,13 +494,11 @@ export class SegundaAudienciaComponent implements OnInit {
 						if (retvalue["reason"] == 'OK') {
 							let eventos = retvalue['value'] as data[];
 
-							console.log('respuesta validacion fecha programar');
-							console.log(retvalue);
+							
 							if (eventos == null) {
 								//se programa la audiencia
 								this._audienciaService.ProgramarAudiencia(this.FechaCtrl.value, this.HoraCtrl.value, this.data.NoQueja, 2,this.data.Flujo).subscribe((retvalue) => {
 									if (retvalue["reason"] == 'OK') {
-										console.log(retvalue);
 										this.SetSecTimerUpdateList();
 										this.flagInsertInfo = true;
 										this.SetSecTimerInsert();
@@ -466,13 +510,11 @@ export class SegundaAudienciaComponent implements OnInit {
 
 
 									} else {
-										console.log('Rest service response ERROR.');
 										this.flagInfoError = true;
 										this.SetSecTimerInfoError();
 									}
 									this.flagBoton = true;
 								}, (error) => {
-									console.log(error);
 									this.flagInfoError = true;
 									this.flagBoton = true;
 								});
@@ -494,7 +536,6 @@ export class SegundaAudienciaComponent implements OnInit {
 									//se programa la audiencia
 									this._audienciaService.ProgramarAudiencia(this.FechaCtrl.value, this.HoraCtrl.value, this.data.NoQueja,2,this.data.Flujo).subscribe((retvalue) => {
 										if (retvalue["reason"] == 'OK') {
-											console.log(retvalue);
 											this.SetSecTimerUpdateList();
 											this.flagInsertInfo = true;
 											this.SetSecTimerInsert();
@@ -506,13 +547,11 @@ export class SegundaAudienciaComponent implements OnInit {
 
 
 										} else {
-											console.log('Rest service response ERROR.');
 											this.flagInfoError = true;
 											this.SetSecTimerInfoError();
 										}
 										this.flagBoton = true;
 									}, (error) => {
-										console.log(error);
 										this.flagInfoError = true;
 										this.flagBoton = true;
 									});
@@ -522,12 +561,10 @@ export class SegundaAudienciaComponent implements OnInit {
 
 
 						} else {
-							console.log('Rest service response ERROR.');
 
 						}
 
 					}, (error) => {
-						console.log(error);
 
 					});
 
@@ -548,20 +585,17 @@ export class SegundaAudienciaComponent implements OnInit {
 			this.flagBoton3=false;
 			this._audienciaService.Audiencia(this.ResultadoCtrl.value,this.data.NoQueja,2,this.data.Flujo).subscribe((retvalue)=>{
 				if(retvalue["reason"] == 'OK'){
-					console.log(retvalue);
 					this.SetSecTimerUpdateList();
 					this.flagInsertInfo=true;
 					this.SetSecTimerInsert();
 					this.flag_Resultado=true;
 					this.flagMainUpdate=true;
 				}else{
-					console.log('Rest service response ERROR.');
 					this.flagInfoError=true;
 					this.SetSecTimerInfoError();
 				}	
 				this.flagBoton3=true;
 			},(error)=>{
-				console.log(error);
 				this.flagInfoError=true;
 				this.flagBoton3=true;
 			});
@@ -582,18 +616,15 @@ export class SegundaAudienciaComponent implements OnInit {
 				this.flagBoton2=false;
 				this._registrosservice.add_4RegistrosJuridico(this.data.NoQueja, this.id_audiencia).subscribe((retvalue)=>{
 					if(retvalue["reason"] == 'OK'){
-						console.log(retvalue);
 						//this.SetSecTimerUpdateList();
 						this.flagRegError=false;
 						this.GetRegistro();
 					}else{
-						console.log('Rest service response ERROR.');
 						this.flagRegError=true;
 						this.SetSecTimerRegistro();
 					}				
 					this.flagBoton2=true;
 				},(error)=>{
-					console.log(error);
 					this.flagRegError=true;
 					this.flagBoton2=true;
 					this.SetSecTimerRegistro();
@@ -602,81 +633,161 @@ export class SegundaAudienciaComponent implements OnInit {
 		}
 	}
 
+	generarRegistros(){
+
+		this.flagBoton2 = false;
+		this._registrosservice.add_4Registros(this.data.NoQueja, this.id_audiencia).subscribe((retvalue) => {
+			if (retvalue["reason"] == 'OK') {
+				this.flagRegError = false;
+				this.GetRegistro();
+				this.tblPrimeraAudiencia = true
+			} else {
+				this.flagRegError = true;
+				this.SetSecTimerRegistro();
+			}
+			this.flagBoton2 = true;
+		}, (error) => {
+			this.flagRegError = true;
+			this.flagBoton2 = true;
+			this.SetSecTimerRegistro();
+		});
+	}
+
 	GetRegistro(){
 		if(this.id_audiencia!=0){
-			this._registrosservice.read_4RegistrosJuridico(this.id_audiencia).subscribe((retvalue)=>{
+			this._registrosservice.read_4Registros(this.id_audiencia).subscribe((retvalue) => {
+			// this._registrosservice.read_4RegistrosJuridico(this.id_audiencia).subscribe((retvalue)=>{
 				if(retvalue["reason"] == 'OK'){
 					var tempstr=retvalue['value'];
 					if(tempstr != null)	{
-						//console.log(retvalue);
 						this.registros=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
-						console.log(this.registros);
 						this.Leer4Registros(false);
 					}else{
 						this.Leer4Registros(true);
 					}
 				}else{
-					console.log('Rest service response ERROR.');
 					this.flagInfoError=true;
 					this.SetSecTimerInfoError();
 				}		
 			},(error)=>{
-				console.log(error);
 				this.flagInfoError=true;
 				this.SetSecTimerInfoError();
 			});
 		}
 	}
 
-	Leer4Registros(blank:boolean ){
-		let empty=false;
-		if(blank){
-			this.routerlink1='';
-			this.linkdescription1='';
-			this.routerlink2='';
-			this.linkdescription2='';
-			this.routerlink3='';
-			this.linkdescription3='';
-			this.routerlink4='';
-			this.linkdescription4='';
-			this.routerlink5='';
-			this.linkdescription5='';
-			this.routerlink6='';
-			this.linkdescription6='';
-		}else{
-			if(typeof this.registros["0"] === 'undefined')
-				empty=true;
-			if(!empty){
-				if(this.registros[0]['cedula_citacion_jur_con_id'] != null){
-					this.routerlink1='MuestraRegistro/3/'+this.registros[0]['cedula_citacion_jur_con_id'];
-					this.linkdescription1=this.registros[0]['cedula_citacion_jur_con_codigo'];
+	GetRegistroJuridico() {
+		if (this.id_audiencia != 0) {
+			this._registrosservice.read_4RegistrosJuridico(this.id_audiencia).subscribe((retvalue) => {
+				if (retvalue["reason"] == 'OK') {
+					var tempstr = retvalue['value'];
+					if (tempstr != null) {
+						this.registros = JSON.parse('[' + retvalue["value"].slice(0, -1) + ']');
+						this.LeerRegistrosJuridico(false);
+					} else {
+						this.LeerRegistrosJuridico(true);
+					}
+				} else {
+					this.flagInfoError = true;
+					this.SetSecTimerInfoError();
 				}
-				if(this.registros[0]['cedula_citacion_jur_pro_id'] != null){
-					this.routerlink2='MuestraRegistro/4/'+this.registros[0]['cedula_citacion_jur_pro_id'];
-					this.linkdescription2=this.registros[0]['cedula_citacion_jur_pro_codigo'];
-				}
-
-                if(this.registros[0]['cedula_notificacion_citacion_jur_con_id'] != null){
-					this.routerlink3='MuestraRegistro/4/'+this.registros[0]['cedula_notificacion_citacion_jur_con_id'];
-					this.linkdescription3=this.registros[0]['cedula_notificacion_citacion_jur_con_codigo'];
-				}
-                if(this.registros[0]['cedula_notificacion_citacion_jur_pro_id'] != null){
-					this.routerlink4='MuestraRegistro/4/'+this.registros[0]['cedula_notificacion_citacion_jur_pro_id'];
-					this.linkdescription4=this.registros[0]['cedula_notificacion_citacion_jur_pro_codigo'];
-				}
-
-				if(this.registros[0]['cedula_notificacion_re_correo_id'] != null){
-					this.routerlink5='MuestraRegistro/5/'+this.registros[0]['cedula_notificacion_re_correo_id'];
-					this.linkdescription5=this.registros[0]['cedula_notificacion_re_correo_codigo'];
-				}
-				if(this.registros[0]['cedula_notificacion_cit_correo_id'] != null){
-					this.routerlink6='MuestraRegistro/6/'+this.registros[0]['cedula_notificacion_cit_correo_id'];
-					this.linkdescription6=this.registros[0]['cedula_notificacion_cit_correo_codigo'];
-				}
-			}
-			
+			}, (error) => {
+				this.flagInfoError = true;
+				this.SetSecTimerInfoError();
+			});
 		}
 	}
+
+
+	Leer4Registros(blank: boolean) {
+		let empty = false;
+		if (blank) {
+			this.routerlink1 = '';
+			this.linkdescription1 = '';
+			this.routerlink2 = '';
+			this.linkdescription2 = '';
+			this.routerlink3 = '';
+			this.linkdescription3 = '';
+			this.routerlink4 = '';
+			this.linkdescription4 = '';
+		} else {
+			if (typeof this.registros["0"] === 'undefined')
+				empty = true;
+			if (!empty) {
+				if (this.registros[0]['cedula_citacion_con_id'] != null) {
+					this.tblPrimeraAudiencia = true
+					this.routerlink1 = 'MuestraRegistro/3/' + this.registros[0]['cedula_citacion_con_id'];
+					this.linkdescription1 += this.registros[0]['cedula_citacion_con_codigo'];
+				}
+				if (this.registros[0]['cedula_citacion_pro_id'] != null) {
+					this.routerlink2 = 'MuestraRegistro/4/' + this.registros[0]['cedula_citacion_pro_id'];
+					this.linkdescription2 += this.registros[0]['cedula_citacion_pro_codigo'];
+				}
+				if (this.registros[0]['cedula_notificacion_con_id'] != null) {
+					this.routerlink3 = 'MuestraRegistro/5/' + this.registros[0]['cedula_notificacion_con_id'];
+					this.linkdescription3 += this.registros[0]['cedula_notificacion_con_codigo'];
+				}
+				if (this.registros[0]['cedula_notificacion_pro_id'] != null) {
+					this.routerlink4 = 'MuestraRegistro/6/' + this.registros[0]['cedula_notificacion_pro_id'];
+					this.linkdescription4 += this.registros[0]['cedula_notificacion_pro_codigo'];
+				}
+			}
+
+		}
+	}
+
+	
+
+
+	// Leer4Registros(blank:boolean ){
+	// 	let empty=false;
+	// 	if(blank){
+	// 		this.routerlink1='';
+	// 		this.linkdescription1='';
+	// 		this.routerlink2='';
+	// 		this.linkdescription2='';
+	// 		this.routerlink3='';
+	// 		this.linkdescription3='';
+	// 		this.routerlink4='';
+	// 		this.linkdescription4='';
+	// 		this.routerlink5='';
+	// 		this.linkdescription5='';
+	// 		this.routerlink6='';
+	// 		this.linkdescription6='';
+	// 	}else{
+	// 		if(typeof this.registros["0"] === 'undefined')
+	// 			empty=true;
+	// 		if(!empty){
+	// 			if(this.registros[0]['cedula_citacion_jur_con_id'] != null){
+	// 				this.routerlink1='MuestraRegistro/3/'+this.registros[0]['cedula_citacion_jur_con_id'];
+	// 				this.linkdescription1=this.registros[0]['cedula_citacion_jur_con_codigo'];
+	// 			}
+	// 			if(this.registros[0]['cedula_citacion_jur_pro_id'] != null){
+	// 				this.routerlink2='MuestraRegistro/4/'+this.registros[0]['cedula_citacion_jur_pro_id'];
+	// 				this.linkdescription2=this.registros[0]['cedula_citacion_jur_pro_codigo'];
+	// 			}
+
+    //             if(this.registros[0]['cedula_notificacion_citacion_jur_con_id'] != null){
+	// 				this.routerlink3='MuestraRegistro/4/'+this.registros[0]['cedula_notificacion_citacion_jur_con_id'];
+	// 				this.linkdescription3=this.registros[0]['cedula_notificacion_citacion_jur_con_codigo'];
+	// 			}
+    //             if(this.registros[0]['cedula_notificacion_citacion_jur_pro_id'] != null){
+	// 				this.routerlink4='MuestraRegistro/4/'+this.registros[0]['cedula_notificacion_citacion_jur_pro_id'];
+	// 				this.linkdescription4=this.registros[0]['cedula_notificacion_citacion_jur_pro_codigo'];
+	// 			}
+
+	// 			if(this.registros[0]['cedula_notificacion_re_correo_id'] != null){
+	// 				this.routerlink5='MuestraRegistro/5/'+this.registros[0]['cedula_notificacion_re_correo_id'];
+	// 				this.linkdescription5=this.registros[0]['cedula_notificacion_re_correo_codigo'];
+	// 			}
+	// 			if(this.registros[0]['cedula_notificacion_cit_correo_id'] != null){
+	// 				this.routerlink6='MuestraRegistro/6/'+this.registros[0]['cedula_notificacion_cit_correo_id'];
+	// 				this.linkdescription6=this.registros[0]['cedula_notificacion_cit_correo_codigo'];
+	// 			}
+	// 		}
+			
+	// 	}
+	// }
 
 	SetSecTimerInsert(){
 		const source = timer(5000);
@@ -692,7 +803,7 @@ export class SegundaAudienciaComponent implements OnInit {
 	}
 	SetSecTimerUpdateRegistro(){
 		const source = timer(3000);
-		const subscribe = source.subscribe(val => this.GetRegistro());
+		const subscribe = source.subscribe(val => { this.GetRegistro(); this.GetRegistroJuridico()});
 	}
 	SetSecTimerTimeError(){
 		const source = timer(3000);
@@ -707,7 +818,6 @@ export class SegundaAudienciaComponent implements OnInit {
 		const subscribe = source.subscribe(val => this.TimerForm() );
 	}
 	TimerForm(){
-		console.log(this.flagformvisible);
 		if(this.flagformvisible<3){
 			this.loaderror=true;	
 			this.flagformvisible=-1;
@@ -745,75 +855,83 @@ export class SegundaAudienciaComponent implements OnInit {
 	  }
 	}
 	
+	openCedulaCitaCons() {
+		this._registrosservice.getCedulaCitaCons(this.registros[0]['id_audiencia']).subscribe((Data) => {
+			this._registrosservice.FileDownLoadChoose(Data, 1);
+		}, (error) => {
+			this.SetSecTimerInfoError();
+		});
+	}
+
+
+	openCedulaNotifiCons() {
+		this._registrosservice.getCedulaNotiCons(this.registros[0]['id_audiencia']).subscribe((Data) => {
+			this._registrosservice.FileDownLoadChoose(Data, 1);
+		}, (error) => {
+			this.SetSecTimerInfoError();
+		});
+	}
+
+	openCedulaNotifiProv() {
+		this._registrosservice.getCedulaNotiProv(this.registros[0]['id_audiencia']).subscribe((Data) => {
+			this._registrosservice.FileDownLoadChoose(Data, 1);
+		}, (error) => {
+			this.SetSecTimerInfoError();
+		});
+	}
+	openCedulaCitaProv() {
+		this._registrosservice.getCedulaCitaProv(this.registros[0]['id_audiencia']).subscribe((Data) => {
+			this._registrosservice.FileDownLoadChoose(Data, 1);
+		}, (error) => {
+			this.SetSecTimerInfoError();
+		});
+	}
+
 
 	openCedulaCitaConJur(){
-		console.log('entro a openCedulaCitaConJur con id reporte: ');
 		this._registrosservice.openCedulaCitaConJur(this.registros[0]['id_audiencia']).subscribe((Data)=>{
 			this._registrosservice.FileDownLoadChoose(Data,1);
-		//	this.flagDBError=false;
 		},(error)=>{
-			console.log(error);
-		//	this.flagDBError=true;
 			this.SetSecTimerInfoError();
 		});
 	}
 
 	openCedulaCitaProJur(){
-		console.log('entro a openCedulaCitaProJur');
 		this._registrosservice.openCedulaCitaProJur(this.registros[0]['id_audiencia']).subscribe((Data)=>{
 			this._registrosservice.FileDownLoadChoose(Data,1);
-		//	this.flagDBError=false;
 		},(error)=>{
-			console.log(error);
-		//	this.flagDBError=true;
 			this.SetSecTimerInfoError();
 		});
 	}
 
 	openCedulaNotiProJur(){
-		console.log('entro a openCedulaNotiProJur');
 		this._registrosservice.openCedulaNotiProJur(this.registros[0]['id_audiencia']).subscribe((Data)=>{
 			this._registrosservice.FileDownLoadChoose(Data,1);
-		//	this.flagDBError=false;
 		},(error)=>{
-			console.log(error);
-		//	this.flagDBError=true;
 			this.SetSecTimerInfoError();
 		});
 	}
 
 	openCedulaNotiConJur(){
-		console.log('entro a openCedulaNotiConJur');
 		this._registrosservice.openCedulaNotiConJur(this.registros[0]['id_audiencia']).subscribe((Data)=>{
 			this._registrosservice.FileDownLoadChoose(Data,1);
-		//	this.flagDBError=false;
 		},(error)=>{
-			console.log(error);
-		//	this.flagDBError=true;
 			this.SetSecTimerInfoError();
 		});
 	}
 
 	openCedulaCitaNotiCitCorreo(){
-		console.log('entro a openCedulaCitaNotiCitCorreo ');
 		this._registrosservice.openCedulaCitaNotiCitCorreo(this.registros[0]['id_audiencia']).subscribe((Data)=>{
 			this._registrosservice.FileDownLoadChoose(Data,1);
-		//	this.flagDBError=false;
 		},(error)=>{
-			console.log(error);
-		//	this.flagDBError=true;
 			this.SetSecTimerInfoError();
 		});
 	}
 
 	openCedulaCitaNotiResCorreo(){
-		console.log('entro a openCedulaCitaNotiResCorreo ');
 		this._registrosservice.openCedulaCitaNotiResCorreo(this.registros[0]['id_audiencia']).subscribe((Data)=>{
 			this._registrosservice.FileDownLoadChoose(Data,1);
-		//	this.flagDBError=false;
 		},(error)=>{
-			console.log(error);
-		//	this.flagDBError=true;
 			this.SetSecTimerInfoError();
 		});
 	}

@@ -12,6 +12,7 @@ import { SubmitFormService } from "../shared/submit-form.service";
 })
 export class QuejaService {
 	private baseUrl:string=BASE_URL_REST+'tipos-queja';
+	private URLInfor:string = BASE_URL_REST + "expiracion-queja/info-consumidor"
 	private httpOptions = {
 	  headers: new HttpHeaders({
 		'content-type':'application/json; charset=iso-8859-1'
@@ -31,6 +32,11 @@ export class QuejaService {
 	  return this._http.get(localURL,this.httpOptions).pipe(map(this.extractData));
   }
   
+
+  getInfoConsumidorQueja(no_queja, anio){
+	  return this._http.post(this.URLInfor, this.JsonInfo(no_queja, anio), this.httpOptions);
+  }
+
   getDataQueja(id){	  
 	  var localURL=this.baseUrl+'/'+id+'/'+this._submitFormService.Get_token();
 	//   console.log(localURL);
@@ -98,6 +104,11 @@ export class QuejaService {
 	var locarray = { id_queja:id_queja, estado_resolver:estado_resolver, usuario:this._submitFormService.Get_userid(), token: this._submitFormService.Get_token() };
 	return JSON.stringify(locarray);
 }  
+
+	JsonInfo(no_queja, anio){
+		var json = {no_queja:no_queja, anio:anio}
+		return JSON.stringify(json)
+	}
   
   ObjaJSON_Reasignar(actualizaestado, id_queja, flujo, usuario_asignado){
 	  var locarray = { id_queja:id_queja, valor:usuario_asignado, usuario:this._submitFormService.Get_userid(), token: this._submitFormService.Get_token(), id_flujo: flujo, valor2: actualizaestado};

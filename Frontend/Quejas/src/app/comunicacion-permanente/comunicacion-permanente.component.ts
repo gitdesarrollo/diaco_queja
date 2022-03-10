@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import { Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FrmComPermanente } from '../fakedata';
-import { CmbCatalogo, FrmRegComCon, FormResponse } from "../atencion-consumidor-const"
+import { CmbCatalogo, FrmRegComCon, FormResponse, FrmDataConsumidor } from "../atencion-consumidor-const"
 import { CatalogoService } from '../shared/catalogo.service'
 import { RegistrosService } from '../shared/registros.service'
 import { CompermanenteService } from './compermanente.service'
@@ -52,6 +52,9 @@ export class ComunicacionPermanenteComponent implements OnInit {
   btnvisible:boolean;
   loc_pagina;
   showSpinner: boolean = false;  
+  infoConsumidor: FrmDataConsumidor[]
+  infoDatoConsumidor:String;
+  titleInfoConsumidor:String;
 
   constructor( @Inject(MAT_DIALOG_DATA) public data: any, private _catalogoservice:CatalogoService, private _compermservice:CompermanenteService, public dialogRef: MatDialogRef<ComunicacionPermanenteComponent>, private _registrosservice:RegistrosService, private _quejaService: QuejaService, private _seguridadService:SeguridadService ) { 
 		this.flagDBError = false;
@@ -81,8 +84,28 @@ export class ComunicacionPermanenteComponent implements OnInit {
 	 this.LocalForm=[];
 	 this.routerlink='MuestraRegistro/1/1';
 	 this.GetRegistro(false);
+	 this.getInfoQueja(this.data.NoQueja, this.data.anio)
 	 this.GetQuejaList(this.data.NoQueja);
 	 this.SetSecTimerForm();
+  }
+
+
+  selecciontipo(event){
+	  
+	if (event == 1)
+	{
+		this.titleInfoConsumidor = "Teléfono"
+		this.infoDatoConsumidor = this.infoConsumidor[0].telefono_principal
+	}else if( event == 2 ){
+		this.titleInfoConsumidor = "Correo Electrónico"
+		this.infoDatoConsumidor = this.infoConsumidor[0].Correo_principal
+	}
+}
+
+  getInfoQueja(no_queja, anio){
+	  this._quejaService.getInfoConsumidorQueja(no_queja,anio).subscribe(response => {
+		this.infoConsumidor = JSON.parse('['+response["value"].slice(0, -1) +']');
+	  })
   }
    
    GetQuejaList(idqueja){
@@ -162,6 +185,7 @@ export class ComunicacionPermanenteComponent implements OnInit {
 				tempstr=Data['value'];
 				if(tempstr != null)	{
 					this.cmbvia=JSON.parse('['+tempstr.slice(0, -1) +']');
+					
 					this.flagformvisible++;
 				}else{
 					this.cmbvia=[];
@@ -217,25 +241,12 @@ export class ComunicacionPermanenteComponent implements OnInit {
 			}
 			this.btnvisible=true;
 		},(error)=>{
-			console.log(error);
 			this.flagDBError=true;
 			this.btnvisible=true;
 			this.SetSecTimerInfoError();
 		});
   }
-  /*
-  openFichaRegistro(){
-		console.log('entro a openFichaRegistro');
-		this._compermservice.getFichaRegistro().subscribe((Data)=>{
-		console.log('entro a openRegisto');
-			this._compermservice.FileDownLoadChoose(Data,1);
-			this.flagDBError=false;
-		},(error)=>{
-			console.log(error);
-			this.flagDBError=true;
-			this.SetSecTimerInfoError();
-		});
-	}*/ 
+
 	openComunicacionPerm(){
 		this._registrosservice.getComPermanente(this.routerlink).subscribe((Data)=>{
 			this._registrosservice.FileDownLoadChoose(Data,1);
@@ -253,7 +264,6 @@ export class ComunicacionPermanenteComponent implements OnInit {
 	}
 	
   SubmitandGo(){
-	  //console.log('we got here');
 	  if (this.myForm.valid) {
 		this.SaveData();
 		this.loc_pagina=1;
@@ -387,6 +397,7 @@ export class ComunicacionPermanenteComponent implements OnInit {
 				var tempstr=retvalue['value'];
 				if(tempstr != null)	{
 					this.registrodata=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
+					
 					//this.routerlink='MuestraRegistro/1/'+this.registrodata[0]['id'];
 					this.routerlink=this.registrodata[0]['id'];
 					this.linkdescription=this.registrodata[0]['codigo'];

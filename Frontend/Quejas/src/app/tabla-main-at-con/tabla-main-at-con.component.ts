@@ -105,6 +105,7 @@ export class TablaMainAtConComponent implements OnInit {
     //}
 
     // populate datatable rows
+   
     this.data = this.rows;
     // copy over dataset to empty object
     this.filteredData = this.rows;
@@ -166,7 +167,30 @@ export class TablaMainAtConComponent implements OnInit {
 		  return false;
   }*/
 
+  donwloadFileZip(strQueja){
+    this._seguridadService.downloadFileZip(strQueja).subscribe((retvalue) => {
+      this.downloadZipFile(retvalue,strQueja)
+    }, (error) => {
+      return error;
+    });
+
+  }
+
+  downloadZipFile(data,strQueja) {
+		const blob = new Blob([data], { type: 'application/zip' });
+		const url = window.URL.createObjectURL(blob);
+    var anchor = document.createElement("a");
+    anchor.download = strQueja + ".zip";
+    anchor.href = url;
+    anchor.click();
+		// var pwa = window.open(url);
+		// if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+		// 	alert('Por favor deshabilite su bloqueador de Pop-ups e intente de nuevo.');
+		// }
+	}
+
   openVerifVirtual(NoQueja, strQueja) {
+    console.log("Queja ", NoQueja, "Str ", strQueja)
     this.Token();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
@@ -188,7 +212,7 @@ export class TablaMainAtConComponent implements OnInit {
 
   }
 
-  openComPermanente(NoQueja, strQueja, flujo) {
+  openComPermanente(NoQueja, strQueja, flujo, anio) {
     this.Token();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
@@ -200,7 +224,8 @@ export class TablaMainAtConComponent implements OnInit {
       quejanumero: strQueja,
       Rol: this._submitFormService.Get_Atencion_Consumidor(),
       Usuario: this._submitFormService.Get_userid(),
-      Flujo: flujo
+      Flujo: flujo,
+      anio: anio
     };
 
     this.MtDialogRefCompPerm = this.dialog.open(ComunicacionPermanenteComponent, dialogConfig);
@@ -463,6 +488,7 @@ export class TablaMainAtConComponent implements OnInit {
     this.Token();
     let frmmainloc = this.LoadInputInfo();
     let tempstr = '';
+    
     this._maintableservice.getUsers(frmmainloc).subscribe((Data) => {
       if (Data['reason'] == 'OK') {
         tempstr = Data['value'];
@@ -594,6 +620,9 @@ export class TablaMainAtConComponent implements OnInit {
 
   changeClassIcon(enabled: boolean){
     return enabled ? "btn btn-apgreen icon-dashboard " : "btn btn-primary icon-dashboard ";
+  }
+  downloadClassIcon(){
+    return "btn btn-danger icon-dashboard";
   }
 
 }

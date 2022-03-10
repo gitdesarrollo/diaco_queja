@@ -46,7 +46,7 @@ export class ProveedoresService {
  
    saveDataPCV(proveedor: Proveedorpcv) {
     return this.http.post<any>(BASE_URL_REST_FILE2 + 'proveedores/aprobar', proveedor, this.httpOptions).pipe(
-		tap((item) => console.log('grabada la proveedor')),catchError(this.handleError<any>('error en grabar '))
+		tap((item) => {}),catchError(this.handleError<any>('error en grabar '))
 	);
    }
 

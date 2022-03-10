@@ -1,78 +1,9 @@
 /******************************************************************
- * ****************************************************************
  * *************** VARIABLES DE CONEXIÓN **************************
- */
-
-
-/*
-* Test
 */
-// export const BASE_URL_REST = 'http://gestorquejas.diaco.gob.gt/quejas_1/rs/';
-// export const BASE_VERIFICACION_DATOS_LINK = 'http://gestorquejas.diaco.gob.gt/dist6/#/consumidor/interno/';
-// export const BASE_PRESENCIAL_LINK = 'http://gestorquejas.diaco.gob.gt/dist6/#/pquejaini/presencial/';
-// export const BASE_CALLCENTER_LINK = 'http://gestorquejas.diaco.gob.gt/dist6/#/pquejaini/callcenter/';
-
-/*******************************************************/
-
-/* 
-* local_JJ
-*/
-
-/* export const BASE_URL_REST = 'http://localhost:8080/Quejas/rs/';
-//export const BASE_URL_REST_CALENDARIO = 'http://localhost:8080/web-quejaini/rs/quejas/calendario';
-export const BASE_URL_REST_CALENDARIO = 'http://localhost:8080/web-quejaini/rs/quejas/calendario';
-export const BASE_VERIFICACION_DATOS_LINK = 'http://localhost:8080/dist6/#/consumidor/interno/';
-export const BASE_PRESENCIAL_LINK = 'http://localhost:8080/dist6/#/pquejaini/presencial/';
-export const BASE_CALLCENTER_LINK = 'http://localhost:8080/dist6/#/pquejaini/callcenter/'; */
-//export const BASE_VERIFICACION_DATOS_LINK = 'http://localhost:4300/quejas_ini_6/#/consumidor/interno/';
-//export const BASE_PRESENCIAL_LINK = 'http://localhost:4300/quejas_ini_6/#/pquejaini/presencial/';
-//export const BASE_CALLCENTER_LINK = 'http://localhost:4300/quejas_ini_6/#/pquejaini/callcenter/';
-
 /*
-* local_old
-*/
-
-/* export const BASE_URL_REST = 'http://localhost:8080/file-web-quejaapp/rs/';
-export const BASE_URL_REST_CALENDARIO = 'http://localhost:8080/web-quejaini/rs/quejas/calendario';
-export const BASE_VERIFICACION_DATOS_LINK = 'http://localhost:8080/quejas_ini_6/#/consumidor/interno/';
-export const BASE_PRESENCIAL_LINK = 'http://localhost:8080/quejas_ini_6/#/pquejaini/presencial/';
-export const BASE_CALLCENTER_LINK = 'http://localhost:8080/quejas_ini_6/#/pquejaini/callcenter/'; */
-
-/*
-* Dev
-*/
-
-/*  export const BASE_URL_REST = 'http://desagestorquejas.diaco.gob.gt/quejas_dev/rs/';
- export const BASE_URL_REST_CALENDARIO = 'http://desagestorquejas.diaco.gob.gt/web-quejaini/rs/quejas/calendario';
- export const BASE_VERIFICACION_DATOS_LINK = 'http://desagestorquejas.diaco.gob.gt/quejas_ini_6/#/consumidor/interno/';
- export const BASE_PRESENCIAL_LINK = 'http://desagestorquejas.diaco.gob.gt/quejas_ini_6/#/pquejaini/presencial/';
- export const BASE_CALLCENTER_LINK = 'http://desagestorquejas.diaco.gob.gt/quejas_ini_6/#/pquejaini/callcenter/'; */
-/**/
-/********************************************************/
-
-/*
-* Production_old
-
- */
-// export const BASE_URL_REST = 'http://gestorquejas.diaco.gob.gt/quejas_dev/rs/';
-// export const BASE_VERIFICACION_DATOS_LINK = 'http://gestorquejas.diaco.gob.gt/quejas_ini_6/#/consumidor/interno/';
-// export const BASE_PRESENCIAL_LINK = 'http://gestorquejas.diaco.gob.gt/quejas_ini_6/#/pquejaini/presencial/';
-// export const BASE_CALLCENTER_LINK = 'http://gestorquejas.diaco.gob.gt/quejas_ini_6/#/pquejaini/callcenter/';
-
-
-// /*
-// * Production GESTOR QUEJAS
-
-//  */
-//  export const BASE_URL_REST = 'http://gestorquejas.diaco.gob.gt/Quejas/rs/';
-//  export const BASE_URL_REST_CALENDARIO = 'http://gestorquejas.diaco.gob.gt/web-quejaini/rs/quejas/calendario';
-//  export const BASE_VERIFICACION_DATOS_LINK = 'http://gestorquejas.diaco.gob.gt/dist6/#/consumidor/interno/';
-//  export const BASE_PRESENCIAL_LINK = 'http://gestorquejas.diaco.gob.gt/dist6/#/pquejaini/presencial/';
-//  export const BASE_CALLCENTER_LINK = 'http://gestorquejas.diaco.gob.gt/dist6/#/pquejaini/callcenter/';
-
-
-/*
-* Desarrollo
+*
+	Desarrollo
 
  */
  export const BASE_URL_REST = 'http://localhost:8080/Quejas/rs/';
@@ -87,44 +18,6 @@ export const BASE_CALLCENTER_LINK = 'http://localhost:8080/quejas_ini_6/#/pqueja
 //  export const BASE_PRESENCIAL_LINK = 'https://dev.mineco.gob.gt/dist6/#/pquejaini/presencial/';
 //  export const BASE_CALLCENTER_LINK = 'https://dev.mineco.gob.gt/dist6/#/pquejaini/callcenter/';
 
-
-/*
-* Production 128.5.9.82:8181
-
- */
-/* export const BASE_URL_REST = 'https://128.5.9.82:8181/Quejas/rs/';
-export const BASE_URL_REST_CALENDARIO = 'https://128.5.9.82:8181/web-quejaini/rs/quejas/calendario';
-export const BASE_VERIFICACION_DATOS_LINK = 'https://128.5.9.82:8181/dist6/#/consumidor/interno/';
-export const BASE_PRESENCIAL_LINK = 'https://128.5.9.82:8181/dist6/#/pquejaini/presencial/';
-export const BASE_CALLCENTER_LINK = 'https://128.5.9.82:8181/dist6/#/pquejaini/callcenter/'; */
-
-
-/*Production dev.mineco.gob.gt
-
- */
-/* export const BASE_URL_REST = 'https://dev.mineco.gob.gt/Quejas/rs/';
-export const BASE_URL_REST_CALENDARIO = 'https://dev.mineco.gob.gt/web-quejaini/rs/quejas/calendario';
-export const BASE_VERIFICACION_DATOS_LINK = 'https://dev.mineco.gob.gt/dist6/#/consumidor/interno/';
-export const BASE_PRESENCIAL_LINK = 'https://dev.mineco.gob.gt/dist6/#/pquejaini/presencial/';
-export const BASE_CALLCENTER_LINK = 'https://dev.mineco.gob.gt/dist6/#/pquejaini/callcenter/'; */
-
-/*Production https://gestorquejas.diaco.gob.gt
-
- */
-/* export const BASE_URL_REST = 'https://gestorquejas.diaco.gob.gt/Quejas/rs/';
-export const BASE_URL_REST_CALENDARIO = 'https://gestorquejas.diaco.gob.gt/web-quejaini/rs/quejas/calendario';
-export const BASE_VERIFICACION_DATOS_LINK = 'https://gestorquejas.diaco.gob.gt/dist6/#/consumidor/interno/';
-export const BASE_PRESENCIAL_LINK = 'https://gestorquejas.diaco.gob.gt/dist6/#/pquejaini/presencial/';
-export const BASE_CALLCENTER_LINK = 'https://gestorquejas.diaco.gob.gt/dist6/#/pquejaini/callcenter/'; */
-
-
-
-/*********************************************************/
-
-
-/**********************************************************************
- * ********************************************************************
- */
 
 export const BASE_URL_REST_FILE = BASE_URL_REST;
 export const MSG_REGISTRO_DESHABILITADO = '(Registro Deshabilitado hasta que se ingresen datos completos de la queja en la sección Verificación de Datos.)';
@@ -394,6 +287,12 @@ export class FormResponse {
 
 export class FrmRegComCon {
   id: number;
+}
+
+export class FrmDataConsumidor{
+	Correo_principal: String;
+	Correo_secundario: String;
+	telefono_principal: String;
 }
 
 export class Frm4Registros {

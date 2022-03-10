@@ -112,12 +112,10 @@ export class TablaMainJuridicoComponent implements OnInit {
 
   Token() {
     let loc_token = this._submitFormService.Get_token();
-    //console.log(loc_token);
     if (loc_token == '') {
       this._seguridadService.RedireccionarLogin();
     }
     this._seguridadService.VerifyToken(loc_token).subscribe((retvalue) => {
-      console.log('token check', retvalue);
       if (retvalue['reason'] != 'OK') {
         this._seguridadService.SesionVencida();
       }
@@ -134,7 +132,6 @@ export class TablaMainJuridicoComponent implements OnInit {
       frmmain['SelectedFHasta'] = null;
       frmmain['selectedNoqueja'] = '';
     } else {
-      console.log(this.inputfrmmain);
       frmmain['selectedFiltro'] = this.inputfrmmain['controls']['selectedFiltro'].value;
       frmmain['SelectedFDesde'] = this.inputfrmmain['controls']['SelectedFDesde'].value;
       frmmain['SelectedFHasta'] = this.inputfrmmain['controls']['SelectedFHasta'].value;
@@ -146,7 +143,6 @@ export class TablaMainJuridicoComponent implements OnInit {
   ngAfterViewInit() {
     //this.setupDT();
     //this.dtTrigger.next();
-    //console.log('ngAfterViewInit');
   }
 
   /*SetEdicionxEstadoQueja(estado){
@@ -385,7 +381,6 @@ export class TablaMainJuridicoComponent implements OnInit {
     if (FormResponse.changes) {
       this.LoadServiceInfo();
     }
-    console.log(FormResponse);
     if (FormResponse.pagina == 1) {
       this.openArchivarQueja(+FormResponse.NoQueja, FormResponse.quejanumero);
     } else if (FormResponse.pagina == 2) {
@@ -400,7 +395,6 @@ export class TablaMainJuridicoComponent implements OnInit {
   }
 
   ModalLogicVerifDatos(FormResponse) {
-    console.log(FormResponse.changes);
     if (FormResponse.changes) {
       this.LoadServiceInfo();
     }
@@ -410,7 +404,6 @@ export class TablaMainJuridicoComponent implements OnInit {
     if (FormResponse.changes) {
       this.LoadServiceInfo();
     }
-    console.log(FormResponse);
     if (FormResponse.pagina == 1) {
       this.openMovimientoExpediente(+FormResponse.NoQueja, FormResponse.quejanumero);
     } else if (FormResponse.pagina == 2) {
@@ -428,7 +421,6 @@ export class TablaMainJuridicoComponent implements OnInit {
     if (FormResponse.changes) {
       this.LoadServiceInfo();
     }
-    console.log(FormResponse);
   }
 
   openListadoArchivos(NoQueja, strQueja, flujo) {
@@ -471,7 +463,7 @@ export class TablaMainJuridicoComponent implements OnInit {
     });
   }
 
-  openComPermanente(NoQueja, strQueja, flujo) {
+  openComPermanente(NoQueja, strQueja, flujo, anio) {
     this.Token();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
@@ -483,7 +475,8 @@ export class TablaMainJuridicoComponent implements OnInit {
       quejanumero: strQueja,
       Rol: this._submitFormService.Get_Juridico(),
       Usuario: this._submitFormService.Get_userid(),
-      Flujo: flujo
+      Flujo: flujo,
+      anio: anio
     };
 
     this.MtDialogRefCompPerm = this.dialog.open(ComunicacionPermanenteComponent, dialogConfig);
@@ -499,8 +492,6 @@ export class TablaMainJuridicoComponent implements OnInit {
     this._maintableservice.getJuridico(frmmainloc).subscribe((Data) => {
       if (Data['reason'] == 'OK') {
         tempstr = Data['value'];
-        console.log(Data);
-        //console.log(tempstr);
         if (tempstr != null && tempstr != '') {
           this.FrmMainListFD = JSON.parse('[' + tempstr.slice(0, -1) + ']');
           if (this.FrmMainListFD.length >= 2000) {
@@ -513,15 +504,12 @@ export class TablaMainJuridicoComponent implements OnInit {
         this.rows = this.FrmMainListFD;
         this.data = this.rows;
         this.filteredData = this.rows;
-        console.log(Data);
         this.flagDBError = false;
       } else {
-        console.log('Rest Service Error');
         this.flagDBError = true;
         this.SetSecTimerDBError();
       }
     }, (error) => {
-      console.log(error);
       this.flagDBError = true;
       this.SetSecTimerDBError();
     });
@@ -544,7 +532,6 @@ export class TablaMainJuridicoComponent implements OnInit {
       hashasta=true;
     }
     locresult=this.frmmain.SelectedFDesde > this.frmmain.SelectedFHasta;
-    //console.log('hey '+locresult);
 
     if( (hasdesde && !hashasta) || (!hasdesde && hashasta) ){
       this.flagmissingdatep=true;
@@ -589,7 +576,6 @@ export class TablaMainJuridicoComponent implements OnInit {
               return true;
             }
           }catch (e) {
-            console.log('sin data');
           }
         }
       }
@@ -597,7 +583,6 @@ export class TablaMainJuridicoComponent implements OnInit {
   }
 
   onSelect({selected}) {
-    console.log('Select Event', selected, this.selected);
   }
 
   singleSelectCheck = (row: any) => {
@@ -625,6 +610,13 @@ export class TablaMainJuridicoComponent implements OnInit {
     } else {
       return 'btn btn-primary btn-image ' + image;
     }
+  }
+
+  changeClassIcon(enabled: boolean){
+    return enabled ? "btn btn-apgreen icon-dashboard " : "btn btn-primary icon-dashboard ";
+  }
+  downloadClassIcon(){
+    return "btn btn-danger icon-dashboard";
   }
 
 }

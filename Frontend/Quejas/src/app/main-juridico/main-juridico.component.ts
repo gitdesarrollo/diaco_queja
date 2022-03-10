@@ -159,7 +159,6 @@ list_filtro:BaseCmbClass[];
 	}
 
 	GoToVerificacion(){
-		console.log('VyV');
 		this.router.navigate(['/mainVyV']);
 	}
 		
@@ -203,12 +202,10 @@ list_filtro:BaseCmbClass[];
 
 	Token(){
 	  let loc_token=this._submitFormService.Get_token();
-	  //console.log(loc_token);
 	  if(loc_token == '*'){
 		  this._seguridadService.RedireccionarLogin();
 	  }else{
 		  this._seguridadService.VerifyToken(loc_token).subscribe((retvalue)=>{
-				console.log('token check',retvalue);
 				if(retvalue["reason"] != 'OK'){
 					this._seguridadService.SesionVencida();
 				}		
@@ -220,11 +217,9 @@ list_filtro:BaseCmbClass[];
 	
 	CerrarSesion(){
 		let loc_token=this._submitFormService.Get_token();
-		console.log(loc_token);
 		if(loc_token == '')
 			this._seguridadService.RedireccionarLogin();
 		this._seguridadService.Logout(loc_token).subscribe((retvalue)=>{
-			console.log('cerrar sesion',retvalue);
 			this._seguridadService.RedireccionarLogin();		
 		},(error)=>{
 			this._seguridadService.RedireccionarLogin();
@@ -240,14 +235,11 @@ list_filtro:BaseCmbClass[];
 				}else{
 					this.flagAccionPendiente=false;
 				}
-				console.log(this.flagAccionPendiente);
 			}else{
-				console.log('Rest service response ERROR.');
 				this.flagInfoError=true;
 				this.SetSecTimerInfoError();
 			}		
 		},(error)=>{
-			console.log(error);
 			this.flagInfoError=true;
 			this.SetSecTimerInfoError();
 		});
@@ -323,7 +315,6 @@ list_filtro:BaseCmbClass[];
 		
 		this.MtDialogBusqueda = this.dialog.open(BusquedaComponent,dialogConfig);	
 		this.MtDialogBusqueda.afterClosed().subscribe(result => {
-			console.log(result);
 			this.BusquedaLogic(result);
 		});
 	}
@@ -340,7 +331,6 @@ list_filtro:BaseCmbClass[];
 		
 		this.MtDialogConfMov = this.dialog.open(MovimientoConfJuridicoComponent,dialogConfig);	
 		this.MtDialogConfMov.afterClosed().subscribe(result => {
-			console.log(result);
 			this.ModalLogicMovimiento(result);
 		});
 	}
@@ -383,7 +373,6 @@ list_filtro:BaseCmbClass[];
 		
 		this.MtDialogConfUsuario = this.dialog.open(ConfUsuarioComponent,dialogConfig);	
 		this.MtDialogConfUsuario.afterClosed().subscribe(result => {
-			console.log(result);
 			this.ModalLogicConfUsuario(result);
 		});
 	}
@@ -400,7 +389,6 @@ list_filtro:BaseCmbClass[];
 		
 		this.MtDialogConfUsuarioPP = this.dialog.open(ConfUsuarioConcPreviaComponent,dialogConfig);	
 		this.MtDialogConfUsuarioPP.afterClosed().subscribe(result => {
-			console.log(result);
 			this.ModalLogicConfUsuarioPP(result);
 		});
 	}
@@ -417,7 +405,6 @@ list_filtro:BaseCmbClass[];
 		
 		this.MtDialogUsuarioDetalle = this.dialog.open(UsuarioDetalleComponent,dialogConfig);	
 		this.MtDialogUsuarioDetalle.afterClosed().subscribe(result => {
-			console.log(result);
 			this.ModalLogicUsuarioDetalle(result);
 		});
 	}
@@ -434,7 +421,6 @@ list_filtro:BaseCmbClass[];
 		
 		this.MtDialogUsuarioDetallePP = this.dialog.open(UsuarioDetalleConcPreviaComponent,dialogConfig);	
 		this.MtDialogUsuarioDetallePP.afterClosed().subscribe(result => {
-			console.log(result);
 			this.ModalLogicUsuarioDetallePP(result);
 		});
 	}
@@ -599,7 +585,6 @@ list_filtro:BaseCmbClass[];
 	}
 
 	ModalLogicConfUsuario(FormResponse){
-		console.log(FormResponse);
 		if(FormResponse.changes){
 			this.openUsuarioDetalle(FormResponse.quejanumero);
 		}
@@ -612,7 +597,6 @@ list_filtro:BaseCmbClass[];
 	}
 
 	ModalLogicConfUsuarioPP(FormResponse){
-		console.log(FormResponse);
 		if(FormResponse.changes){
 			this.openUsuarioDetallePP(FormResponse.quejanumero, FormResponse.NoQueja);
 		}

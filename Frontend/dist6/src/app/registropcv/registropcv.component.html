@@ -5,6 +5,8 @@
 
 <body>
 
+
+
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <span class="navbar-text whitefont">DIACO - Registro de proveedores a conciliación virtual</span>
     <div class="collapse navbar-collapse" id="navbarText">
@@ -22,6 +24,27 @@
 
 
   <div class="container">
+
+    <mat-card class="card-registro-prov">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>Shiba Inu</mat-card-title>
+        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+          bred for hunting.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button>LIKE</button>
+        <button mat-button>SHARE</button>
+      </mat-card-actions>
+    </mat-card>
+
+
     <div class="row">
       <!--re captcha-->
       <div class="col-sm-12" *ngIf="!isValid">
@@ -35,7 +58,8 @@
                   <p>Seleccione el botón de reCaptcha “No soy un robot” </p>
                   <re-captcha (resolved)="resolved($event)" siteKey="6LeCJqsaAAAAALo4on7TTz-uKediysRf3eAJdibo">
                     <!-- 6LeCJqsaAAAAALo4on7TTz-uKediysRf3eAJdibo -->
-                    <!-- 6LeEM20UAAAAAEW2TvlDa5_v5gCrEBFXrGfsRIHq -->  <!-- ORIGINAL INICIAL FUNCIONAL EN LOCAL HOST -->
+                    <!-- 6LeEM20UAAAAAEW2TvlDa5_v5gCrEBFXrGfsRIHq -->
+                    <!-- ORIGINAL INICIAL FUNCIONAL EN LOCAL HOST -->
 
                   </re-captcha>
                 </div>
@@ -62,13 +86,17 @@
                     <div class="col-lg-4">
                       <input id="nit" type="text" class="form-control" matTooltipPosition="after"
                         matTooltip="Ingrese su número de identificación tributaria"
-                        matTooltipClass="custom-tooltip-blue" formControlName="nit" placeholder="NIT" required>                        
+                        matTooltipClass="custom-tooltip-blue" formControlName="nit" placeholder="NIT" required>
                     </div>
-                    <div class="col-sm-1" *ngIf="continua=='0'">
+                    <div class="col-sm-2" *ngIf="continua=='0'">
                       <div class="col-lg-12 text-center">
                         <button class="btn btn-primary row" type="button" [disabled]="completado"
                           (click)="findByNITtoSAT()" matTooltipPosition="after" matTooltip="Buscar proveedor."
-                          matTooltipClass="custom-tooltip-blue">Buscar</button>
+                          matTooltipClass="custom-tooltip-blue">
+                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                            *ngIf="loading"></span>
+                          Buscar
+                        </button>
                       </div>
                     </div>
 
@@ -89,9 +117,9 @@
 
                     <div class="col-sm-5" *ngIf="continua=='1'">
                       <input id="email" type="text" class="form-control" formControlName="email"
-                          matTooltipPosition="after" matTooltip="Ingrese direccion"
-                          matTooltipClass="custom-tooltip-blue" placeholder="Correo">
-                      
+                        matTooltipPosition="after" matTooltip="Ingrese direccion" matTooltipClass="custom-tooltip-blue"
+                        placeholder="Correo">
+
                       <!-- {{correo_}} -->
                     </div>
                   </div>
@@ -100,295 +128,325 @@
             </div>
           </div>
 
-          <div *ngIf="continua=='1' && !success">
-            <div class="form-group row">
-              <label for="" class="col-sm-2 col-form-label">Adjuntos Obligatorios</label>
-              <div class="col-sm-10">
-                <div class="card">
-                  <div class="card-body">
 
-                    <div class="form-group row">
-                      <label for="tipoProveedor" class="col-sm-2 col-form-label">(*) Tipo de proveedor</label>
-                      <div class="col-sm-10">
-                        <select id="tipoProveedor" class="form-control" formControlName="tipoProveedor">
-                          <option value="1">Pequeño contribuyente</option>
-                          <option value="2">Empresa Individual</option>
-                          <option value="3">Sociendad Anonima</option>
-                        </select>
-                      </div>
-                    </div>
 
-                    <div class="form-group row" >
-                      <label for="filFormulario" class="col-sm-4 col-form-label">(*) Formulario de registro</label>
-                      <div class="col-sm-5">
-                        <input #filFormulario id="filFormulario" type="file" ng2FileSelect [uploader]="uploader"
-                          class="form-control" (change)="onFileChanged('FORM')" matTooltipPosition="after"
-                          matTooltip="Ingrese su formulario de registro" matTooltipClass="custom-tooltip-blue"
-                          placeholder="Formulario de registro" accept="image/jpg,application/pdf,image/jpeg">
-                      </div> 
-                      <a download="formulario" target="_blank" href="formulario.pdf">
-                        Descargar formulario
-                       </a>       
-                                    
-                    </div>
-                    <div class="form-group row" *ngIf="registropcvForm.value.tipoProveedor=='3'">
-                      <label for="filNombramiento" class="col-sm-4 col-form-label">(*) Nombramiento de representante
-                        legal</label>
-                      <div class="col-sm-5">
-                        <input #filNombramiento id="filNombramiento" type="file" ng2FileSelect [uploader]="uploader"
-                          class="form-control" (change)="onFileChanged('NOMB')" matTooltipPosition="after"
-                          matTooltip="Ingrese Nombramiento de representante" matTooltipClass="custom-tooltip-blue"
-                          placeholder="Nombramiento" accept="image/jpg,application/pdf,image/jpeg">
-                      </div>
-                    </div>
+          <ng-container *ngIf="loading; else formularioProv">
+            <div class="d-flex justify-content-center">
+              <div class="spinner-border text-primary" style="width: 7rem; height: 7rem;" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
 
-                    <div class="form-group row"
-                      *ngIf="registropcvForm.value.tipoProveedor=='1' || registropcvForm.value.tipoProveedor=='2' || registropcvForm.value.tipoProveedor=='3'">
-                      <label for="filDpi" class="col-sm-4 col-form-label">(*) DPI dueño o Representante legal </label>
-                      <div class="col-sm-5">
-                        <input #filDpi id="filDpi" type="file" ng2FileSelect [uploader]="uploader" class="form-control"
-                          (change)="onFileChanged('DPI')" matTooltipPosition="after" matTooltip="Ingrese DPI"
-                          matTooltipClass="custom-tooltip-blue" placeholder="DPI"
-                          accept="image/jpg,application/pdf,image/jpeg">
-                      </div>
-                    </div>
-                    <div class="form-group row"
-                      *ngIf="registropcvForm.value.tipoProveedor=='2' || registropcvForm.value.tipoProveedor=='3'">
-                      <label for="filPatente" class="col-sm-4 col-form-label">(*) Patente de sociedad y empresa</label>
-                      <div class="col-sm-5">
-                        <input #filPatente id="filPatente" type="file" ng2FileSelect [uploader]="uploader"
-                          class="form-control" (change)="onFileChanged('PATE')" matTooltipPosition="after"
-                          matTooltip="Ingrese Patente" matTooltipClass="custom-tooltip-blue" placeholder="Patente"
-                          accept="image/jpg,application/pdf,image/jpeg">
-                      </div>
-                    </div>
+            </div>
+          </ng-container>
+          <ng-template #formularioProv>
+            <div *ngIf="continua=='1' && !success">
+              <div class="form-group row">
+                <label for="" class="col-sm-2 col-form-label">Adjuntos Obligatorios</label>
+                <div class="col-sm-10">
+                  <div class="card">
+                    <div class="card-body">
 
-                    <div class="form-group row"
-                      *ngIf="registropcvForm.value.tipoProveedor=='1' || registropcvForm.value.tipoProveedor=='2' || registropcvForm.value.tipoProveedor=='3'">
-                      <label for="filRtu" class="col-sm-4 col-form-label">(*) Constancia de inscripcion y modificacion
-                        al registro tributario unificado</label>
-                      <div class="col-sm-5">
-                        <input #filRtu id="filRtu" type="file" ng2FileSelect [uploader]="uploader" class="form-control"
-                          (change)="onFileChanged('RTU')" matTooltipPosition="after" matTooltip="Ingrese RTU"
-                          matTooltipClass="custom-tooltip-blue" placeholder="Patente"
-                          accept="image/jpg,application/pdf,image/jpeg">
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <p>Estos documentos deben ir completos, por ejemplo el DPI debe ser escaneado a ambos lados.</p>
-                    </div>
-                    <div class="form-group row">
-
-                      <div class="col-sm-2">
-                        <div class="col-lg-12 text-center">
-                          <button class="btn btn-primary row" type="button" (click)="continuar()"
-                            matTooltipPosition="after" matTooltip="Continuar."
-                            matTooltipClass="custom-tooltip-blue">Continuar</button>
+                      <div class="form-group row">
+                        <label for="tipoProveedor" class="col-sm-2 col-form-label">(*) Tipo de proveedor</label>
+                        <div class="col-sm-10">
+                          <select id="tipoProveedor" class="form-control" formControlName="tipoProveedor">
+                            <option value="1">Pequeño contribuyente</option>
+                            <option value="2">Empresa Individual</option>
+                            <option value="3">Sociendad Anonima</option>
+                          </select>
                         </div>
                       </div>
-                    </div>
 
+                      <div class="form-group row">
+                        <label for="filFormulario" class="col-sm-4 col-form-label">(*) Formulario de registro</label>
+                        <div class="col-sm-5">
+                          <input #filFormulario id="filFormulario" type="file" ng2FileSelect [uploader]="uploader"
+                            class="form-control" (change)="onFileChanged('FORM')" matTooltipPosition="after"
+                            matTooltip="Ingrese su formulario de registro" matTooltipClass="custom-tooltip-blue"
+                            placeholder="Formulario de registro" accept="image/jpg,application/pdf,image/jpeg">
+                        </div>
+                        <a download="formulario" target="_blank" href="formulario.pdf">
+                          Descargar formulario
+                        </a>
 
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="continua=='2'  && !success">
-            <div class="form-group row">
-              <label for="filOtros" class="col-sm-2 col-form-label">Adjuntar otro documento</label>
-              <div class="col-sm-10">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="form-group row">
-                      <div class="col-sm-6">
-                        <input #filOtros id="filOtros" type="file" ng2FileSelect [uploader]="uploader"
-                          accept="image/jpg,application/pdf,image/jpeg" (change)="onFileChanged('OTRO')"
-                          class="form-control">
                       </div>
-                    </div>
-                    <!--div class="col-sm-4 text-left">
-          <button
-            class="btn btn-primary">Agregar Documento</button>
-          </div-->
-                    <div class="form-group row">
+                      <div class="form-group row" *ngIf="registropcvForm.value.tipoProveedor=='3'">
+                        <label for="filNombramiento" class="col-sm-4 col-form-label">(*) Nombramiento de representante
+                          legal</label>
+                        <div class="col-sm-5">
+                          <input #filNombramiento id="filNombramiento" type="file" ng2FileSelect [uploader]="uploader"
+                            class="form-control" (change)="onFileChanged('NOMB')" matTooltipPosition="after"
+                            matTooltip="Ingrese Nombramiento de representante" matTooltipClass="custom-tooltip-blue"
+                            placeholder="Nombramiento" accept="image/jpg,application/pdf,image/jpeg">
+                        </div>
+                      </div>
+
+                      <div class="form-group row"
+                        *ngIf="registropcvForm.value.tipoProveedor=='1' || registropcvForm.value.tipoProveedor=='2' || registropcvForm.value.tipoProveedor=='3'">
+                        <label for="filDpi" class="col-sm-4 col-form-label">(*) DPI dueño o Representante legal </label>
+                        <div class="col-sm-5">
+                          <input #filDpi id="filDpi" type="file" ng2FileSelect [uploader]="uploader"
+                            class="form-control" (change)="onFileChanged('DPI')" matTooltipPosition="after"
+                            matTooltip="Ingrese DPI" matTooltipClass="custom-tooltip-blue" placeholder="DPI"
+                            accept="image/jpg,application/pdf,image/jpeg">
+                        </div>
+                      </div>
+                      <div class="form-group row"
+                        *ngIf="registropcvForm.value.tipoProveedor=='2' || registropcvForm.value.tipoProveedor=='3'">
+                        <label for="filPatente" class="col-sm-4 col-form-label">(*) Patente de sociedad y
+                          empresa</label>
+                        <div class="col-sm-5">
+                          <input #filPatente id="filPatente" type="file" ng2FileSelect [uploader]="uploader"
+                            class="form-control" (change)="onFileChanged('PATE')" matTooltipPosition="after"
+                            matTooltip="Ingrese Patente" matTooltipClass="custom-tooltip-blue" placeholder="Patente"
+                            accept="image/jpg,application/pdf,image/jpeg">
+                        </div>
+                      </div>
+
+                      <div class="form-group row"
+                        *ngIf="registropcvForm.value.tipoProveedor=='1' || registropcvForm.value.tipoProveedor=='2' || registropcvForm.value.tipoProveedor=='3'">
+                        <label for="filRtu" class="col-sm-4 col-form-label">(*) Constancia de inscripcion y modificacion
+                          al registro tributario unificado</label>
+                        <div class="col-sm-5">
+                          <input #filRtu id="filRtu" type="file" ng2FileSelect [uploader]="uploader"
+                            class="form-control" (change)="onFileChanged('RTU')" matTooltipPosition="after"
+                            matTooltip="Ingrese RTU" matTooltipClass="custom-tooltip-blue" placeholder="Patente"
+                            accept="image/jpg,application/pdf,image/jpeg">
+                        </div>
+                      </div>
+
                       <div class="row">
-                        <div class="container">
-                          <table class="table">
-                            <thead>
-                              <tr>
-                                <th>Documentos adjuntos {{ uploader?.queue?.length }}</th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr *ngFor="let item of uploader.queue; let i = index">
-                                <td>{{item.file.name}}</td>
-                                <td>
-                                  <button class="btn btn-danger" (click)="onRemoveClicked(i)">Quitar</button>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
+                        <p>Estos documentos deben ir completos, por ejemplo el DPI debe ser escaneado a ambos lados.</p>
                       </div>
-                    </div>
+                      <div class="form-group row">
 
-                    <div class="form-group row">
-                      <div class="col-sm-2">
-                        <div class="col-lg-12 text-center">
-                          <button class="btn btn-primary row" type="button" (click)="regresar()"
-                            matTooltipPosition="after" matTooltip="Regresar."
-                            matTooltipClass="custom-tooltip-blue">Regresar</button>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="col-lg-12 text-center">
-                          <button class="btn btn-primary row" type="button" (click)="continuar()"
-                            matTooltipPosition="after" matTooltip="Continuar."
-                            matTooltipClass="custom-tooltip-blue">Continuar</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-
-              </div>
-
-            </div>
-          </div>
-
-          <div *ngIf="continua=='3'  && !success">
-
-            <div class="form-group row">
-              <label for="filOtros" class="col-sm-2 col-form-label">Datos para creación de usuario del portal de
-                Proveedores</label>
-              <div class="col-sm-10">
-                <div class="card">
-                  <div class="card-body">
-
-                    <div class="form-group row">
-                      <div class="col sm-6">
-                        <div class="row">
-                          <label for="cui" class="col-sm-4 col-form-label">(*) DPI </label>
-                          <div class="col-sm-8">
-                            <input id="cui" type="text" class="form-control" formControlName="cui" value="cui"
-                              [(ngModel)]="cui" matTooltipPosition="after" matTooltip="Ingrese DPI"
-                              matTooltipClass="custom-tooltip-blue" placeholder="DPI">
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    <div class="form-group row">
-                      <div class="col-sm-6">
-                        <div class="row">
-                          <div class="col-lg-6 text-center">
-                            <button class="btn btn-primary row" type="button" (click)="regresar()"
-                              matTooltipPosition="after" matTooltip="Regresar."
-                              matTooltipClass="custom-tooltip-blue">Regresar</button>
-                          </div>
-                          <div class="col-lg-6 text-center">
+                        <div class="col-sm-2">
+                          <div class="col-lg-12 text-center">
                             <button class="btn btn-primary row" type="button" (click)="continuar()"
                               matTooltipPosition="after" matTooltip="Continuar."
                               matTooltipClass="custom-tooltip-blue">Continuar</button>
                           </div>
                         </div>
+                      </div>
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="continua=='2'  && !success">
+              <div class="form-group row">
+                <label for="filOtros" class="col-sm-2 col-form-label">Adjuntar otro documento</label>
+                <div class="col-sm-10">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="form-group row">
+                        <div class="col-sm-6">
+                          <input #filOtros id="filOtros" type="file" ng2FileSelect [uploader]="uploader"
+                            accept="image/jpg,application/pdf,image/jpeg" (change)="onFileChanged('OTRO')"
+                            class="form-control">
+                        </div>
+                      </div>
+                      <!--div class="col-sm-4 text-left">
+            <button
+              class="btn btn-primary">Agregar Documento</button>
+            </div-->
+                      <div class="form-group row">
+                        <div class="row">
+                          <div class="container">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th>Documentos adjuntos {{ uploader?.queue?.length }}</th>
+                                  <th></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let item of uploader.queue; let i = index">
+                                  <td>{{item.file.name}}</td>
+                                  <td>
+                                    <button class="btn btn-danger" (click)="onRemoveClicked(i)">Quitar</button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group row">
+                        <div class="col-sm-2">
+                          <div class="col-lg-12 text-center">
+                            <button class="btn btn-primary row" type="button" (click)="regresar()"
+                              matTooltipPosition="after" matTooltip="Regresar."
+                              matTooltipClass="custom-tooltip-blue">Regresar</button>
+                          </div>
+                        </div>
+                        <div class="col-sm-2">
+                          <div class="col-lg-12 text-center">
+                            <button class="btn btn-primary row" type="button" (click)="continuar()"
+                              matTooltipPosition="after" matTooltip="Continuar."
+                              matTooltipClass="custom-tooltip-blue">Continuar</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+
+              </div>
+            </div>
+
+            <div *ngIf="continua=='3'  && !success">
+
+              <div class="form-group row">
+                <label for="filOtros" class="col-sm-2 col-form-label">Datos para creación de usuario del portal de
+                  Proveedores</label>
+                <div class="col-sm-10">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="form-group row">
+                        <div class="col sm-6">
+                          <div class="row">
+                            <label for="cui" class="col-sm-4 col-form-label">(*) DPI </label>
+                            <div class="col-sm-8">
+                              <input id="cui" type="text" class="form-control" formControlName="cui" value="cui"
+                                [(ngModel)]="cui" matTooltipPosition="after" matTooltip="Ingrese DPI"
+                                matTooltipClass="custom-tooltip-blue" placeholder="DPI">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <div class="col sm-6">
+                          <div class="row">
+                            <label for="cui" class="col-sm-4 col-form-label">Fecha Nombramiento</label>
+                            <div class="col-sm-8">
+
+                              <mat-form-field>
+                                <input matInput [matDatepicker]="fechaInicial" placeholder="Fecha Inicial" formControlName="fechaInicial">
+                                <mat-datepicker-toggle matSuffix [for]="fechaInicial"></mat-datepicker-toggle>
+                                <mat-datepicker #fechaInicial></mat-datepicker>
+                              </mat-form-field>
+
+                              <mat-form-field>
+                                <input matInput [matDatepicker]="fechaFinal" placeholder="Fecha Final" formControlName="fechaFinal">
+                                <mat-datepicker-toggle matSuffix [for]="fechaFinal"></mat-datepicker-toggle>
+                                <mat-datepicker #fechaFinal></mat-datepicker>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group row">
+                        <div class="col-sm-6">
+                          <div class="row">
+                            <div class="col-lg-6 text-center">
+                              <button class="btn btn-primary row" type="button" (click)="regresar()"
+                                matTooltipPosition="after" matTooltip="Regresar."
+                                matTooltipClass="custom-tooltip-blue">Regresar</button>
+                            </div>
+                            <div class="col-lg-6 text-center">
+                              <button class="btn btn-primary row" type="button" (click)="continuar()"
+                                matTooltipPosition="after" matTooltip="Continuar."
+                                matTooltipClass="custom-tooltip-blue">Continuar</button>
+                            </div>
+                          </div>
+
+                        </div>
 
                       </div>
 
                     </div>
-
                   </div>
                 </div>
+
               </div>
+
+
 
             </div>
 
 
-
-          </div>
-
-
-          <div *ngIf="continua=='4'  && !success">
-
-
-            <div class="form-group row">
-              <label for="" class="col-sm-2 col-form-label">Dirección</label>
-              <div class="col-sm-10">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="form-group row">
-                      <div class="col-sm-6">
-                        <div class="row">
-                          <label for="codigoDepartamento" class="col-sm-4 col-form-label">(*) Departamento</label>
-                          <div class="col-sm-8">
-                            <select id="codigoDepartamento" class="form-control" formControlName="codigoDepartamento"
-                              (change)="onDepartamentoChanged(codigoDepartamento)" matTooltipPosition="after"
-                              matTooltip="Ingrese departamento" matTooltipClass="custom-tooltip-blue"
-                              placeholder="Departamento">
-                              <option disabled selected>Escoger</option>
-                              <option value="{{departamento.codigoDepartamento}}"
-                                *ngFor="let departamento of departamentos">{{departamento.nombreDepartamento}}</option>
-                            </select>
+            <div *ngIf="continua=='4'  && !success">
+              <div class="form-group row">
+                <label for="" class="col-sm-2 col-form-label">Dirección</label>
+                <div class="col-sm-10">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="form-group row">
+                        <div class="col-sm-6">
+                          <div class="row">
+                            <label for="codigoDepartamento" class="col-sm-4 col-form-label">(*) Departamento</label>
+                            <div class="col-sm-8">
+                              <select id="codigoDepartamento" class="form-control" formControlName="codigoDepartamento"
+                                (change)="onDepartamentoChanged(codigoDepartamento)" matTooltipPosition="after"
+                                matTooltip="Ingrese departamento" matTooltipClass="custom-tooltip-blue"
+                                placeholder="Departamento">
+                                <option disabled selected>Escoger</option>
+                                <option value="{{departamento.codigoDepartamento}}"
+                                  *ngFor="let departamento of departamentos">{{departamento.nombreDepartamento}}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="row">
+                            <label for="codigoMunicipio" class="col-sm-4 col-form-label">(*) Municipio</label>
+                            <div class="col-sm-8">
+                              <select id="codigoMunicipio" class="form-control" formControlName="codigoMunicipio"
+                                matTooltipPosition="after" matTooltip="Ingrese municipio"
+                                matTooltipClass="custom-tooltip-blue" placeholder="Municipio">
+                                <option disabled selected>Escoger</option>
+                                <option value="{{municipio.codigoMunicipio}}" *ngFor="let municipio of municipios">
+                                  {{municipio.nombreMunicipio}}</option>
+                              </select>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-sm-6">
-                        <div class="row">
-                          <label for="codigoMunicipio" class="col-sm-4 col-form-label">(*) Municipio</label>
-                          <div class="col-sm-8">
-                            <select id="codigoMunicipio" class="form-control" formControlName="codigoMunicipio"
-                              matTooltipPosition="after" matTooltip="Ingrese municipio"
-                              matTooltipClass="custom-tooltip-blue" placeholder="Municipio">
-                              <option disabled selected>Escoger</option>
-                              <option value="{{municipio.codigoMunicipio}}" *ngFor="let municipio of municipios">
-                                {{municipio.nombreMunicipio}}</option>
-                            </select>
+                      <div class="form-group row">
+                        <label for="direccionDetalle" class="col-sm-2 col-form-label">(*) Direccion</label>
+                        <div class="col-sm-10">
+                          <input id="direccionDetalle" type="text" class="form-control"
+                            formControlName="direccionDetalle" matTooltipPosition="after" matTooltip="Ingrese direccion"
+                            matTooltipClass="custom-tooltip-blue" placeholder="Direccion">
+                        </div>
+                      </div>
+
+                      <div class="form-group row">
+                        <div class="col-sm-6">
+                          <div class="col-lg-12 text-center">
+                            <button class="btn btn-primary row" type="button" (click)="regresar()"
+                              matTooltipPosition="after" matTooltip="Regresar."
+                              matTooltipClass="custom-tooltip-blue">Regresar</button>
                           </div>
                         </div>
-                      </div>
-                    </div>
+                        <div class="col-sm-6" *ngIf="completado">
+                          <div class="col-lg-12 text-center">
+                            <button class="btn btn-primary" type="submit">Enviar solicitud</button>
+                            <mat-spinner style="margin:0 auto;" *ngIf="cargando"></mat-spinner>
+                          </div>
 
-
-
-                    <div class="form-group row">
-                      <label for="direccionDetalle" class="col-sm-2 col-form-label">(*) Direccion</label>
-                      <div class="col-sm-10">
-                        <input id="direccionDetalle" type="text" class="form-control" formControlName="direccionDetalle"
-                          matTooltipPosition="after" matTooltip="Ingrese direccion"
-                          matTooltipClass="custom-tooltip-blue" placeholder="Direccion">
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
-                      <div class="col-sm-6">
-                        <div class="col-lg-12 text-center">
-                          <button class="btn btn-primary row" type="button" (click)="regresar()" matTooltipPosition="after"
-                            matTooltip="Regresar." matTooltipClass="custom-tooltip-blue">Regresar</button>
                         </div>
                       </div>
-                      <div class="col-sm-6" *ngIf="completado">
-                        <div class="col-lg-12 text-center">
-                          <button class="btn btn-primary" type="submit">Enviar solicitud</button>
-                          <mat-spinner style="margin:0 auto;" *ngIf="cargando"></mat-spinner>
-                        </div>
-      
-                      </div>
-                    </div>
 
+                    </div>
                   </div>
                 </div>
+
+
+
               </div>
-
-
-             
             </div>
-          </div>
+          </ng-template>
+
 
         </form>
 

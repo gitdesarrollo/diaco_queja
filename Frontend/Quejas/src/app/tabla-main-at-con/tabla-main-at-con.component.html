@@ -95,6 +95,7 @@
 				<ngx-datatable-column name="Datos Completos" prop="completo_dato" [flexGrow]="2">
 					<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
 						<ng-container *ngIf="row.completo_datos === 'Datos Completos'">
+							
 							Datos Completos
 						</ng-container>
 						<ng-container *ngIf="row.completo_datos === 'Faltan
@@ -103,9 +104,15 @@
 						</ng-container>
 					</ng-template>
 				</ngx-datatable-column>
-				<ngx-datatable-column name="Acciones" sortable="false" prop="id_queja" [flexGrow]="4" >
+				<ngx-datatable-column name="Acciones" sortable="false" prop="id_queja" [flexGrow]="5" >
 					<ng-template let-row="row" let-value="value" ngx-datatable-cell-template >
 						<ng-container *ngIf="!flagAtConVerificador">
+							<button 
+								title="Conciliación Previa"
+								[ngClass]="downloadClassIcon()"
+								(click)="clickStopper($event);donwloadFileZip(row.quejanumero);">
+								<i class="fa fa-download fa-2x" aria-hidden="true"></i>
+							</button>
 							<button 
 								title="Conciliación Previa"
 								[ngClass]="changeClassIcon(row.tipoflujoguia.atcon_conc_previa)"
@@ -124,7 +131,7 @@
 								<button 
 									title="Comunicación Permanente"
 									[ngClass]="changeClassIcon(row.tipoflujoguia.atcon_com_permanente)" 
-									(click)="clickStopper($event);openComPermanente(value,row.quejanumero,1);">
+									(click)="clickStopper($event);openComPermanente(value,row.quejanumero,1, row.anio);">
 									<i class="fa fa-phone fa-2x" aria-hidden="true"></i>	
 								</button>
 								<button 

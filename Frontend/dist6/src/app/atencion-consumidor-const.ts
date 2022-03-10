@@ -1,24 +1,10 @@
 
-// export const BASE_SERVER   = 'http://gestorquejas.diaco.gob.gt/';
 export const BASE_SERVER   = 'http://localhost:8080/';
 // export const BASE_SERVER   = 'https://dev.mineco.gob.gt/';
 
- /*
- * Dev
- */
-//export const BASE_SERVER   = 'http://desagestorquejas.diaco.gob.gt/';
 export const BASE_URL_REST= BASE_SERVER + 'Quejas/rs/';
 /*--------------------------------------------------------- */
  
-/*
- * produccion
- */
-// export const BASE_SERVER   = 'http://gestorquejas.diaco.gob.gt/';
-// export const BASE_URL_REST= BASE_SERVER + 'diaco-int-web/rs/';
-/*--------------------------------------------------------- */
-
-
-//export const BASE_URL_REST= BASE_SERVER + 'diaco-int-web/rs/';
 export const BASE_VERIFICACION_DATOS_LINK=BASE_URL_REST	
 export const BASE_URL_REST_FILE=BASE_URL_REST;
 

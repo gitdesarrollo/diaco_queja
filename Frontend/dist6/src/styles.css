@@ -14,3 +14,13 @@ h2 {
 	color:#23ACC7;
 	font-size:150%;
 }
+
+
+mat-form-field {
+    margin-right: 12px;
+}
+
+
+.card-registro-prov {
+	max-width: 400px;
+}

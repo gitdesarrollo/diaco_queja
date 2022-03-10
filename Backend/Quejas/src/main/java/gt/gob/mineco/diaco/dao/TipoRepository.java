@@ -105,6 +105,7 @@ import gt.gob.mineco.diaco.service.SecurityManagerServiceImpl;
 import gt.gob.mineco.diaco.util.CedulaNotificacionDto;
 import gt.gob.mineco.diaco.util.Constants;
 import gt.gob.mineco.diaco.util.FormBusqueda;
+import gt.gob.mineco.diaco.util.FormConsumidorQuery;
 import gt.gob.mineco.diaco.util.FormUsuarioSrch;
 import gt.gob.mineco.diaco.util.FormViewMainQueja1;
 import gt.gob.mineco.diaco.util.FormViewMainQueja2;
@@ -351,6 +352,17 @@ public class TipoRepository {
     public List<TipoQueja> findAllAlertaExpiradoSPCorreo() {
         this.em.getEntityManagerFactory().getCache().evict(TipoQueja.class);
         return em.createNamedQuery("TipoQueja.findAllAlertaExpiradoSPCorreo").getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<TipoConsumidor> getConsumidorByQueja(FormConsumidorQuery queja) {
+        Query nq;
+        // String querystring = "select t.telefono, t.correo_electronico1, t.correo_electronico2 from diaco_consumidor t inner join diaco_queja q on q.id_consumidor = t.id_consumidor where q.no_queja = :queja and q.anio = :anio";
+        String querystring = "SELECT t from TipoConsumidor t inner join TipoQueja q where q.no_queja = :queja and q.anio = :anio";
+        nq = this.em.createQuery(querystring);
+        nq.setParameter("queja", Integer.parseInt(queja.getNo_queja()));
+        nq.setParameter("anio", Integer.parseInt(queja.getAnio()));
+        return nq.getResultList();
     }
 
     @SuppressWarnings("unchecked")

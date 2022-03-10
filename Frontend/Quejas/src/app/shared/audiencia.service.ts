@@ -34,7 +34,6 @@ export class AudienciaService {
 		let URL = this.urlParametro + GetParametro
 		return this._http.get(URL, this.httpOptions).pipe(
 			tap(response => {
-				console.log("parametro", response)
 			})
 		)
 
@@ -42,7 +41,6 @@ export class AudienciaService {
 
 	getData(idqueja, no_audiencia): Observable<any> {
 		var LocalURL = this.baseUrl + '/' + idqueja + '/' + no_audiencia + '/' + this._submitFormService.Get_token();
-		// console.log(LocalURL);
 		return this._http.get(LocalURL, this.httpOptions).pipe(map(this.extractData));
 	}
 	
@@ -54,37 +52,32 @@ export class AudienciaService {
 
 	getCorrelResolF(): Observable<any> {
 		var LocalURL = this.baseUrl + '/resol_final/getcorrelativo/' + this._submitFormService.Get_token();
-		// console.log(LocalURL);
 		return this._http.get(LocalURL, this.httpOptions).pipe(map(this.extractData));
 	}
 
 	getallResAudiencia(idqueja): Observable<any> {
 		var LocalURL = this.baseUrl + '/res_audiencia/getall/' + idqueja + '/' + this._submitFormService.Get_token();
-		// console.log(LocalURL);
 		return this._http.get(LocalURL, this.httpOptions).pipe(map(this.extractData));
 	}
 
 	getResAudiencia(id): Observable<any> {
 		var LocalURL = this.baseUrl + '/res_audiencia/get/' + id + '/' + this._submitFormService.Get_token();
-		// console.log(LocalURL);
 		return this._http.get(LocalURL, this.httpOptions).pipe(map(this.extractData));
 	}
 
 	getallResFinal(idqueja): Observable<any> {
 		var LocalURL = this.baseUrl + '/res_final/getall/' + idqueja + '/' + this._submitFormService.Get_token();
-		// console.log(LocalURL);
 		return this._http.get(LocalURL, this.httpOptions).pipe(map(this.extractData));
 	}
 
 	getResFinal(id): Observable<any> {
 		var LocalURL = this.baseUrl + '/res_final/get/' + id + '/' + this._submitFormService.Get_token();
-		// console.log(LocalURL);
 		return this._http.get(LocalURL, this.httpOptions).pipe(map(this.extractData));
 	}
 
 	addData(frmData): Observable<any> {
 		return this._http.post<any>(this.baseUrl, frmData, this.httpOptions).pipe(
-			tap((item) => console.log('Registro Guardado', frmData)),
+			tap((item) => {}),
 			catchError(this.handleError<any>('Registro Guardado'))
 		);
 	}
@@ -92,66 +85,54 @@ export class AudienciaService {
 
 	saveResAudiencia(tipo, fecha_notif, ccitacion, no_queja) {
 		var LocalURL = this.baseUrl + '/res_audiencia/add';
-		// console.log(LocalURL);
 		var frmData = this.ObjaJSON_ResAudiencia(tipo, fecha_notif, ccitacion, no_queja);
-		// console.log(frmData);
 		return this._http.post<any>(LocalURL, frmData, this.httpOptions).pipe(
-			tap((item) => console.log('Registro Guardado')),
+			tap((item) => {}),
 			catchError(this.handleError<any>('Registro Guardado'))
 		);
 	}
 
 	updResAudiencia(tipo, fecha_notif, ccitacion, no_queja, id) {
 		var LocalURL = this.baseUrl + '/res_audiencia/upd';
-		// console.log(LocalURL);
 		var frmData = this.ObjaJSONUpd_ResAudiencia(tipo, fecha_notif, ccitacion, no_queja, id);
-		// console.log(frmData);
 		return this._http.post<any>(LocalURL, frmData, this.httpOptions).pipe(
-			tap((item) => console.log('Registro Guardado')),
+			tap((item) => {}),
 			catchError(this.handleError<any>('Registro Guardado'))
 		);
 	}
 
 	DelResAudiencia(id, no_queja) {
 		var LocalURL = this.baseUrl + '/res_audiencia/del';
-		// console.log(LocalURL);
 		var frmData = this.ObjaJSONDel_ResAudiencia(id, no_queja);
-		// console.log(frmData);
 		return this._http.post<any>(LocalURL, frmData, this.httpOptions).pipe(
-			tap((item) => console.log('Registro Eliminado')),
+			tap((item) => {}),
 			catchError(this.handleError<any>('Registro Eliminado'))
 		);
 	}
 
 	saveResFinal(tipo, no_queja, motivo, monto) {
 		var LocalURL = this.baseUrl + '/res_final/add';
-		// console.log(LocalURL);
 		var frmData = this.ObjaJSON_ResFinal(tipo, no_queja, motivo, monto);
-		// console.log(frmData);
 		return this._http.post<any>(LocalURL, frmData, this.httpOptions).pipe(
-			tap((item) => console.log('Registro Guardado')),
+			tap((item) => {}),
 			catchError(this.handleError<any>('Registro Guardado'))
 		);
 	}
 
 	updResFinal(tipo, no_queja, id) {
 		var LocalURL = this.baseUrl + '/res_final/upd';
-		// console.log(LocalURL);
 		var frmData = this.ObjaJSONUpd_ResFinal(tipo, no_queja, id);
-		// console.log(frmData);
 		return this._http.post<any>(LocalURL, frmData, this.httpOptions).pipe(
-			tap((item) => console.log('Registro Guardado')),
+			tap((item) => {}),
 			catchError(this.handleError<any>('Registro Guardado'))
 		);
 	}
 
 	DelResFinal(id, no_queja) {
 		var LocalURL = this.baseUrl + '/res_final/del';
-		// console.log(LocalURL);
 		var frmData = this.ObjaJSONDel_ResFinal(id, no_queja);
-		// console.log(frmData);
 		return this._http.post<any>(LocalURL, frmData, this.httpOptions).pipe(
-			tap((item) => console.log('Registro Eliminado')),
+			tap((item) => {}),
 			catchError(this.handleError<any>('Registro Eliminado'))
 		);
 	}
@@ -172,7 +153,6 @@ export class AudienciaService {
 			// TODO: send the error to remote logging infrastructure
 			// console.error(error); // log to console instead
 			// TODO: better job of transforming error for user consumption
-			// console.log('${operation} failed: ${error.message}');
 			// Let the app keep running by returning an empty result.
 			return of(result as T);
 		};
@@ -277,7 +257,6 @@ export class AudienciaService {
 			fechaInicio: this.dateFormatCalendario(fechaInicio),
 			fechaFinal: this.dateFormatCalendario(fechaFin)
 		};
-		// console.log("locarray "+JSON.stringify(locarray));
 
 		return JSON.stringify(locarray);
 	}
@@ -293,10 +272,8 @@ export class AudienciaService {
 
 	//se obtiene el calendario
 	ObtenerCalendario(frmData): Observable<any> {
-		// console.log('json enviado '+frmData);
 		return this._http.post<any>(this.baseUrlCalendario, frmData, this.httpOptions).pipe(
 			tap((item) => {
-			console.log("valores devueltos ", item)
 			})
 			,
 			catchError(this.handleError<any>('Registro Guardado'))
@@ -314,7 +291,6 @@ export class AudienciaService {
 			fechaInicio: fechaInicio,
 			fechaFinal: fechaFin
 		};
-		// console.log("locarray "+JSON.stringify(locarray));
 
 		return JSON.stringify(locarray);
 	}

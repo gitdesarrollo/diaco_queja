@@ -485,6 +485,7 @@ public class TipoConsumidor implements Serializable {
         if(getTipo_consumidor() == 7) 
         { 
           nombrecompleto=  this. getNombreCompletoJuridico();
+
         }
         else
         {
@@ -522,15 +523,15 @@ public class TipoConsumidor implements Serializable {
             JsonObject temp = new JsonObject();
             temp.addProperty("id_consumidor",this.id_consumidor);
             String nombrecompleto=this.nombre1+' '+this.nombre2+' '+this.nombre3+' '+this.apellido1+' '+this.apellido2+' '+this.apellido_casada;
-           temp.addProperty("nombre1",this.nombre1);
-           temp.addProperty("nombre2",this.nombre2);
-           temp.addProperty("nombre3",this.nombre3);
-           temp.addProperty("apellido1",this.apellido1);
-           temp.addProperty("apellido2",this.apellido2);
-           temp.addProperty("apellido_casada",this.apellido_casada);
+            temp.addProperty("nombre1",this.nombre1);
+            temp.addProperty("nombre2",this.nombre2);
+            temp.addProperty("nombre3",this.nombre3);
+            temp.addProperty("apellido1",this.apellido1);
+            temp.addProperty("apellido2",this.apellido2);
+            temp.addProperty("apellido_casada",this.apellido_casada);
             temp.addProperty("nombre_consumidor",nombrecompleto.replaceAll("null", "").replaceAll("\\s+", " ").trim());
             temp.addProperty("nit",this.nit_consumidor);
-             temp.addProperty("nit_consumidor",this.nit_consumidor);
+            temp.addProperty("nit_consumidor",this.nit_consumidor);
             temp.addProperty("doc_identificacion",this.documento_identificacion);
             temp.addProperty("documento_identificacion",this.documento_identificacion);
             temp.addProperty("direccion_avenida", this.direccion_avenida);
@@ -548,7 +549,10 @@ public class TipoConsumidor implements Serializable {
             temp.addProperty("tipo_consumidor",this.tipo_consumidor);
             temp.addProperty("id_etnia",this.id_etnia);
             temp.addProperty("id_pais",this.id_pais);
-             temp.addProperty("tipo_documento",this.tipo_documento);
+            temp.addProperty("tipo_documento",this.tipo_documento);
+            temp.addProperty("telefono_principal", this.telefono);
+            temp.addProperty("Correo_principal", this.correo_electronico1);
+            temp.addProperty("Correo_secundario", this.correo_electronico2);
             return temp.toString()+",";
         }
         

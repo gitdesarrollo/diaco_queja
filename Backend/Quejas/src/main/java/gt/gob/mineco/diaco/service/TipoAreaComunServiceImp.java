@@ -7148,6 +7148,8 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
         List<TipoQueja> lst_queja_vyv = tipoDao.findAllExpiradoVyVCorreo();
         List<TipoQueja> lst_queja_sp = tipoDao.findAllExpiradoSPCorreo();
 
+        System.out.println("jefe.." + jefe_atcon.getEmail());
+
         //correo atencion al consumidor
         try {
             transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
@@ -7169,6 +7171,7 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
                 cuerpo = cuerpo + listatxtquejas;
                 String[] mailstring = GetEmailStringUsuario(jefe_atcon.getEmail());
                 boolean sendmail = saveEmailEnviar(mailstring, Constants.REG_DIACO_FUENTE_EMAIL_QUEJA_EXPIRADA_ATCON, cuerpo); // fuente de email 8
+                System.out.println("cuerpo.." + cuerpo);
             }
             transaction.commit();
         } catch (Exception e) {

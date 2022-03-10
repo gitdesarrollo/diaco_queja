@@ -473,6 +473,7 @@ export class PrimeraAudienciaComponent implements OnInit {
 			if (response['value']){
 				this.lst_audiencia = JSON.parse('[' + response["value"].slice(0, -1) + ']');
 				this.lst_audiencia.forEach(v => {
+					console.log("Audiencias 2", this.lst_audiencia)
 					if(Number(v.es_primera_seg_audiencia) === 1){
 						this.btnPrimeraAudiencia = true
 						// this.tblPrimeraAudiencia = true
@@ -801,7 +802,7 @@ export class PrimeraAudienciaComponent implements OnInit {
 					if (tempstr != null) {
 						//console.log(retvalue);
 						this.registros = JSON.parse('[' + retvalue["value"].slice(0, -1) + ']');
-						// this.MostrarMensaje("Registro link ",this.registros)
+						this.MostrarMensaje("Registros 2 ",this.registros)
 						this.Leer4Registros(false);
 
 					} else {

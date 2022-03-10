@@ -5,6 +5,7 @@
  */
 package gt.gob.mineco.diaco.programado;
 
+import gt.gob.mineco.diaco.service.AlertasNotificacionService;
 import gt.gob.mineco.diaco.service.TipoAreaComunService;
 import gt.gob.mineco.diaco.dao.TipoRepository;
 import javax.inject.Inject;
@@ -50,6 +51,8 @@ public class RuteoAtencionConsumidor {
     private TipoRepository tipoDao;
     @Inject
     private TipoAreaComunService AreaComun;
+    @Inject
+    private AlertasNotificacionService alertas;
     
     
     //@Schedule(hour="*/1", minute="0", second="0", persistent=false)
@@ -77,6 +80,12 @@ public class RuteoAtencionConsumidor {
         //tarea programada
         /**/
 
+
+        // @Schedule(hour = "*", minute = "*", second = "*/5")
+        // public void TestProgramado(){
+        //     AreaComun.EmailQuejasExpiradas();
+        //     // System.out.println("Tiempo Programado.." );
+        // }
     
     
 }

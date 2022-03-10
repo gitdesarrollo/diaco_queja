@@ -39,8 +39,8 @@ public class TipoRegistrosQuejaRs {
     }
  
     @GET
-    @Path("/compress/{id}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("/zipFiles/{id}")
+    @Produces("application/zip")
     public Response getCompressFile(@PathParam("id") String id) {
     //    return tipoRegQuejaService.getRegistroFichaQueja(idqueja);
         return tipoRegQuejaService.getCompressFilesByQueja(id);

@@ -29,7 +29,6 @@ private baseUrlRegistro:string=BASE_URL_REST+'registros-queja';
   
   getData(noqueja, flujo){	  
 	  var localURL=this.baseUrl+'/'+noqueja+'/'+this._submitFormService.Get_token()+'/'+flujo;
-	  console.log(localURL);
 	  //return this._http.get(localURL,this.options).map((response:Response)=>response.json()).catch(this.errorHandler);
 	  return this._http.get(localURL,this.httpOptions).pipe(map(this.extractData));
   }
@@ -37,19 +36,16 @@ private baseUrlRegistro:string=BASE_URL_REST+'registros-queja';
   private handleError<T> (operation = 'operation', result?: T) {
 		return (error: any): Observable<T> => {
 			// TODO: send the error to remote logging infrastructure
-			console.error(error); // log to console instead
 			// TODO: better job of transforming error for user consumption
-			console.log('${operation} failed: ${error.message}');
 			// Let the app keep running by returning an empty result.
 			return of(result as T);
 		};
   }
     
   addData (estatus, consumidor, via, no_queja, flujo): Observable<any> {
-		console.log(this.ObjaJSON_add(estatus, consumidor, via, no_queja, flujo));
 		//return this._http.post(this.baseUrl, this.ObjaJSON_add(estatus, consumidor, via, no_queja), this.options).map((response:Response)=>response.json()).catch(this.errorHandler);
 		return this._http.post<any>(this.baseUrl, this.ObjaJSON_add(estatus, consumidor, via, no_queja, flujo), this.httpOptions).pipe(
-			tap((item) => console.log('Added item')),
+			tap((item) => {}),
 			catchError(this.handleError<any>('Add Data'))
 		);
   }
@@ -57,8 +53,7 @@ private baseUrlRegistro:string=BASE_URL_REST+'registros-queja';
   ObjaJSON_add(estatus, observaciones, via, no_queja, flujo){
 	  var locarray = { usuario_operacion:this._submitFormService.Get_userid(),estatus: this.TrimandCut(estatus,399), observaciones: this.TrimandCut(observaciones,399), via:via, id_queja: no_queja, id_sede_diaco_operacio:1,
   id_departamento_interno:1, token: this._submitFormService.Get_token(), id_flujo: flujo };
-	  //console.log(bitacora+'-'+consumidor+'-'+no_queja);
-	  //console.log(locarray);
+
 	  return JSON.stringify(locarray);
   }
   

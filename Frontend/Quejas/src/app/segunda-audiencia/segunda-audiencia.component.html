@@ -22,13 +22,25 @@
 	</div>
 	<ng-container *ngIf="flagformvisible >= 4; else NoForm">
 		<div class="container-fluid">
-			<!---<ng-container *ngIf="!flag_Resultado">--->
 			<div class="row">
 				<div class="col-lg-1">
 					&nbsp;
 				</div>
 			</div>
-			<ng-container *ngIf="flagEditable">
+			<ng-container *ngIf="!flagEditable">
+				<div class="row">
+					<div class="col-lg-12">
+						(Edici&oacute;n Deshabilitada)
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-1">
+						&nbsp;
+					</div>
+				</div>
+			</ng-container>
+
+			<!-- <ng-container *ngIf="flagEditable">
 				<form (ngSubmit)="onSubmit()" [formGroup]="ProgramarForm">
 					<div class="row">
 						<div class="col-lg-1">
@@ -92,217 +104,291 @@
 					</div>
 				</div>
 				<mat-divider></mat-divider>
-			</ng-container>
+			</ng-container> -->
 
-			<!--Calendario -->
-			<ng-container *ngIf="flagEditable">
-
-
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-lg-12">
-							<button color="green" class="btn btn-apgreen" type="button">Audiencias Proveedor</button>
-							<button color="blue" class="btn btn-calendario" type="button">Audiencias Conciliador</button>
-							<p-fullCalendar [events]="events" [options]="options"></p-fullCalendar>
-						</div>
-					</div>
-				</div>
-			</ng-container>
-			<!--Calendario -->
-
-			<ng-container *ngIf="!flagEditable">
+			<div class="container-fluid">
 				<div class="row">
-					<div class="col-lg-12">
-						(Edici&oacute;n Deshabilitada)
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-lg-1">
-						&nbsp;
-					</div>
-				</div>
-			</ng-container>
-
-			<ng-container *ngIf="flag_Programado">
-				<div class="row">
-					<div class="col-lg-1">
-						&nbsp;
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-lg-12">
-						<label><b>Dpto:</b> {{lbl_dpto}}, <b>Municipio:</b> {{lbl_muni}}, <b>Sede DIACO:</b>
-							{{lbl_sede}} </label>
-					</div>
-				</div>
-				<div class="row">
-					<ng-container *ngFor="let thisItem of lst_programado">
-						<ng-container *ngIf="thisItem.activo === false; else Bold">
-							<div class="col-lg-6">
-								<label>Fecha: {{thisItem.fecha_programada | date: 'dd/MM/yyyy'}}, Hora:
-									{{thisItem.fecha_programada | date: 'h:mm a'}} (reprogramado)</label>
+					<div class="col-sm">
+						<!--Calendario -->
+						<ng-container *ngIf="flagEditable">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-lg-12">
+										<button color="green" class="btn btn-apgreen" type="button">Proveedor</button>
+										<button color="blue" class="btn btn-calendario" type="button">Conciliador</button>
+										<p-fullCalendar [events]="events" [options]="options"></p-fullCalendar>
+									</div>
+								</div>
 							</div>
 						</ng-container>
-						<ng-template #Bold>
-							<div class="col-lg-6">
-								<label><b>Fecha: {{thisItem.fecha_programada | date: 'dd/MM/yyyy'}}, </b><b>Hora:
-										{{thisItem.fecha_programada | date: 'h:mm a'}}</b></label>
-							</div>
-						</ng-template>
-					</ng-container>
-				</div>
-				<ng-container *ngIf="flagValidadorRegistros">
-					<ng-container *ngIf="flagEditable">
-						<ng-container *ngIf="id_audiencia != 0">
+						<!--Calendario -->
+						<ng-container *ngIf="flag_Programado">
 							<div class="row">
-								<div class="col-lg-4">
-									<ng-container *ngIf="flagBoton2; else NoButton2">
-										<button class="btn btn-primary btn-block" type="button"
-											(click)="Generar4Registros()">Generar los 6 registros</button>
+								<div class="col-lg-1">
+									&nbsp;
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<label><b>Dpto:</b> {{lbl_dpto}}, <b>Municipio:</b> {{lbl_muni}}, <b>Sede DIACO:</b>
+										{{lbl_sede}} </label>
+								</div>
+							</div>
+							<div class="row">
+								<ng-container *ngFor="let thisItem of lst_programado">
+									<ng-container *ngIf="thisItem.activo === false; else Bold">
+										<div class="col-lg-6">
+											<label>Fecha: {{thisItem.fecha_programada | date: 'dd/MM/yyyy'}}, Hora:
+												{{thisItem.fecha_programada | date: 'h:mm a'}} (reprogramado)</label>
+										</div>
 									</ng-container>
-									<ng-template #NoButton2>
-										<span><i class="icon"></i></span>&nbsp;
+									<ng-template #Bold>
+										<div class="col-lg-6">
+											<label><b>Fecha: {{thisItem.fecha_programada | date: 'dd/MM/yyyy'}}, </b><b>Hora:
+													{{thisItem.fecha_programada | date: 'h:mm a'}}</b></label>
+										</div>
 									</ng-template>
+								</ng-container>
+							</div>
+						</ng-container>
+					</div>
+					<div class="col-sm">
+
+						<ng-container *ngIf="flag_Programado">
+							<ng-container *ngIf="flagValidadorRegistros">
+								<ng-container>
+									<div class="row">
+										<!-- primera Audiencia -->
+										
+										<div class="col-12" >
+											<div class="card" *ngIf="btnPrimeraAudiencia">
+												<div class="card-header text-white bg-primary">
+													Documentos Primera Audiencia
+												</div>
+												<div class="card-body">
+													<div class="text-center pt-5 pb-5" *ngIf="tblPrimeraAudiencia == false; else tablaCompletaAudiencia">
+														<div class="spinner-border" style="width: 5rem; height: 5rem;" role="status" >
+															<span class="sr-only">Loading...</span>
+														</div>
+													</div>
+													<ng-template #tablaCompletaAudiencia>
+														<table class="table table-striped table-bordered mt-3" >
+															<thead>
+																<tr>
+																<th class="col-1">#</th>
+																<th class="col-8">Descripción</th>
+																<th class="col-md-auto">Archivo</th>
+																</tr>
+															</thead>
+															<tbody>
+															<tr>
+																<td class="col-1">1</td>
+																<td class="col-8">Consumidor</td>
+																<td class="col-md-auto text-center">
+																	<a #replink (click)="openCedulaCitaCons();" [routerLink]="" class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+																	<a #replink (click)="openCedulaNotifiCons();" [routerLink]="" class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+																</td>
+															</tr>
+															<tr>
+																<td class="col-1">2</td>
+																<td class="col-8">Proveedor</td>
+																<td  class="col-md-auto text-center">
+																	<a #replink (click)="openCedulaCitaProv();" [routerLink]=""	class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+																	<a #replink (click)="openCedulaNotifiProv();" [routerLink]="" class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+																</td>
+															</tr>
+															</tbody>
+														</table>
+													</ng-template>
+												</div>
+											</div>								
+										</div>
+										<!--  Segunda Audiencia -->
+										<div class="col-12" >
+											<div class="card" *ngIf="btnSegundaAudiencia">
+												<div class="card-header text-white bg-primary">
+													Documentos Segunda Audiencia
+												</div>
+												<div class="card-body">
+													<div class="text-center pt-5 pb-5" *ngIf="tblSegundaAudiencia == false; else tablaCompleta">
+														<div class="spinner-border" style="width: 5rem; height: 5rem;" role="status" >
+															<span class="sr-only">Loading...</span>
+														</div>
+													</div>
+													<ng-template #tablaCompleta>
+														<table class="table table-striped table-bordered mt-3" >
+															<thead>
+																<tr>
+																<th class="col-1">#</th>
+																<th class="col-8">Descripción</th>
+																<th class="col-md-auto">Archivo</th>
+																</tr>
+															</thead>
+															<tbody>
+															<tr>
+																<td class="col-1">1</td>
+																<td class="col-8">Consumidor</td>
+																<td class="col-md-auto text-center">
+																	<a #replink (click)="openCedulaCitaConJur();" [routerLink]="" class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+																	<a #replink (click)="openCedulaNotiConJur();" [routerLink]="" class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+																</td>
+															</tr>
+															<tr>
+																<td class="col-1">2</td>
+																<td class="col-8">Proveedor</td>
+																<td  class="col-md-auto text-center">
+																	<a #replink (click)="openCedulaCitaProJur();" [routerLink]="" class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+																	<a #replink (click)="openCedulaNotiProJur();" [routerLink]="" class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+																</td>
+															</tr>
+															<tr>
+																<td class="col-1">3</td>
+																<td class="col-8">Notificación por correo y Resolución por Correo</td>
+																<td  class="col-md-auto text-center">
+																	<a #replink (click)="openCedulaCitaNotiResCorreo();" [routerLink]="" class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+																	<a #replink (click)="openCedulaCitaNotiCitCorreo();" [routerLink]="" class="formlink"><i class="fa fa-file-pdf-o fa-2x mr-4" style="font-size:38px;color:red" aria-hidden="true"></i></a>
+																</td>
+															</tr>
+															</tbody>
+														</table>
+													</ng-template>
+												</div>
+											</div>
+										</div>
+									</div>
+								</ng-container>
+							</ng-container>
+							
+							<!-- <ng-container *ngIf="flagValidadorRegistros">
+								<ng-container *ngIf="flagEditable">
+									<ng-container *ngIf="id_audiencia != 0">
+										<div class="row">
+											<div class="col-lg-4">
+												<ng-container *ngIf="flagBoton2; else NoButton2">
+													<button class="btn btn-primary btn-block" type="button"
+														(click)="Generar4Registros()">Generar los 6 registros</button>
+												</ng-container>
+												<ng-template #NoButton2>
+													<span><i class="icon"></i></span>&nbsp;
+												</ng-template>
+											</div>
+										</div>
+									</ng-container>
+								</ng-container>
+								<div class="row">
+									<div class="col-lg-1" style="height:10px;">
+										&nbsp;
+									</div>
+								</div>
+								<ng-container *ngIf="routerlink1 != ''">
+									<div class="row">
+										<div class="col-lg-6">
+											<label>Citación Consumidor: <a #replink (click)="openCedulaCitaConJur();"
+													[routerLink]="" class="formlink"> {{linkdescription1}}</a></label>
+										</div>
+										<div class="col-lg-6">
+											<label>Citacion Proveedor: <a #replink (click)="openCedulaCitaProJur();" [routerLink]=""
+													class="formlink"> {{linkdescription2}}</a></label>
+										</div>
+									</div>
+			
+									<div class="row">
+										<div class="col-lg-6">
+											<label>Notificación Consumidor: <a #replink (click)="openCedulaNotiConJur();"
+													[routerLink]="" class="formlink"> {{linkdescription3}}</a></label>
+										</div>
+										<div class="col-lg-6">
+											<label>Notificación Proveedor: <a #replink (click)="openCedulaNotiProJur();"
+													[routerLink]="" class="formlink"> {{linkdescription4}}</a></label>
+										</div>
+			
+									</div>
+			
+									<div class="row">
+										<div class="col-lg-6">
+											<label>Cedula Notificación de Resolución por Correo:<a #replink
+													(click)="openCedulaCitaNotiResCorreo();" [routerLink]="" class="formlink">
+													{{linkdescription5}}</a></label>
+										</div>
+										<div class="col-lg-6">
+											<label>Cedula Notificación de Citación por Correo: <a #replink
+													(click)="openCedulaCitaNotiCitCorreo();" [routerLink]="" class="formlink">
+													{{linkdescription6}}</a></label>
+										</div>
+									</div>
+								</ng-container>
+							</ng-container> -->
+							<ng-container *ngIf="!flagValidadorRegistros">
+								<div class="row">
+									<div class="col-lg-12">
+										<b>{{msg_deshabilitado}}</b>
+									</div>
+								</div>
+							</ng-container>
+							<div class="row">
+								<div class="col-lg-1">
+									&nbsp;
 								</div>
 							</div>
 						</ng-container>
-					</ng-container>
-					<div class="row">
-						<div class="col-lg-1" style="height:10px;">
-							&nbsp;
-						</div>
-					</div>
-					<ng-container *ngIf="routerlink1 != ''">
-						<div class="row">
-							<div class="col-lg-6">
-								<label>Citación Consumidor: <a #replink (click)="openCedulaCitaConJur();"
-										[routerLink]="" class="formlink"> {{linkdescription1}}</a></label>
-							</div>
-							<div class="col-lg-6">
-								<label>Citacion Proveedor: <a #replink (click)="openCedulaCitaProJur();" [routerLink]=""
-										class="formlink"> {{linkdescription2}}</a></label>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-6">
-								<label>Notificación Consumidor: <a #replink (click)="openCedulaNotiConJur();"
-										[routerLink]="" class="formlink"> {{linkdescription3}}</a></label>
-							</div>
-							<div class="col-lg-6">
-								<label>Notificación Proveedor: <a #replink (click)="openCedulaNotiProJur();"
-										[routerLink]="" class="formlink"> {{linkdescription4}}</a></label>
-							</div>
-
-						</div>
-
-						<div class="row">
-							<div class="col-lg-6">
-								<label>Cedula Notificación de Resolución por Correo:<a #replink
-										(click)="openCedulaCitaNotiResCorreo();" [routerLink]="" class="formlink">
-										{{linkdescription5}}</a></label>
-							</div>
-							<div class="col-lg-6">
-								<label>Cedula Notificación de Citación por Correo: <a #replink
-										(click)="openCedulaCitaNotiCitCorreo();" [routerLink]="" class="formlink">
-										{{linkdescription6}}</a></label>
-							</div>
-						</div>
-					</ng-container>
-				</ng-container>
-				<ng-container *ngIf="!flagValidadorRegistros">
-					<div class="row">
-						<div class="col-lg-12">
-							<b>{{msg_deshabilitado}}</b>
-						</div>
-					</div>
-				</ng-container>
-				<div class="row">
-					<div class="col-lg-1">
-						&nbsp;
 					</div>
 				</div>
-				<mat-divider></mat-divider>
-				<div class="row">
-					<div class="col-lg-1">
-						&nbsp;
-					</div>
+			</div>
+			<mat-divider></mat-divider>
+			<div class="row">
+				<div class="col-lg-1">
+					&nbsp;
 				</div>
-				<ng-container *ngIf="flagEditable; else ReadOnly1">
-					<form (ngSubmit)="onSubmit2()" [formGroup]="CerrarForm">
-						<div class="row">
-							<div class="col-lg-2">
-								<label><b>Resultado:</b></label>
-							</div>
-							<div class="col-lg-7">
-								<select class="form-control" formControlName="resultado">
-									<option *ngFor="let x of cmb_resultado" [value]="x.id_resultado_audiencia">
-										{{x.descripcion}}</option>
-								</select>
-							</div>
-							<div *ngIf="ResultadoCtrl.invalid && (ResultadoCtrl.dirty && ResultadoCtrl.touched)"
-								class="col-lg-12">
-								<div *ngIf="ResultadoCtrl.errors.required" class="alert alert-danger col-lg-12">
-									Debe seleccionar un resultado
-								</div>
-							</div>
-						</div>
-					</form>
-				</ng-container>
-				<ng-template #ReadOnly1>
+			</div>
+			<ng-container *ngIf="flagEditable; else ReadOnly1">
+				<form (ngSubmit)="onSubmit2()" [formGroup]="CerrarForm">
 					<div class="row">
 						<div class="col-lg-2">
 							<label><b>Resultado:</b></label>
 						</div>
 						<div class="col-lg-7">
-							{{lbl_resultado}}
+							<select class="form-control" formControlName="resultado">
+								<option *ngFor="let x of cmb_resultado" [value]="x.id_resultado_audiencia">
+									{{x.descripcion}}</option>
+							</select>
+						</div>
+						<div *ngIf="ResultadoCtrl.invalid && (ResultadoCtrl.dirty && ResultadoCtrl.touched)"
+							class="col-lg-12">
+							<div *ngIf="ResultadoCtrl.errors.required" class="alert alert-danger col-lg-12">
+								Debe seleccionar un resultado
+							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-lg-1">
-							&nbsp;
-						</div>
-					</div>
-				</ng-template>
+				</form>
+			</ng-container>
+			<ng-template #ReadOnly1>
 				<div class="row">
-					<ng-container *ngIf="flagEditable">
-						<div class="col-lg-4">
-							<ng-container *ngIf="flagBoton3; else NoButton3">
-								<button class="btn btn-primary btn-block" type="button" [disabled]="!CerrarForm.valid"
-									(click)="Save_Audiencia()">Guardar Resultado de Audiencia</button>
-							</ng-container>
-							<ng-template #NoButton3>
-								<span><i class="icon"></i></span>&nbsp;
-							</ng-template>
-						</div>
-					</ng-container>
-					<div class="col-lg-4">
-						<button class="btn btn-secondary btn-block" (click)="closeMoveDialog(1)" type="button">Ir a
-							Movimiento de Expediente</button>
+					<div class="col-lg-2 mb-4">
+						<label><b>Resultado:</b></label>
+					</div>
+					<div class="col-lg-7">
+						{{lbl_resultado}}
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-lg-1" style="height:5px;">
+					<div class="col-lg-1">
 						&nbsp;
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-lg-4">
-						<button class="btn btn-secondary btn-block" (click)="closeMoveDialog(3)" type="button">Ir a
-							Conciliación</button>
+			</ng-template>
+			<div class="row">
+				<ng-container *ngIf="flagEditable">
+					<div class="col-lg-4 mt-4 mb-4">
+						<ng-container *ngIf="flagBoton3; else NoButton3">
+							<button class="btn btn-primary btn-block" type="button" [disabled]="!CerrarForm.valid"
+								(click)="Save_Audiencia()">Guardar Resultado de Audiencia</button>
+						</ng-container>
+						<ng-template #NoButton3>
+							<span><i class="icon"></i></span>&nbsp;
+						</ng-template>
 					</div>
-					<div class="col-lg-4">
-						<button class="btn btn-secondary btn-block" (click)="closeMoveDialog(4)" type="button">Ir a
-							Archivar</button>
-					</div>
-					<ng-container *ngIf="data.Flujo == 1">
-						<div class="col-lg-4">
-							<button class="btn btn-secondary btn-block" (click)="closeMoveDialog(5)" type="button">Ir a
-								Incomparecencia</button>
-						</div>
-					</ng-container>
-				</div>
-			</ng-container>
+				</ng-container>
+			</div>
 			<div *ngIf="flagInsertInfo" class="alert alert-success col-lg-12" [@EnterLeave]="'flyIn'">
 				Se guardo la información exitosamente.
 			</div>

@@ -9,10 +9,13 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Null;
 
 import gt.gob.mineco.diaco.dao.TipoRepository;
 
 import gt.gob.mineco.diaco.util.ResponseRs;
+
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import java.io.File;
@@ -107,23 +110,15 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
     @Inject
     private bitacoraPdfService bitacoraPdf;
 
-    private final String URL_PATH = "D:/www/diaco_java/diaco_queja/files";
-
-    //private static final String OOOEXEFOLDER;
-//     private final String oooExeFolder = "/opt/libreoffice6.1/program";//PRODUCCION
-    //private final String oooExeFolder = "/usr/lib/libreoffice/program";
-    private final String oooExeFolder="C:/Program Files/LibreOffice/program"; //DESARROLLO
     
-     
-    /* local---*/ 
-    private final String workingDir="D:/www/FILESERVER/diacoRegistros1/";
-//     private final String workingDir= "/home/diaco/Documentos/FILESERVER/diacoRegistros1/"; //PRODUCCION
-      
-    //private final String workingDir="C:/Users/jjaguilal/Documents/FILESERVER/diacoRegistros/"; //DESARROLLO
+        // private final String URL_PATH = "/home/diaco/Documentos/FILESERVER/FILESERVER/files"; //PRODUCCION
+        // private final String oooExeFolder = "/opt/libreoffice6.1/program";//PRODUCCION
+        // private final String workingDir= "/home/diaco/Documentos/FILESERVER/diacoRegistros1/"; //PRODUCCION
 
-    /*  static 
-    { OOOEXEFOLDER = "/opt/libreoffice6.1/program";
-    }*/
+        private final String URL_PATH = "D:/www/diaco_java/diaco_queja/files"; //DESARROLLO
+        private final String oooExeFolder="C:/Program Files/LibreOffice/program"; //DESARROLLO
+        private final String workingDir="D:/www/FILESERVER/diacoRegistros1/"; //DESARROLLO
+    
 
         public String CreateDirectory(String no_queja){
                 String nameDirectory = URL_PATH + '/' + no_queja;
@@ -249,26 +244,22 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
         }
 
         public Response getCompressFilesByQueja(String idqueja){
-                ResponseBuilder response = Response.ok();
                 try {
-                        // compressZip(idqueja);
-                        zipFolder(URL_PATH+"/"+idqueja, URL_PATH+"/boleta_zip/"+idqueja+".zip");
-                        System.out.println("comprimir");
-                        return response.build();
+                        String pathZip = URL_PATH+"/boleta_zip/"+idqueja+".zip";
+                        zipFolder(URL_PATH+"/"+idqueja, pathZip);
+                        File f = new File(pathZip);
+                        if (!f.exists()) {
+                                throw new WebApplicationException(404);
+                        }
 
-                        // ResponseBuilder response = Response.ok();
-                        // response.type("application/zip");
-                        // response.header("Content-Disposition", "attachment;filename=queja.docx");
-                        // return response.build();
-
-                        // resp.setContentType("application/zip");
-                        // resp.setContentType("application/zip");
-                        // resp.addHeader("Content-Disposition", "attachment; filename=" + ("pdf_"+PDFIndex+"_"+PDFtime+".zip"));
-                        // resp.setContentLength((int) zipFile.length());
+                        return Response.ok(f)
+                        .header("Content-Disposition",
+                                "attachment; filename="+idqueja+".zip").build();
                 } catch (Exception e) {
-                        System.out.println("error "+ e);
-                        return response.build();
+                        ResponseBuilder res = Response.noContent();
+                        return res.build();
                 }
+
         }
 
  /*DIACO-AQ-FO-02*/

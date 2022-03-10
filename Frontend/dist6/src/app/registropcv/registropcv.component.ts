@@ -29,6 +29,9 @@ import swal from 'sweetalert2'
 })
 export class RegistropcvComponent implements OnInit {
 
+	
+	
+
 	registropcvForm: FormGroup;
 	@ViewChild('filDpi')
 	filDpi: ElementRef;
@@ -43,11 +46,12 @@ export class RegistropcvComponent implements OnInit {
 	continua: string = "0";
 	paso: number;
 	completado: boolean = false;
+	loading: boolean;
 
 	uploader = new FileUploader({
 		itemAlias: 'document',
-		allowedMimeType: ['image/jpg', 'application/pdf','image/jpeg'] ,
-		maxFileSize: 5*1024*1024 // 5 MB
+		allowedMimeType: ['image/jpg', 'application/pdf', 'image/jpeg'],
+		maxFileSize: 5 * 1024 * 1024 // 5 MB
 	});
 
 	otro: FileItem;
@@ -106,8 +110,6 @@ export class RegistropcvComponent implements OnInit {
 	 * @param captchaResponse resultado del captcha
 	 */
 	resolved(captchaResponse: string) {
-		console.log(`Resolved captcha with response ${captchaResponse}:`);
-
 		this.$valorCaptcha = captchaResponse;
 		if (captchaResponse) {
 			this.isValid = true;
@@ -115,11 +117,9 @@ export class RegistropcvComponent implements OnInit {
 		} else {
 			this.isValid = false;
 		}
-		console.log(`isValid ${this.isValid}:`);
 	}
 
 	ngOnInit() {
-		// cargar departamentos
 		this.departamentosSubscription = this.departamentosService.fetchData().subscribe(
 			res => {
 				this.departamentos = res.value;
@@ -131,19 +131,13 @@ export class RegistropcvComponent implements OnInit {
 
 
 	initregistropcvForm(proveedor: Proveedorpcv) {
-		console.log("cui initRegistro " + this.cui);
 		if (proveedor) {
 			this.nombre_ = proveedor.nombre;
 			this.telefono_ = proveedor.telefono;
-			if	(proveedor.correo) {
-/* 				var caracteres = proveedor.correo.split('',2);
-				for (let index = 0; index < caracteres.length; index++) {
-					const element = caracteres[index];
-					console.log(element);
-				} */
+			if (proveedor.correo) {
 				if (proveedor.correo.includes('F#')) {
-					proveedor.correo = proveedor.correo.replace('F#','');
-							
+					proveedor.correo = proveedor.correo.replace('F#', '');
+
 				}
 			};
 
@@ -151,17 +145,17 @@ export class RegistropcvComponent implements OnInit {
 			this.cui = proveedor.cui;
 		}
 		this.registropcvForm = new FormGroup({
-			'nit': new FormControl(proveedor ? proveedor.nit : '', Validators.required)
-			, 'telefono': new FormControl(proveedor ? this.telefono_ : '', Validators.required)
-			, 'email': new FormControl(proveedor ? this.correo_ : '', Validators.required)
-			, 'codigoDepartamento': new FormControl(proveedor ? proveedor.idDepartamento : '', Validators.required)
-			, 'codigoMunicipio': new FormControl(proveedor ? proveedor.idMunicipio : '', Validators.required)
-			, 'direccionDetalle': new FormControl(proveedor ? proveedor.direccion : '', Validators.required)
-			//,'nombre' : new FormControl(proveedor ? proveedor.nombre : '', Validators.required)
-			//,'razonSocial' : new FormControl(proveedor ? proveedor.razonSocial : '', Validators.required)
-			, 'cui': new FormControl(proveedor ? this.cui : '', Validators.required)
-			, 'tipoProveedor': new FormControl(1, Validators.required)
-			, 'recaptcha': new FormControl('', Validators.required)
+			'nit': new FormControl(proveedor ? proveedor.nit : '', Validators.required),
+			'telefono': new FormControl(proveedor ? this.telefono_ : '', Validators.required),
+			'email': new FormControl(proveedor ? this.correo_ : '', Validators.required),
+			'codigoDepartamento': new FormControl(proveedor ? proveedor.idDepartamento : '', Validators.required),
+			'codigoMunicipio': new FormControl(proveedor ? proveedor.idMunicipio : '', Validators.required),
+			'direccionDetalle': new FormControl(proveedor ? proveedor.direccion : '', Validators.required),
+			'fechaInicial' : new FormControl(new Date()),
+			'fechaFinal' : new FormControl((new Date()).toISOString()),
+			'cui': new FormControl(proveedor ? this.cui : '', Validators.required),
+			'tipoProveedor': new FormControl(1, Validators.required),
+			'recaptcha': new FormControl('', Validators.required)
 		});
 		if (proveedor) {
 			// seleccionar departamento
@@ -180,7 +174,7 @@ export class RegistropcvComponent implements OnInit {
 
 	onFileChanged(type: string) {
 		if (type == 'FORM') {
-			console.log('this.uploader.queue.length '+this.uploader.queue.length);
+			console.log('this.uploader.queue.length ' + this.uploader.queue.length);
 			if (this.formulario) {
 				let formularioItem = this.uploader.queue[this.formularioIndex];
 				this.uploader.removeFromQueue(formularioItem);
@@ -210,7 +204,7 @@ export class RegistropcvComponent implements OnInit {
 			this.patenteIndex = this.uploader.queue.length - 1;
 		} else if (type == 'RTU') {
 			if (this.rtu) {
-				
+
 				let rtuItem = this.uploader.queue[this.rtuIndex];
 				this.uploader.removeFromQueue(rtuItem);
 			}
@@ -244,7 +238,6 @@ export class RegistropcvComponent implements OnInit {
 	}
 
 	public onSubmit() {
-		console.log("submit " + this.cui)
 
 		let proveedor: Proveedorpcv = new Proveedorpcv();
 		if (this.registropcvForm.value.nit == "" || this.registropcvForm.value.nit == undefined) {
@@ -260,15 +253,12 @@ export class RegistropcvComponent implements OnInit {
 		if (this.registropcvForm.value.email == "" || this.registropcvForm.value.email == undefined) {
 			this.mjsError += "- Ingrese correo.  " + "\r\n";
 		} else {
-			/* proveedor.correoNotif = this.correo_; */
 			proveedor.correoNotif = this.registropcvForm.value.email;
 		}
 
 		if (this.cui == "" || this.cui == undefined) {
 			this.mjsError += "- Ingrese CUI del dueño o Representante legal.  " + "\r\n";
 		} else {
-			console.log("this.cui " + this.cui);
-			console.log("this.existingProveedor.cui " + this.existingProveedor.cui);
 			if (this.existingProveedor.cui != undefined || this.existingProveedor.cui != null) {
 				proveedor.cui = this.existingProveedor.cui;
 			} else {
@@ -341,9 +331,6 @@ export class RegistropcvComponent implements OnInit {
 		if (this.mjsError == '') {
 
 		} else {
-			//alert(this.mjsError);
-			//aalruanoe - 16.02.2020
-			//se cambia el manejo de mensajes de error
 			this.Alerta("Advertencia", this.mjsError);
 			this.mjsError = "";
 			return false;
@@ -353,20 +340,15 @@ export class RegistropcvComponent implements OnInit {
 		proveedor.id = this.existingProveedor.id;
 		proveedor.razonSocial = this.existingProveedor.razonSocial;
 		proveedor.telefono = this.existingProveedor.telefono;
-		/* proveedor.correo = this.existingProveedor.correo; */
 		proveedor.correo = this.registropcvForm.value.email;
 		proveedor.notaRechazo = this.existingProveedor.notaRechazo;
 		proveedor.estado = (this.existingProveedor.estado ? this.existingProveedor.estado : 'P');
 		proveedor.tipo_proveedor = this.registropcvForm.value.tipoProveedor;
-		console.log('a grabar proveedor ')
-		console.log(proveedor);		
-		this.cargando=true;
-		this.proveedoresService.saveDataPCV(proveedor).subscribe(			
+		this.cargando = true;
+		this.proveedoresService.saveDataPCV(proveedor).subscribe(
 			(retvalue) => {
-
 				if (retvalue) {
 					var tempstr = retvalue['value'];
-
 					if (tempstr != null && tempstr != '') {
 						//this.registrodata=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
 						//this.vanio = tempstr.anio;
@@ -377,53 +359,31 @@ export class RegistropcvComponent implements OnInit {
 							// this.success = true;
 							this.uploader.onBeforeUploadItem = (removeItem) => {
 								for (let i = 0; i < this.uploader.queue.length; i++) {
-									//console.log("modifica url - inicio");
-									//console.log(i);
 									let removeItem = this.uploader.queue[i];
 									if (removeItem == this.dpi) {
-										//console.log("cambia url dpi");
 										this.uploader.queue[i].url = BASE_URL_REST_FILE2 + 'proveedores/upload?id_proveedor=' + this.vidproveedor + "&id_categoria_imagen=" + 16 + "&correo=0&data=0";
-										//console.log(this.uploader.queue[i].url);
-										//console.log(removeItem);
 									} else {
 										if (removeItem == this.formulario) {
-											//console.log("cambia url formulario");
 											this.uploader.queue[i].url = BASE_URL_REST_FILE2 + 'proveedores/upload?id_proveedor=' + this.vidproveedor + "&id_categoria_imagen=" + 14 + "&correo=0&data=0";
-											//console.log(this.uploader.queue[i].url);	
-											//console.log(removeItem);
 										} else {
 											if (removeItem == this.nombramiento) {
-												//console.log("cambia url nombramiento");
 												this.uploader.queue[i].url = BASE_URL_REST_FILE2 + 'proveedores/upload?id_proveedor=' + this.vidproveedor + "&id_categoria_imagen=" + 15 + "&correo=0&data=0";
-												//console.log(this.uploader.queue[i].url);	
-												//console.log(removeItem);
 											} else {
 												if (removeItem == this.patente) {
-													//console.log("cambia url patente");
 													this.uploader.queue[i].url = BASE_URL_REST_FILE2 + 'proveedores/upload?id_proveedor=' + this.vidproveedor + "&id_categoria_imagen=" + 17 + "&correo=0&data=0";
-													//console.log(this.uploader.queue[i].url);	
-													//console.log(removeItem);
 												} else {
 													if (removeItem == this.rtu) {
-														//console.log("cambia url patente");
 														this.uploader.queue[i].url = BASE_URL_REST_FILE2 + 'proveedores/upload?id_proveedor=' + this.vidproveedor + "&id_categoria_imagen=" + 22 + "&correo=0&data=0";
-														//console.log(this.uploader.queue[i].url);	
-														//console.log(removeItem);
 													} else {
-														//console.log("cambia url otro");
 														this.uploader.queue[i].url = BASE_URL_REST_FILE2 + 'proveedores/upload?id_proveedor=' + this.vidproveedor + "&id_categoria_imagen=" + 1 + "&correo=0&data=0";
-														//console.log(this.uploader.queue[i].url);
-														//console.log(removeItem);
 													}
-												} // remove patente
-											} // remove nombramiento
-										} // remove formulario
-									} //remove dpi
-									//console.log("modifica url - fin");	
+												}
+											}
+										}
+									}
 								}
 
 							}
-							//console.info("ingreso files");
 							this.uploader.setOptions({
 								itemAlias: 'file'
 							});
@@ -432,9 +392,6 @@ export class RegistropcvComponent implements OnInit {
 								// finalizo la carga de todos los archivos
 								///this.vidimagen = this.vidimagen - 1;
 								this.operation.next(retvalue.value);
-
-
-								console.info("ingreso files onclomplete", estado);
 								if (estado) {
 									this.success = true;
 									this.completado = false;
@@ -445,47 +402,33 @@ export class RegistropcvComponent implements OnInit {
 
 									this.Alerta("exito", null);
 								} else {
-									//this.success = false;									
-									//alert("Ocurrio un error al cargar sus archivos, por favor verifique.  Gracias.");
-									//aalruanoe 18.02.2020
-									//se cambia la forma de presentar los mensajes de error
-									this.cargando=false;
+									this.cargando = false;
 									this.Alerta("Error", "Ocurrio un error al cargar sus archivos, por favor verifique.  Gracias.");
 								}
 							};
 							this.uploader.onCompleteItem = (item, uploadResponse, status, headers) => {
 								// finalizo la carga de un archivo
-								//this.vidimagen = this.vidimagen - 1;
-								//console.info("ingreso files oncompleteitem",status);
 								if (status == 0) {
-									//this.success = false;
 									estado = false;
 								} else {
-									//this.success = true;
 								}
 							};
 
 							this.uploader.uploadAll();
-							//console.info("ingreso files uploadall");
 						} else {
 							this.operation.next(retvalue.value);
 						}
 					} else {
-						////console.log('no llego');
-						this.cargando=false;
+						this.cargando = false;
 					}
 				} else {
-					this.cargando=false;
-					console.log('Rest service response ERROR.');
+					this.cargando = false;
 				}
 
 
 			}
 
 		);
-		//console.info(this.vsecuencia);
-		//console.info(this.vanio);
-
 	}
 	/**
 	 * alruanoe
@@ -510,7 +453,7 @@ export class RegistropcvComponent implements OnInit {
 		this.completado = false;
 		this.errorCorreo = false;
 		this.errorTelefono = false;
-		this.cargando=false;
+		this.cargando = false;
 		//variable que valida el captcha
 		this.isValid = false;
 		//variable que guarda el cui del representate legal o propietario
@@ -547,7 +490,6 @@ export class RegistropcvComponent implements OnInit {
 
 	public onDepartamentoChanged(_departamento: number) {
 		// cargar municipios
-		//console.log("depto ",_departamento);
 		this.municipiosSubscription = this.departamentosService.fetchMunicipios(_departamento != undefined ? _departamento : this.registropcvForm.value.codigoDepartamento).subscribe(
 			res => {
 				this.municipios = res.value;
@@ -567,76 +509,72 @@ export class RegistropcvComponent implements OnInit {
 	}
 
 	/**Obtener pdf instructivo */
-/*	generarPdf(seccion: string) {    
-   
-		var data = document.getElementById(seccion);  
-		html2canvas(data).then(canvas => {  
-		  // Few necessary setting options  
-		  var imgWidth = 208;   
-		  var pageHeight = 295;    
-		  var imgHeight = canvas.height * imgWidth / canvas.width;  
-		  var heightLeft = imgHeight;    
-		  const contentDataURL = canvas.toDataURL('image/png')  
-		  let pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
-		  var position = 0;  
-		  pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
-		  pdf.save('instructivo_'+seccion+'.pdf'); // Generated PDF   
-		});  
-	
-	  }*/
+	/*	generarPdf(seccion: string) {    
+	   
+			var data = document.getElementById(seccion);  
+			html2canvas(data).then(canvas => {  
+			  // Few necessary setting options  
+			  var imgWidth = 208;   
+			  var pageHeight = 295;    
+			  var imgHeight = canvas.height * imgWidth / canvas.width;  
+			  var heightLeft = imgHeight;    
+			  const contentDataURL = canvas.toDataURL('image/png')  
+			  let pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF  
+			  var position = 0;  
+			  pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)  
+			  pdf.save('instructivo_'+seccion+'.pdf'); // Generated PDF   
+			});  
+		
+		  }*/
 
 	/***
 	  busca nit en servicio de SAT
 	***/
 	public findByNITtoSAT() {
-		console.log('findByNITtoSAT ');
-		let pnit = this.registropcvForm.value.nit;
-		
-		this.completado = true;
-		pnit=pnit.replace('-','').toUpperCase();
 
-		console.log('nit modificado '+pnit);
-		this.proveedoresService.fetchDataByWsProveedor(pnit).subscribe(
-			(response) => {
+		this.loading = !this.loading
 
-				console.log("response ");
-				console.log(response)
-				let tempstr = response['value'];
+		if (this.registropcvForm.value.nit == null || this.registropcvForm.value.nit === "") {
+			this.Alerta("Error", "El campo NIT no puede ser NULL o VACIO");
+			this.loading = !this.loading
+		} else {
+			let pnit = this.registropcvForm.value.nit;
 
-				console.log("tempstr ");
-				console.log(tempstr);
-				if (tempstr != null || tempstr != undefined) {
+			this.completado = true;
+			pnit = pnit.replace('-', '').toUpperCase();
+			this.proveedoresService.fetchDataByWsProveedor(pnit).subscribe(
+				(response) => {
+					let tempstr = response['value'];
+					if (tempstr != null || tempstr != undefined) {
 
-					console.info("existe", tempstr);
-					this.initregistropcvForm(tempstr);
-					this.existingProveedor = tempstr;
-					if (this.existingProveedor.telefono == null || this.existingProveedor.telefono == undefined || this.existingProveedor.telefono == " ") {
-						this.errorTelefono = true;
-						this.Alerta("ErrorTelefono", null);
+						this.initregistropcvForm(tempstr);
+						this.existingProveedor = tempstr;
+						this.loading = !this.loading
+						if (this.existingProveedor.telefono == null || this.existingProveedor.telefono == undefined || this.existingProveedor.telefono == " ") {
+							this.errorTelefono = true;
+							this.Alerta("ErrorTelefono", null);
+
+						} else {
+							if (this.existingProveedor.correo == null || this.existingProveedor.correo == undefined || this.existingProveedor.correo == " ") {
+								this.errorCorreo = true;
+								this.Alerta("ErrorCorreo", null);
+							} else {
+								this.continua = "1";
+								this.paso = 1;
+								this.completado = true;
+							}
+						}
 
 					} else {
-						if (this.existingProveedor.correo == null || this.existingProveedor.correo == undefined || this.existingProveedor.correo == " ") {
-							this.errorCorreo = true;
-							this.Alerta("ErrorCorreo", null);
-						} else {
-							this.continua = "1";
-							console.log('this.continua ' + this.continua);
-							this.paso = 1;
-							this.completado = true;
-						}
+						this.Alerta("Error", "No existe información para el NIT ingresado, por favor verifique. Gracias");
+						this.loading = !this.loading
+						this.registropcvForm.reset();
+						this.completado = false;
 					}
-
-				} else {
-
-					//aalruanoe 18.02.2020
-					//se cambia la forma de presentar el error.
-					this.Alerta("Error", "No existe información para el NIT ingresado, por favor verifique. Gracias");
-					this.registropcvForm.reset();
-					this.completado = false;
 				}
-			}
-		);
-		//console.info("findByTokenProveedor end ",this.quejasService.quejat);
+			);
+
+		}
 	}
 
 
@@ -687,7 +625,7 @@ export class RegistropcvComponent implements OnInit {
 			}
 
 			if (tipo == 'exito') {
-				swal.fire({					
+				swal.fire({
 					icon: 'success',
 					title: 'Su solicitud ha sido registrada exitosamente.',
 					showConfirmButton: false,

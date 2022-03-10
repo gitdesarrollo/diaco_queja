@@ -14,6 +14,7 @@ import { SubmitFormService } from './submit-form.service'
 })
 export class SeguridadService {
 	private baseUrl:string=BASE_URL_REST+'users';
+	private baseUrlZip:String=BASE_URL_REST;
 	private httpOptions = {
 	  headers: new HttpHeaders({
 		'content-type':'application/json; charset=iso-8859-1'
@@ -59,6 +60,15 @@ export class SeguridadService {
 		);
   }
   
+
+  downloadFileZip(strQueja): Observable<any>{
+	  var Url = this.baseUrlZip + 'registros-queja/zipFiles/' + strQueja;
+	  return this._http.get(Url, { responseType: 'blob' }).pipe(
+		  tap(item => {}),
+		  catchError(this.handleError<any>('error'))
+	  )
+  }
+
   VerifyToken (token): Observable<any> {
 		//console.log(this.ObjaJSON_token(token));
 		var localURL=this.baseUrl+'/token';

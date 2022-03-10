@@ -89,7 +89,7 @@ export class ArchivarQuejaComponent implements OnInit {
 			conclusion:  this.conclusionCtrl,
 			comentario:  this.comentarioCtrl,
 		});
-		this.montoCtrl.setValue('0.00');
+		this.montoCtrl.setValue('1.00');
 		this.LoadCmbPOA();
 		this.LoadCmbRazon();
 		this.SetSecTimerForm();
