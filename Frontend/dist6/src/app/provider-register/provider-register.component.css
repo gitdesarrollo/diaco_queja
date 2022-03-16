@@ -1,0 +1,23 @@
+nav.navbar{
+	background-color: #00284d !important;
+}
+
+.input-nit{
+    display: flex;
+    flex-direction: column;
+}
+
+.input-nit > *{
+    width: 100%;
+}
+
+.search-button-row button,
+.search-button-row a {
+  margin-right: 8px;
+}
+
+.wrapper {
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+}

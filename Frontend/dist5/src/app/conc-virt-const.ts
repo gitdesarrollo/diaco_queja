@@ -6,9 +6,9 @@ export const BASE_URL_FILE='http://gestorquejas.diaco.gob.gt/file-web-quejaini/r
 
 //PRODUCCION JJ
 //export const BASE_SERVER   = 'https://gestorquejas.diaco.gob.gt/';
-export const BASE_SERVER   = 'http://gestorquejas.diaco.gob.gt/';
+// export const BASE_SERVER   = 'http://gestorquejas.diaco.gob.gt/';
 //export const BASE_SERVER   = 'http://localhost:8080/';
-//export const BASE_SERVER   = 'https://dev.mineco.gob.gt/';
+export const BASE_SERVER   = 'https://dev.mineco.gob.gt/';
 export const BASE_URL_REST = BASE_SERVER + 'web-quejaini/rs/';
 export const BASE_URL_FILE = BASE_SERVER + 'web-quejaini/rs/';
 export const BASE_URL_REST_FILE = BASE_URL_FILE;

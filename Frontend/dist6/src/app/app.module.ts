@@ -30,9 +30,24 @@ import { SoapService } from './shared/soap.service';
 
 
 import {
-  MatInputModule, MatButtonModule, MatSelectModule, MatIconModule, MatTooltipModule, MatDialogModule, MatPaginatorModule, MatTableModule, MatSortModule, MatPaginatorIntl,MatDatepickerModule, MatNativeDateModule  
-  , MatCardModule, MatToolbarModule
+  MatInputModule, 
+  MatButtonModule, 
+  MatSelectModule, 
+  MatIconModule, 
+  MatTooltipModule, 
+  MatDialogModule, 
+  MatPaginatorModule, 
+  MatTableModule, 
+  MatSortModule, 
+  MatPaginatorIntl,
+  MatDatepickerModule, 
+  MatNativeDateModule, 
+  MatCardModule, 
+  MatToolbarModule
 } from '@angular/material';
+
+
+
 import { RegistropcvComponent } from './registropcv/registropcv.component';
 import { RevisionquejaComponent } from './revisionqueja/revisionqueja.component';
 import { RegistronotprevComponent } from './registronotprev/registronotprev.component';

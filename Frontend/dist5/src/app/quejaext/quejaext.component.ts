@@ -585,7 +585,8 @@ export class QuejaextComponent implements OnInit {
 									confirmButtonText: `Regresar`,
 									showConfirmButton: true,
 									
-								})/* .then((result) => {
+								})
+								/* .then((result) => {
 									
 									if (result.isConfirmed) {
 									  Swal.fire('Saved!', '', 'success')

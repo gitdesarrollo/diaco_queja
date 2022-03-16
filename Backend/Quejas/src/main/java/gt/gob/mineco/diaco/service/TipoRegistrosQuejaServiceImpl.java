@@ -111,13 +111,13 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
     private bitacoraPdfService bitacoraPdf;
 
     
-        // private final String URL_PATH = "/home/diaco/Documentos/FILESERVER/FILESERVER/files"; //PRODUCCION
-        // private final String oooExeFolder = "/opt/libreoffice6.1/program";//PRODUCCION
-        // private final String workingDir= "/home/diaco/Documentos/FILESERVER/diacoRegistros1/"; //PRODUCCION
+        private final String URL_PATH = "/home/diaco/Documentos/FILESERVER/FILESERVER/files"; //PRODUCCION
+        private final String oooExeFolder = "/opt/libreoffice6.1/program";//PRODUCCION
+        private final String workingDir= "/home/diaco/Documentos/FILESERVER/diacoRegistros1/"; //PRODUCCION
 
-        private final String URL_PATH = "D:/www/diaco_java/diaco_queja/files"; //DESARROLLO
-        private final String oooExeFolder="C:/Program Files/LibreOffice/program"; //DESARROLLO
-        private final String workingDir="D:/www/FILESERVER/diacoRegistros1/"; //DESARROLLO
+        // private final String URL_PATH = "D:/www/diaco_java/diaco_queja/files"; //DESARROLLO
+        // private final String oooExeFolder="C:/Program Files/LibreOffice/program"; //DESARROLLO
+        // private final String workingDir="D:/www/FILESERVER/diacoRegistros1/"; //DESARROLLO
     
 
         public String CreateDirectory(String no_queja){

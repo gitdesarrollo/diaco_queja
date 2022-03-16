@@ -17,6 +17,9 @@ import { BuscaprovComponent}  from './buscaprov/buscaprov.component';
 
 import {QuejaprComponent }  from './quejapr/quejapr.component';
 
+
+import { ProviderRegisterComponent } from './provider-register/provider-register.component'
+
 const routes: Routes = [
 	//{ path: '', redirectTo: '/consumidor', pathMatch: 'full' },
   //{ path: 'mainConcVirt', component: MainConcVirtualComponent },
@@ -31,7 +34,8 @@ const routes: Routes = [
 	,{ path: 'consumidor/:dato/:id', component: ConsumidorComponent }
 	,{ path: 'consumidor/:dato/:id/:queja', component: ConsumidorComponent }
 	,{ path: 'pquejaini/:dato/:id', component: PquejainiComponent }
-	,{ path: 'quejapr/:dato', component: QuejaprComponent }
+	,{ path: 'quejapr/:dato', component: QuejaprComponent },
+	{ path:'registro-proveedor', component: ProviderRegisterComponent}
 ];
 
 @NgModule({
