@@ -189,6 +189,7 @@ export class SubmitFormService {
 				rol=2;
 			}else if(thisitem['perfil']=='Administrador'){
 				rol=3;
+				this.atcon_verificador=2;
 			}else if(thisitem['perfil']=='Verificador'){
 				rol=2;
 				this.atcon_verificador=1;

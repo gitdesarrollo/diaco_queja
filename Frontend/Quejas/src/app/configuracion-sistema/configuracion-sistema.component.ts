@@ -44,6 +44,8 @@ export class ConfiguracionSistemaComponent implements OnInit {
 	atcon_expirardiasCtrl: FormControl;
 	atcon_alertadiasCtrl: FormControl;
 	atcon_verifdatosCtrl: FormControl;
+	atcon_primera_audienciaCtrl: FormControl;
+	atcon_segunda_audienciaCtrl: FormControl;
 	jur_expirardiasCtrl: FormControl;
 	jur_alertadiasCtrl: FormControl;
 	vyv_expirardiasCtrl: FormControl;
@@ -81,6 +83,8 @@ export class ConfiguracionSistemaComponent implements OnInit {
 	atcon_expirardiasCtrl: FormControl;
 	atcon_alertadiasCtrl: FormControl;
 	atcon_verifdatosCtrl: FormControl;
+	atcon_primera_audienciaCtrl : FormControl;
+	atcon_segunda_audienciaCtrl: FormControl;
 	jur_expirardiasCtrl: FormControl;
 	jur_alertadiasCtrl: FormControl;
 	vyv_expirardiasCtrl: FormControl;
@@ -99,6 +103,8 @@ export class ConfiguracionSistemaComponent implements OnInit {
 	  this.atcon_expirardiasCtrl =  new FormControl('',Validators.required);
 	  this.atcon_alertadiasCtrl =  new FormControl('',Validators.required);
 	  this.atcon_verifdatosCtrl =  new FormControl('',Validators.required);
+	  this.atcon_primera_audienciaCtrl  =  new FormControl('',Validators.required);
+	  this.atcon_segunda_audienciaCtrl  =  new FormControl('',Validators.required);
 	  this.jur_expirardiasCtrl =  new FormControl('',Validators.required);
 	  this.jur_alertadiasCtrl =  new FormControl('',Validators.required);
 	  this.vyv_expirardiasCtrl =  new FormControl('',Validators.required);
@@ -118,6 +124,8 @@ export class ConfiguracionSistemaComponent implements OnInit {
 		atcon_expirardias: this.atcon_expirardiasCtrl,
 		atcon_alertadias: this.atcon_alertadiasCtrl,
 		atcon_verifdatos: this.atcon_verifdatosCtrl,
+		atcon_primera_audiencia: this.atcon_primera_audienciaCtrl,
+		atcon_segunda_audiencia: this.atcon_segunda_audienciaCtrl,
 		jur_expirardias: this.jur_expirardiasCtrl,
 		jur_alertadias: this.jur_alertadiasCtrl,
 		vyv_expirardias: this.vyv_expirardiasCtrl,
@@ -189,6 +197,8 @@ export class ConfiguracionSistemaComponent implements OnInit {
 		this.atcon_expirardiasCtrl.setValue(FrmLocal[0]['expira_atcon']);
 		this.atcon_alertadiasCtrl.setValue(FrmLocal[0]['alerta_atcon']);
 		this.atcon_verifdatosCtrl.setValue(FrmLocal[0]['dias_verif_datos']);
+		this.atcon_primera_audienciaCtrl.setValue(FrmLocal[0]['expira_primera_audiencia']);
+		this.atcon_segunda_audienciaCtrl.setValue(FrmLocal[0]['expira_segunda_audiencia']);
 		this.jur_expirardiasCtrl.setValue(FrmLocal[0]['expira_jur']);
 		this.jur_alertadiasCtrl.setValue(FrmLocal[0]['alerta_jur']);
 		this.vyv_expirardiasCtrl.setValue(FrmLocal[0]['expira_vyv']);
@@ -242,7 +252,7 @@ export class ConfiguracionSistemaComponent implements OnInit {
 
 	Guardar(){
 		this.btnvisible=false;
-		this._configuracionService.saveConfiguracion(this.atcon_expirardiasCtrl.value, this.atcon_alertadiasCtrl.value, this.atcon_verifdatosCtrl.value, this.jur_expirardiasCtrl.value, this.jur_alertadiasCtrl.value, this.vyv_expirardiasCtrl.value, this.vyv_alertadiasCtrl.value, this.sp_expirardiasCtrl.value, this.sp_alertadiasCtrl.value, this.pp_expirardiasCtrl.value, this.pp_concvirtintCtrl.value, this.pp_concvirtconfCtrl.value, this.ca_compermCtrl.value, this.ca_verifdatosCtrl.value, this.ca_audCtrl.value, this.ca_archspCtrl.value, this.ca_confresppCtrl.value ).subscribe((retvalue)=>{
+		this._configuracionService.saveConfiguracion(this.atcon_expirardiasCtrl.value, this.atcon_alertadiasCtrl.value, this.atcon_verifdatosCtrl.value, this.atcon_primera_audienciaCtrl.value ,this.atcon_segunda_audienciaCtrl.value, this.jur_expirardiasCtrl.value, this.jur_alertadiasCtrl.value, this.vyv_expirardiasCtrl.value, this.vyv_alertadiasCtrl.value, this.sp_expirardiasCtrl.value, this.sp_alertadiasCtrl.value, this.pp_expirardiasCtrl.value, this.pp_concvirtintCtrl.value, this.pp_concvirtconfCtrl.value, this.ca_compermCtrl.value, this.ca_verifdatosCtrl.value, this.ca_audCtrl.value, this.ca_archspCtrl.value, this.ca_confresppCtrl.value ).subscribe((retvalue)=>{
 			console.log(retvalue);
 			if(retvalue["reason"] == 'OK'){
 				this.flagChange=false;

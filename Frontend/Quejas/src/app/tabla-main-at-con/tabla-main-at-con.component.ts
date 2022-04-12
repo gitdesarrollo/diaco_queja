@@ -68,6 +68,8 @@ export class TablaMainAtConComponent implements OnInit {
   flagmissingdatep: boolean;
   flaglimitError: boolean;
   flagAtConVerificador: boolean;
+  flagExpirado: boolean;
+  flagAdmin: boolean;
   rows = [];
   columns = [];
   data = [];
@@ -93,6 +95,8 @@ export class TablaMainAtConComponent implements OnInit {
     ];
     this.flaglimitError = false;
     this.flagAtConVerificador = false;
+    this.flagExpirado = false;
+    this.flagAdmin = false;
   }
 
   ngOnInit() {
@@ -116,6 +120,9 @@ export class TablaMainAtConComponent implements OnInit {
   VerificarRol() {
     if (this._submitFormService.Get_Atcon_Verificador() == 1) {
       this.flagAtConVerificador = true;
+    }
+    if (this._submitFormService.Get_Atcon_Verificador() == 2) {
+      this.flagAdmin = true;
     }
   }
 
@@ -502,9 +509,19 @@ export class TablaMainAtConComponent implements OnInit {
         } else {
           this.FrmMainListFD = [];
         }
+        // If para verificar si existen quejas en estado expirado, y coloca el Flag
+        if (this.FrmMainListFD[0]){
+          if (this.FrmMainListFD[0].id_estado_queja == 150 || this.FrmMainListFD[0].id_estado_queja == 151 || this.FrmMainListFD[0].id_estado_queja == 152 ){
+          console.log('Hay expirados');
+          this.flagExpirado= true
+          }
+        }
+        console.log('Jj -> this.flagExpirado: '+this.flagExpirado);
         this.rows = this.FrmMainListFD;
         this.data = this.rows;
         this.filteredData = this.rows;
+
+        //console.log('ROWS JJ: '+this.rows[0].id_queja);
         
         this.flagDBError = false;
       } else {

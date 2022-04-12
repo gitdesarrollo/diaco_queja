@@ -46,6 +46,7 @@
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.0.0-rc.0",
     "source-map-explorer": "^2.5.2",
+    "stream-chat": "^6.4.0",
     "sweetalert2": "^9.10.12",
     "tooltip": "^1.6.1",
     "tooltips-js": "^1.0.6",

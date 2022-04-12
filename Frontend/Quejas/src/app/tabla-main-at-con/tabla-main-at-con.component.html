@@ -38,9 +38,12 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-lg-12">
-			<ngx-datatable #table class="material striped expandable" [rows]="rows" [columns]="columns" [limit]="10"
+			<ngx-datatable #table class="material expandable" [rows]="rows" [columns]="columns" [limit]="10"
 				[footerHeight]="40" [rowHeight]="'auto'" [columnMode]="'flex'" [selected]="selected"
 				[selectionType]="'single'" [selectCheck]="singleSelectCheck" (select)='onSelect($event)'>
+				<!-- <ngx-datatable #table class="material striped expandable rojo" [rows]="rows" [columns]="columns" [limit]="10"
+				[footerHeight]="40" [rowHeight]="'auto'" [columnMode]="'flex'" [selected]="selected"
+				[selectionType]="'single'" [selectCheck]="singleSelectCheck" (select)='onSelect($event)'> -->
 				<ngx-datatable-column name="Id Queja" prop="quejanumero" [flexGrow]="2"></ngx-datatable-column>
 				<!-- <ngx-datatable-column name="Fuente" prop="fuente" [flexGrow]="2"></ngx-datatable-column>  -->
 				<ngx-datatable-column name="Medio de Ingreso" prop="fuente" [flexGrow]="2">
@@ -83,6 +86,12 @@
 							completa</ng-container>
 						<ng-container *ngIf="row.id_estado_queja === '107'">Archivado</ng-container>
 						<ng-container *ngIf="row.id_estado_queja === '108'">Finalizado</ng-container>
+						<ng-container *ngIf="row.id_estado_queja === '150'"> <span class="badge badge-pill badge-danger">--</span> Expirado
+						</ng-container>
+						<ng-container *ngIf="row.id_estado_queja === '151'"> <span class="badge badge-pill badge-danger">--</span> Expirado por programación de Primera audiencia
+						</ng-container>
+						<ng-container *ngIf="row.id_estado_queja === '152'"> <span class="badge badge-pill badge-danger">--</span> Expirado por programación de Segunda audiencia
+						</ng-container>
 
 					</ng-template>
 				</ngx-datatable-column>
@@ -104,9 +113,10 @@
 						</ng-container>
 					</ng-template>
 				</ngx-datatable-column>
+				<ng-container >
 				<ngx-datatable-column name="Acciones" sortable="false" prop="id_queja" [flexGrow]="5" >
 					<ng-template let-row="row" let-value="value" ngx-datatable-cell-template >
-						<ng-container *ngIf="!flagAtConVerificador">
+						<ng-container *ngIf="!flagExpirado || (flagExpirado && (row.id_estado_queja === '150' || row.id_estado_queja === '151' || row.id_estado_queja === '152')) || flagAdmin">
 							<button 
 								title="Conciliación Previa"
 								[ngClass]="downloadClassIcon()"
@@ -119,7 +129,7 @@
 								(click)="clickStopper($event);openVerifVirtual(value,row.quejanumero);">
 								<i class="fa fa-user fa-2x" aria-hidden="true"></i>
 							</button>
-						</ng-container>
+						
 							<button 
 								title="Verificación de Datos"
 								[ngClass]="changeClassIcon(row.tipoflujoguia.atcon_verif_datos)"
@@ -127,25 +137,25 @@
 								<i class="fa fa-list fa-2x" aria-hidden="true"></i>								
 							</button>
 							
-							<ng-container *ngIf="!flagAtConVerificador">
-								<button 
-									title="Comunicación Permanente"
-									[ngClass]="changeClassIcon(row.tipoflujoguia.atcon_com_permanente)" 
-									(click)="clickStopper($event);openComPermanente(value,row.quejanumero,1, row.anio);">
-									<i class="fa fa-phone fa-2x" aria-hidden="true"></i>	
-								</button>
-								<button 
-									title="Audiencia de Concicliación"
-									[ngClass]="changeClassIcon(row.tipoflujoguia.atcon_audiencia_conc)" 
-									(click)="clickStopper($event);openPrimeraAudiencia(value,row.quejanumero);">
-									<i class="fa fa-clock-o fa-2x" aria-hidden="true"></i>	
-								</button>
-								<button 
-									title="Conciliación" 
-									[ngClass]="changeClassIcon(row.tipoflujoguia.atcon_audiencia_conc)" 
-									(click)="clickStopper($event);openConciliacion(value,row.quejanumero);">
-									<i class="fa fa-check fa-2x" aria-hidden="true"></i>
-								</button>
+						
+							<button 
+								title="Comunicación Permanente"
+								[ngClass]="changeClassIcon(row.tipoflujoguia.atcon_com_permanente)" 
+								(click)="clickStopper($event);openComPermanente(value,row.quejanumero,1, row.anio);">
+								<i class="fa fa-phone fa-2x" aria-hidden="true"></i>	
+							</button>
+							<button 
+								title="Audiencia de Concicliación"
+								[ngClass]="changeClassIcon(row.tipoflujoguia.atcon_audiencia_conc)" 
+								(click)="clickStopper($event);openPrimeraAudiencia(value,row.quejanumero);">
+								<i class="fa fa-clock-o fa-2x" aria-hidden="true"></i>	
+							</button>
+							<button 
+								title="Conciliación" 
+								[ngClass]="changeClassIcon(row.tipoflujoguia.atcon_audiencia_conc)" 
+								(click)="clickStopper($event);openConciliacion(value,row.quejanumero);">
+								<i class="fa fa-check fa-2x" aria-hidden="true"></i>
+							</button>
 							<div class="hoverbtns" style="display:none">
 								<!-- <p style="font-size:25%"></p> -->
 								<button 
@@ -184,6 +194,7 @@
 						</ng-container>
 					</ng-template>
 				</ngx-datatable-column>
+				</ng-container>
 			</ngx-datatable>
 		</div>
 	</div>

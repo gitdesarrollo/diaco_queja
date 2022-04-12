@@ -168,7 +168,7 @@ export class MainAtencionConsumidorComponent implements OnInit {
 		this.Token();
 		this.list_filtro=LSTFILTRO_ATENCIONCONSUMIDOR;
 		//this.tablechildflag=true;
-		this.selectedFiltroCtrl.setValue(999); //POR DEFAULT ESTABA 101, CAMBIO JJ
+		this.selectedFiltroCtrl.setValue(996); //POR DEFAULT ESTABA 101, CAMBIO JJ
 		this.GetList();
   }
 

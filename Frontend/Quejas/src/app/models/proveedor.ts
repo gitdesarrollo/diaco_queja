@@ -34,4 +34,7 @@ export class Proveedor {
  nombre_tipo_proveedor : string;
  callecilla : string;   
  permite_calificacion : boolean;
+
+ asesor : string;
+ fecha_fin_nombramiento : Date;
 }

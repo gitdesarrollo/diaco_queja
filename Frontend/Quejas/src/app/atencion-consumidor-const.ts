@@ -6,11 +6,11 @@
 	Desarrollo
 
  */
-//  export const BASE_URL_REST = 'http://localhost:8080/Quejas/rs/';
-//  export const BASE_URL_REST_CALENDARIO = 'http://localhost:8080/web-quejaini/rs/quejas/calendario';
-//  export const BASE_VERIFICACION_DATOS_LINK = 'http://localhost:8080/dist6/#/consumidor/interno/';
-//  export const BASE_PRESENCIAL_LINK = 'http://localhost:8080/dist6/#/pquejaini/presencial/';
-//  export const BASE_CALLCENTER_LINK = 'http://localhost:8080/dist6/#/pquejaini/callcenter/';
+/* export const BASE_URL_REST = 'http://localhost:8080/Quejas/rs/';
+export const BASE_URL_REST_CALENDARIO = 'http://localhost:8080/web-quejaini/rs/quejas/calendario';
+export const BASE_VERIFICACION_DATOS_LINK = 'http://localhost:8080/dist6/#/consumidor/interno/';
+export const BASE_PRESENCIAL_LINK = 'http://localhost:8080/dist6/#/pquejaini/presencial/';
+export const BASE_CALLCENTER_LINK = 'http://localhost:8080/dist6/#/pquejaini/callcenter/'; */
 
  export const BASE_URL_REST = 'https://dev.mineco.gob.gt/Quejas/rs/';
  export const BASE_URL_REST_CALENDARIO = 'https://dev.mineco.gob.gt/web-quejaini/rs/quejas/calendario';
@@ -58,6 +58,7 @@ export const LSTFILTRO_ATENCIONCONSUMIDOR: BaseCmbClass[] = [
 	{ id: 997, nombre: 'Pendiente de Confirmación' },
 	{ id: 401, nombre: 'Con el Proveedor' },
 	{ id: 402, nombre: 'Resuelto por el Proveedor' },
+	{ id: 996, nombre: 'Expirados' },
 	{ id: 998, nombre: 'Todos (activos e inactivos)' }
   ];
 
@@ -68,6 +69,7 @@ export const AudienceFilterList: BaseCmbClass[] = [
 ]
 
 export const AudienceType: BaseCmbClass[] = [
+	{ id: 0, nombre: 'Audiencia Virtual' },
 	{ id: 1, nombre: 'Primera' },
 	{ id: 2, nombre: 'Segunda' },
 ]

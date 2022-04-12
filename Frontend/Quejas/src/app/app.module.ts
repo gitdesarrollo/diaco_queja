@@ -92,6 +92,7 @@ import {FullCalendarModule} from 'primeng/fullcalendar';
 import { TablaMainCalendarioComponent } from './tabla-main-calendario/tabla-main-calendario.component';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { ChatComponent } from './chat/chat.component';
 
 
 
@@ -174,7 +175,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 		CatActividadEconomicaComponent,
 		CatTipoComercioComponent,
 		CatSucursalComponent,
-		TablaMainCalendarioComponent
+		TablaMainCalendarioComponent,
+		ChatComponent
   ],
   imports: [
 	NgbModule,

@@ -210,6 +210,11 @@ table tr td.modaltitltdb{
 	/*z-index: 10;*/
 }
 
+.rojo{
+		/*background: #4da6ff !important;*/
+		background: #e60e0e !important;
+}
+
 
 .md-content {
     border-radius: inherit;
@@ -247,7 +252,7 @@ div .modaltitl{
 
 .ngx-datatable.material.single-selection .datatable-body-row.active:hover,
 .ngx-datatable.material.single-selection .datatable-body-row.active:hover .datatable-row-group {
-    background: #99ccff !important;
+    background: #99ccff  !important;
 }
 
 :host ::ng-deep .datatable-body-cell {

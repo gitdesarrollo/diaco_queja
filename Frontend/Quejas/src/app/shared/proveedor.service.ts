@@ -107,7 +107,7 @@ export class ProveedorService {
 
   ObjaJSON2_add(nombre,nit,codigoDepartamento,codigoMunicipio,primerNombre,segundoNombre,tercerNombre,primerApellido,segundoApellido,
 	apellidoCasada,direccion,direccionZona,nombreEmpresa,razonSocial,email,tipoProveedor,
-	telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion){
+	telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion,asesor,fechaFinAsesor){
 	var locarray = { 
 		nombre: nombre,nit_proveedor : nit, codigo_departamento : codigoDepartamento,codigo_municipio :codigoMunicipio,
 		primer_nombre : primerNombre,segundo_nombre :segundoNombre,tercer_nombre:tercerNombre,
@@ -117,7 +117,7 @@ export class ProveedorService {
 	telefono:telefono,id_actividad_economica:idActividadEconomica,
 	id_tipo_comercio:idTipoComercio,habilitado_notificacion_electronica:habilitarNotificacion,
 	servicio_publico:servicioPublico,
-	habilitado_conciliacion_previa:conciliacion,permite_calificacion:calificacion,
+	habilitado_conciliacion_previa:conciliacion,permite_calificacion:calificacion, asesor:asesor, fecha_fin_nombramiento:fechaFinAsesor,
 	usuario : this._submitFormService.Get_username(),
 		token: this._submitFormService.Get_token() };
 	return JSON.stringify(locarray);
@@ -127,7 +127,7 @@ ObjaJSON_update( idProveedor,nombre,nit,codigoDepartamento,codigoMunicipio,prime
 	segundoNombre,tercerNombre,primerApellido,segundoApellido,
 	apellidoCasada,direccion,direccionZona,nombreEmpresa,razonSocial,email,tipoProveedor,
 	telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,
-	servicioPublico,conciliacion,calificacion){
+	servicioPublico,conciliacion,calificacion,asesor,fechaFinAsesor){
 	var locarray = { 
 		id_proveedor : idProveedor,nombre:nombre,nit_proveedor:nit,
 		codigo_departamento:codigoDepartamento,
@@ -141,7 +141,8 @@ ObjaJSON_update( idProveedor,nombre,nit,codigoDepartamento,codigoMunicipio,prime
 		id_tipo_comercio:idTipoComercio,
 		habilitado_notificacion_electronica:habilitarNotificacion,
 		servicio_publico:servicioPublico,
-		habilitado_conciliacion_previa:conciliacion,permite_calificacion:calificacion,		
+		habilitado_conciliacion_previa:conciliacion,permite_calificacion:calificacion,
+		asesor:asesor, fecha_fin_nombramiento:fechaFinAsesor,		
 		usuario : this._submitFormService.Get_username(),
 		token: this._submitFormService.Get_token()};
 	return JSON.stringify(locarray);
@@ -149,16 +150,16 @@ ObjaJSON_update( idProveedor,nombre,nit,codigoDepartamento,codigoMunicipio,prime
 
 saveData (nombre,nit,codigoDepartamento,codigoMunicipio,primerNombre,segundoNombre,tercerNombre,primerApellido,segundoApellido,
 	apellidoCasada,direccion,direccionZona,nombreEmpresa,razonSocial,email,tipoProveedor,
-	telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion
+	telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion,asesor, fechaFinAsesor
 ): Observable<any> {
 	console.log(this.ObjaJSON2_add(
 		nombre,nit,codigoDepartamento,codigoMunicipio,primerNombre,segundoNombre,tercerNombre,primerApellido,segundoApellido,
 		apellidoCasada,direccion,direccionZona,nombreEmpresa,razonSocial,email,tipoProveedor,
-		telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion	
+		telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion, asesor, fechaFinAsesor	
 	));
 	return this._http.post<any>(this.baseUrl+'/save', this.ObjaJSON2_add(nombre,nit,codigoDepartamento,codigoMunicipio,primerNombre,segundoNombre,tercerNombre,primerApellido,segundoApellido,
 		apellidoCasada,direccion,direccionZona,nombreEmpresa,razonSocial,email,tipoProveedor,
-		telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion), this.httpOptions).pipe(
+		telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion, asesor, fechaFinAsesor), this.httpOptions).pipe(
 		tap((item) => console.log('Added item')),
 		catchError(this.handleError<any>('Add Data'))
 	);
@@ -181,15 +182,15 @@ saveData (nombre,nit,codigoDepartamento,codigoMunicipio,primerNombre,segundoNomb
 updateData (idProveedor,nombre,nit,codigoDepartamento,codigoMunicipio,primerNombre,
 	segundoNombre,tercerNombre,primerApellido,segundoApellido,
 	apellidoCasada,direccion,direccionZona,nombreEmpresa,razonSocial,email,tipoProveedor,
-	telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion): Observable<any> {
+	telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion,asesor, fechaFinAsesor): Observable<any> {
 	console.log(this.ObjaJSON_update(idProveedor,nombre,nit,codigoDepartamento,codigoMunicipio,primerNombre,
 		segundoNombre,tercerNombre,primerApellido,segundoApellido,
 		apellidoCasada,direccion,direccionZona,nombreEmpresa,razonSocial,email,tipoProveedor,
-		telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion));
+		telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion, asesor, fechaFinAsesor));
 	return this._http.post<any>(this.baseUrl+'/update', this.ObjaJSON_update(idProveedor,nombre,nit,codigoDepartamento,codigoMunicipio,primerNombre,
 		segundoNombre,tercerNombre,primerApellido,segundoApellido,
 		apellidoCasada,direccion,direccionZona,nombreEmpresa,razonSocial,email,tipoProveedor,
-		telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion), this.httpOptions).pipe(
+		telefono,idActividadEconomica,idTipoComercio,habilitarNotificacion,servicioPublico,conciliacion,calificacion, asesor, fechaFinAsesor), this.httpOptions).pipe(
 		tap((item) => console.log('Updated item')),
 		catchError(this.handleError<any>('Update Data'))
 	);
