@@ -43,6 +43,11 @@ export class AudienciaService {
 		var LocalURL = this.baseUrl + '/' + idqueja + '/' + no_audiencia + '/' + this._submitFormService.Get_token();
 		return this._http.get(LocalURL, this.httpOptions).pipe(map(this.extractData));
 	}
+
+	getDataAudiencia(idqueja, no_audiencia, id_audiencia): Observable<any> {
+		var LocalURL = this.baseUrl + '/' + idqueja + '/' + no_audiencia + '/' + id_audiencia;
+		return this._http.get(LocalURL, this.httpOptions).pipe(map(this.extractData));
+	}
 	
 	getTotalAudiencia(idqueja): Observable<any>{
 		var LocalURL = this.baseUrl + '/cantidad-audiencia/' + idqueja + '/' + this._submitFormService.Get_token();

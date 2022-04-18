@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: 'MuestraRegistro/:id/:reg', component: MuestraRegistroComponent },
   { path: 'GuiaRegistros', component: GuiaRegistrosComponent }*/
 
-  { path: 'Chat', component: ChatComponent }
+  { path: 'Chat/:idAudiencia', component: ChatComponent }
 ];
 
 @NgModule({

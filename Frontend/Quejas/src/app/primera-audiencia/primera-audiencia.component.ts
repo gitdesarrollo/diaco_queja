@@ -41,6 +41,13 @@ import interactionPlugin from "@fullcalendar/interaction";
 import esLocale from "@fullcalendar/core/locales/es";
 import swal from "sweetalert2";
 import * as moment from "moment";
+import { SubmitFormService } from '../shared/submit-form.service';
+import { BASE_URL_REST } from '../atencion-consumidor-const'
+import {Http, Response, Headers, RequestOptions} from '@angular/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { map, catchError, tap } from 'rxjs/operators';
+import { IniciarchatService } from '../iniciarchat.service';
+
 
 @Component({
   selector: "app-primera-audiencia",
@@ -120,6 +127,7 @@ export class PrimeraAudienciaComponent implements OnInit {
   registrosJuridico: string[];
   loadinPrimeraAudiencia: boolean;
   loadinSegundaAudiencia: boolean;
+  idAudienciaVirtual: number;
 
 
   constructor(
@@ -131,7 +139,9 @@ export class PrimeraAudienciaComponent implements OnInit {
     public dialogRef: MatDialogRef<PrimeraAudienciaComponent>,
     private _registrosservice: RegistrosService,
     private datePipe: DatePipe,
-    private _seguridadService: SeguridadService
+    private _seguridadService: SeguridadService,
+    private _iniciaChat:IniciarchatService,
+    private _submitFormService:SubmitFormService,
   ) {
     this.flagInsertInfo = false;
     this.flagInfoError = false;
@@ -244,7 +254,33 @@ export class PrimeraAudienciaComponent implements OnInit {
     };
     //fin calendario
 
+
   }
+
+  // SIN USO GetList()
+  GetList(){
+    console.log
+	  this._iniciaChat.getAll(this._submitFormService.Get_userid()).subscribe((retvalue)=>{
+			if(retvalue["reason"] == 'OK'){
+				var tempstr=retvalue['value'];
+				if(tempstr != null && tempstr != '')	{
+					//this.flagAccionPendiente=true;
+				}else{
+					//this.flagAccionPendiente=false;
+				}
+				// console.log(this.flagAccionPendiente);
+			}else{
+				// console.log('Rest service response ERROR.');
+				this.flagInfoError=true;
+				this.SetSecTimerInfoError();
+			}		
+		},(error)=>{
+			// console.log(error);
+			this.flagInfoError=true;
+			this.SetSecTimerInfoError();
+		});
+	}
+
 
   /**
    * alruanoe
@@ -252,8 +288,9 @@ export class PrimeraAudienciaComponent implements OnInit {
    * metodo para validar calendario a 60 dias a partir del dia actual
    */
   formSubmit() {
+    this.closeDialog();
+    this.router.navigate(["/Chat/"+this.idAudienciaVirtual]);
 
-    this.router.navigate(["/Chat"]);
   }
   
   validarCalendario() {
@@ -526,6 +563,7 @@ export class PrimeraAudienciaComponent implements OnInit {
     }
   }
 
+
   GetAudienciaList() {
     let tempstr = "";
     this._audienciaService.getData(this.data.NoQueja, 0).subscribe(
@@ -566,10 +604,11 @@ export class PrimeraAudienciaComponent implements OnInit {
           this.lst_audiencia = JSON.parse(
             "[" + response["value"].slice(0, -1) + "]"
           );
-          this.lst_audiencia.forEach((v) => {
-            console.log("Audiencias encontradas: ", this.lst_audiencia);
+          this.lst_audiencia.forEach((v,index) => {
+            console.log("Audiencias encontradas: ",index, this.lst_audiencia);
             if (Number(v.es_primera_seg_audiencia) === 0) {
               this.btnAudienciaVirtual = true;
+              this.idAudienciaVirtual = this.lst_audiencia[index].id_audiencia
               // this.tblPrimeraAudiencia = true
             }
 
@@ -637,7 +676,7 @@ export class PrimeraAudienciaComponent implements OnInit {
     var date = this.FechaCtrl.value;
     var time = this.HoraCtrl.value;
     var hour, min;
-    if (time.length == 5) {
+    if (time.length == 5) {//ASUMO QUE ES HORA TIPO 16:00 Y SE CONVIERTE EN HOUR: 16 Y MIN: 00
       hour = time.substring(0, 2);
       min = time.substring(3, 5);
     } else {
@@ -651,7 +690,7 @@ export class PrimeraAudienciaComponent implements OnInit {
       ":" +
       min +
       ":00";
-    return temp;
+    return temp;// RETORNA TIPO 2022-04-18T15:30:00
   }
 
   MostrarMensaje(texto, mensaje) {
@@ -672,7 +711,7 @@ export class PrimeraAudienciaComponent implements OnInit {
 
   SaveProgramarAudiencia() {
     var today = new Date(Date.now());
-    var td = new Date(this.convertDate());
+    var td = new Date(this.convertDate()); //RETORNA TIPO 2022-04-18T:
     if (today > td) {
       this.flagTimeError = true;
       this.SetSecTimerTimeError();

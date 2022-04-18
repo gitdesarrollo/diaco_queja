@@ -5,6 +5,7 @@ import { ChannelData } from '../models/channel-data';
 
 import { WebsocketService } from '../websocket.service';
 import { ChatService } from '../chat.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: "app-chat",
@@ -13,6 +14,7 @@ import { ChatService } from '../chat.service';
   providers: [ WebsocketService, ChatService ]
 })
 export class ChatComponent implements OnInit {
+  idAudiencia!: string;
   title = "angular-chat";
   channel: boolean;
   channelList: ChannelData[];
@@ -21,8 +23,10 @@ export class ChatComponent implements OnInit {
   socket: WebSocket;
   messages: Message[] = [];
   newMessage: '';
+  idAud: number;
+  
 
-  constructor(private router: Router,private chatService: ChatService) {
+  constructor(private router: Router,private chatService: ChatService, private activatedRoute: ActivatedRoute) {
     chatService.messages.subscribe(msg => {   
       this.agregarMensaje(msg.autor,msg.msg);      
       console.log("Response from websocket: " , msg);
@@ -36,7 +40,8 @@ mensajeEscrito(){
 
 private message = {
     autor: 'tutorialedge',
-    msg: 'Hola'
+    msg: 'Hola',
+    audiencia: ''
 }
 
 private message1 = {
@@ -45,6 +50,7 @@ private message1 = {
 
 sendMsg() {
     this.message.msg = this.newMessage;
+    this.message.audiencia = this.idAudiencia;
     console.log('new message from client to websocket: ', this.message1);
     this.chatService.messages.next(this.message);
     this.newMessage = '';
@@ -52,11 +58,14 @@ sendMsg() {
 
 
   ngOnInit() {
+    this.activatedRoute.paramMap.subscribe((parametros: ParamMap) => {
+      this.idAudiencia = parametros.get("idAudiencia")!;
+    })
+
+
     this.channel = false;
     this.channelList = [
-      { id: 1, name: 'Audiencia Diaco' },
-      { id: 2, name: 'Audiencia Diaco 1 ' },
-      { id: 3, name: 'Audiencia Diaco 2' }
+      { id: 1, name: 'Audiencia Diaco' }
     ];
     this.messages = [
       { id: 1, msg: 'Bienvenido a Audiencia Virtual Diaco. Esta conversación quedará grabada como evidencia de la misma. Sea breve.', autor: 'Sistema'},

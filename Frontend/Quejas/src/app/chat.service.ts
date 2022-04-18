@@ -6,7 +6,8 @@ const CHAT_URL = 'ws://localhost:8080/Quejas/socket';
  
 export interface Message {
     autor: string,
-    msg: string
+    msg: string,
+    audiencia: string
 }
 
 export interface Message1 {
@@ -24,7 +25,8 @@ export class ChatService {
                 let data = JSON.parse(response.data);
                 return {
                     autor: data.autor,
-                    msg: data.msg
+                    msg: data.msg,
+                    audiencia: data.audiencia
                 }
             });
     }

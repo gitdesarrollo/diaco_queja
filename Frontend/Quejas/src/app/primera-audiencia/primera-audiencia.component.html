@@ -10,10 +10,10 @@
 				<table width="100%">
 					<tr>
 						<td width="90%" class="modaltitltd">
-							Programar Audiencia de Conciliación ({{data.quejanumero}})
+							Programar Audiencia de Conciliación ({{data.quejanumero}}) {{this.idAudienciaVirtual}}
 							
-							<button class="btn btn-primary" type="button" 
-											(click)="formSubmit()">Form Submit</button>
+							<!-- <button class="btn btn-primary" type="button" 
+											(click)="formSubmit()">Form Submit</button> -->
 							<!--  flagformvisible : {{flagformvisible}} flagEditable {{flagEditable}} flujo {{this.data.Flujo}} -->
 						</td>
 						<td width="10%" align="right" class="modaltitltdb">
@@ -168,7 +168,7 @@
 							</ng-container>
 						</div>
 					</div>
-					<div class="col-sm">{{ btnAudienciaVirtual }} {{ btnPrimeraAudiencia }} {{ btnSegundaAudiencia }}
+					<div class="col-sm"><!-- {{ btnAudienciaVirtual }} {{ btnPrimeraAudiencia }} {{ btnSegundaAudiencia }} -->
 						<button class="btn btn-success mr-3" *ngIf="btnAudienciaVirtual" type="button" (click)="formSubmit()">Unirme a Audiencia Virtual</button>
 						<ng-container *ngIf="flag_Programado">
 							<div class="d-grid gap-2 d-md-block mt-3 mb-3">
