@@ -7,11 +7,10 @@ import { ChatService } from "./chat.service";
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
-  providers: [WebsocketService, ChatService],
 })
 export class AppComponent {
   title = "app";
-  constructor(private chatService: ChatService) {
+/*   constructor(private chatService: ChatService) {
     chatService.messages.subscribe((msg) => {
       console.log("Response from websocket: " + msg);
     });
@@ -26,5 +25,5 @@ export class AppComponent {
     console.log("new message from client to websocket: ", this.message);
     this.chatService.messages.next(this.message);
     this.message.message = "";
-  }
+  } */
 }
