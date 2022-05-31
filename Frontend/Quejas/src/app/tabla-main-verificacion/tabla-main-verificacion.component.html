@@ -84,6 +84,7 @@
         </ngx-datatable-column>
 			<ngx-datatable-column name="actions" sortable="false" prop="id_queja" [flexGrow]="5">
 				 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+						<button title="Conciliación Previa" [ngClass]="downloadClassIcon()"(click)="clickStopper($event);donwloadFileZip(row.quejanumero);"><i class="fa fa-download fa-2x" aria-hidden="true"></i></button>
 						<button title="Asignación de Cola Inicial" class="btn btn-apgreen btn-image Inbox" (click)="clickStopper($event);openAsignaCola(value, row.quejanumero);"></button>&nbsp;
 						<button title="Comunicación Permanente" [ngClass]="SetBtnClass(row.tipoflujoguia.atcon_com_permanente,'ComPermanente')" (click)="clickStopper($event);openComPermanente(value, row.quejanumero,3);"></button>&nbsp;
 						<button title="Generar Acta" class="btn btn-primary btn-image List" (click)="clickStopper($event);openActa(value, row.quejanumero);"></button>&nbsp;

@@ -67,8 +67,18 @@ public class RuteoAtencionConsumidor {
         AreaComun.EmailQuejasExpiradas();
     }
     
-    @Schedule(hour = "3", minute = "10", second = "0", persistent = false)
+    @Schedule(hour = "13", minute = "10", second = "0", persistent = false)
     public void EmailAlertaQuejasExpiradas() { //email alerta quejas por expirar
+        AreaComun.EmailAlertaQuejasExpiradas();
+    }
+    
+    @Schedule(hour = "18", minute = "10", second = "0", persistent = false)
+    public void EmailAlertaQuejasExpiradas1() { //email alerta quejas por expirar
+        AreaComun.EmailAlertaQuejasExpiradas();
+    }
+    
+    @Schedule(hour = "21", minute = "10", second = "0", persistent = false)
+    public void EmailAlertaQuejasExpiradas2() { //email alerta quejas por expirar
         AreaComun.EmailAlertaQuejasExpiradas();
     }
     
@@ -77,6 +87,16 @@ public class RuteoAtencionConsumidor {
     public void ReenvioCorreos() { 
         AreaComun.ReenvioCorreos();
     }
+    
+    
+    
+    //ACTUALIZADO JUAN JOSE DEL AGUILA
+    
+    /*@Schedule(hour="3", minute="30", second="0", persistent=false)
+    //@Schedule(hour="*", minute="*3", second="0", persistent=false)
+    /public void ReenvioCorreos() { 
+        AreaComun.ReenvioCorreos();
+    }*/
         //tarea programada
         /**/
 

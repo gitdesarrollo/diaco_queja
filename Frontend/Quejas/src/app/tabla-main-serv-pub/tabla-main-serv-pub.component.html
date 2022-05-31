@@ -84,6 +84,7 @@
         </ngx-datatable-column>
 			<ngx-datatable-column name="actions" sortable="false" prop="id_queja" [flexGrow]="4">
 				 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+						<button title="Descarga de Archivos" [ngClass]="downloadClassIcon()"(click)="clickStopper($event);donwloadFileZip(row.quejanumero);"><i class="fa fa-download fa-2x" aria-hidden="true"></i></button>
 						<button title="Listado de Archivos" class="btn btn-primary btn-image Verify" (click)="clickStopper($event);openListadoArchivos(value, row.quejanumero, 6);"></button>&nbsp;
 						<button title="Movimiento de Expendiente" class="btn btn-primary btn-image Move" (click)="clickStopper($event);openMovimientoExpediente(value, row.quejanumero);"></button>&nbsp;
 						<button title="Archivar Queja" class="btn btn-primary btn-image File" (click)="clickStopper($event);openArchivarQueja(value, row.quejanumero);"></button>&nbsp;

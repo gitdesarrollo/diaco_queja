@@ -21,6 +21,9 @@ import gt.gob.mineco.diaco.model.TipoProgramaAudiencia;
         name = "TipoAudiencia.findxIdQuejaNo",
         query = "SELECT t FROM TipoAudiencia t inner join t.tipopasoqueja og where og.id_queja = :idqueja and t.es_primera_seg_audiencia = :no_audiencia"),
     @NamedQuery(
+        name = "TipoAudiencia.findxIdQuejaMayor",
+        query = "SELECT t FROM TipoAudiencia t inner join t.tipopasoqueja og where og.id_queja = :idqueja and t.es_primera_seg_audiencia >= :no_audiencia"),
+    @NamedQuery(
         name = "TipoAudiencia.findCantidad",
         query = "SELECT t FROM TipoAudiencia t inner join t.tipopasoqueja og where og.id_queja = :idqueja") 
 })

@@ -44,7 +44,8 @@ export class ComunicacionPermanenteComponent implements OnInit {
   linkdescription;
   flagReportDisponible: boolean;
   registrodata:FrmRegComCon[];
-  flagformvisible;lst_queja;
+  flagformvisible;
+  lst_queja;
   flagEditable:boolean;
   loaderror:boolean;
   flagMainUpdate:boolean;
@@ -68,6 +69,9 @@ export class ComunicacionPermanenteComponent implements OnInit {
 		this.btnvisible=true;
 		this.loc_pagina=0;
 		this.showSpinner=false;
+		this.lst_queja = [
+			0
+		]
   }
 
   ngOnInit() {
@@ -131,7 +135,7 @@ export class ComunicacionPermanenteComponent implements OnInit {
 						}
 					else
 						this.flagEditable=false;
-					
+					console.log('Variable lst_queja: ',this.lst_queja);
 				}else{
 					this.flagDBError=true;
 					this.SetSecTimerInfoError();

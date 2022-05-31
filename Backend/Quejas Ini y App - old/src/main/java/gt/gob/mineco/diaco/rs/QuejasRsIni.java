@@ -231,6 +231,7 @@ public class QuejasRsIni {
     public ResponseRs createQueja(DiacoQuejaIniDto queja) {
         ResponseRs response = new ResponseRs();
         queja = quejasService.saveQuejaIni(queja);
+        System.out.println("Variable queja de (createQueja):"+queja.getConciliacion());
         response.setValue(queja);
         //send email for notification
         if (queja.getConciliacion().equals("1")) {

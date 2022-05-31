@@ -506,6 +506,7 @@ export class TablaMainAtConComponent implements OnInit {
             this.flaglimitError = true;
             this.SetSecTimerLimitError();
           }
+          
         } else {
           this.FrmMainListFD = [];
         }
@@ -514,6 +515,8 @@ export class TablaMainAtConComponent implements OnInit {
           if (this.FrmMainListFD[0].id_estado_queja == 150 || this.FrmMainListFD[0].id_estado_queja == 151 || this.FrmMainListFD[0].id_estado_queja == 152 ){
           console.log('Hay expirados');
           this.flagExpirado= true
+          console.log("Cantidad de Quejas: "+this.FrmMainListFD.length);
+          this.FrmMainListFD[this.FrmMainListFD.length-1].para_trabajar = true; //SE LE ASIGNA A ULTIMA QUEJA QUE DEBE SER TRABAJADA.
           }
         }
         console.log('Jj -> this.flagExpirado: '+this.flagExpirado);

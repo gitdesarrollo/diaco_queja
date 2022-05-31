@@ -110,6 +110,28 @@ export class TablaMainJuridicoComponent implements OnInit {
 
   }
 
+  donwloadFileZip(strQueja){
+    this._seguridadService.downloadFileZip(strQueja).subscribe((retvalue) => {
+      this.downloadZipFile(retvalue,strQueja)
+    }, (error) => {
+      return error;
+    });
+
+  }
+
+  downloadZipFile(data,strQueja) {
+		const blob = new Blob([data], { type: 'application/zip' });
+		const url = window.URL.createObjectURL(blob);
+    var anchor = document.createElement("a");
+    anchor.download = strQueja + ".zip";
+    anchor.href = url;
+    anchor.click();
+		// var pwa = window.open(url);
+		// if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+		// 	alert('Por favor deshabilite su bloqueador de Pop-ups e intente de nuevo.');
+		// }
+	}
+
   Token() {
     let loc_token = this._submitFormService.Get_token();
     if (loc_token == '') {

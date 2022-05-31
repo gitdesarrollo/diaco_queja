@@ -114,6 +114,11 @@ public class TipoProveedor implements Serializable {
     private String telefono;
     @Column(name = "permite_calificacion", columnDefinition = "BIT")
     private boolean permite_calificacion;
+    
+    @Column(name = "asesor")
+    private String asesor;
+    @Column(name = "fecha_fin_nombramiento")
+    private String fecha_fin_nombramiento;
 
     @JoinColumn(name = "id_actividad_economica", referencedColumnName = "id_actividad_economica", updatable = false, insertable = false)
     private TipoActividadEconomica tipoActividadEconomica;
@@ -529,5 +534,33 @@ public class TipoProveedor implements Serializable {
             temp.addProperty("tipo_comercio",checknull.cknull(this.tipoComercio.getTipo_comercio()));
          */
         return temp;
+    }
+
+    /**
+     * @return the asesor
+     */
+    public String getAsesor() {
+        return asesor;
+    }
+
+    /**
+     * @param asesor the asesor to set
+     */
+    public void setAsesor(String asesor) {
+        this.asesor = asesor;
+    }
+
+    /**
+     * @return the fecha_fin_nombramiento
+     */
+    public String getFecha_fin_nombramiento() {
+        return fecha_fin_nombramiento;
+    }
+
+    /**
+     * @param fecha_fin_nombramiento the fecha_fin_nombramiento to set
+     */
+    public void setFecha_fin_nombramiento(String fecha_fin_nombramiento) {
+        this.fecha_fin_nombramiento = fecha_fin_nombramiento;
     }
 }

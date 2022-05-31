@@ -17,7 +17,7 @@ public class CorsFilter implements ContainerResponseFilter {
         //responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://desagestorquejas.diaco.gob.gt");
         //responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://128.5.8.228:8080");
         //responseContext.getHeaders().add("Access-Control-Allow-Origin", "*");
-        responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://localhost:4200");
+        responseContext.getHeaders().add("Access-Control-Allow-Origin", "*");
         responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
         responseContext.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization, html");
         responseContext.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");

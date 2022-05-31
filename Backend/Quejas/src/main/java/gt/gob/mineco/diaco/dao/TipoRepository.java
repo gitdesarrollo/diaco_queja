@@ -722,6 +722,9 @@ public class TipoRepository {
                         case 997://pendiente de confirmación
                             querystring = querystring + " and v.id_estado_queja in (129,130,131,132,133,229,230,231,232,233,330,630)";
                             break;
+                        case 996://todos los expirados
+                            querystring = querystring + " and v.id_estado_queja in (150,151,152)";
+                            break;
                         default:
                             querystring = querystring + " and v.id_estado_queja = :estado";
                             break;
@@ -1644,7 +1647,7 @@ public class TipoRepository {
     public TipoAudiencia findTiposAudienciaxIdQueja(Integer idqueja, Integer no_audiencia) {
         this.em.getEntityManagerFactory().getCache().evict(TipoProgramaAudiencia.class);
         this.em.getEntityManagerFactory().getCache().evict(TipoAudiencia.class);
-        List<TipoAudiencia> DataList = em.createNamedQuery("TipoAudiencia.findxIdQuejaNo").setParameter("idqueja", idqueja).setParameter("no_audiencia", no_audiencia).setMaxResults(1).getResultList();
+        List<TipoAudiencia> DataList = em.createNamedQuery("TipoAudiencia.findxIdQuejaMayor").setParameter("idqueja", idqueja).setParameter("no_audiencia", no_audiencia).setMaxResults(1).getResultList();
         return DataList.isEmpty() ? null : DataList.get(0);
     }
 

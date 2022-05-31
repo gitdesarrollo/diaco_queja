@@ -133,7 +133,7 @@ export class ArchivarQuejaComponent implements OnInit {
 					this.lbl_numqueja=this.lst_queja[0]['quejanumero'];
 					this.LoadFrmInfo(this.lst_queja[0]['quejanumero']);
 					//verificar estado para permitir edicion en formulario
-					if(this.lst_queja[0]['id_estado_queja']>=101 && this.lst_queja[0]['id_estado_queja']<=106)
+					if(this.lst_queja[0]['id_estado_queja']>=101 && this.lst_queja[0]['id_estado_queja']<=152)
 						//si es rol 3 administrador, puede editar
 						if(this.data.Rol == 3)
 							this.flagEditable=true;

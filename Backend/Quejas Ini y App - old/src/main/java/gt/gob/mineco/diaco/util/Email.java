@@ -72,7 +72,8 @@ public class Email {
                  message.addRecipients(Message.RecipientType.TO,sendTo);  
                  message.setSubject(subject);  
                  //message.setText(body);  
-                 message.setContent(body, "text/html");
+                 message.setContent(body, "text/html; charset=utf-8");
+                 //message.setContent(body, "text/plain");
 
                 //send the message  
                  Transport.send(message);  

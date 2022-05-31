@@ -512,10 +512,15 @@ public class QuejasServiceImp {
                 + "Área de Restaurantes 3er. Nivel Tel: 2501-9600";
         switch (tipo) {
             case "1":
-                body5 = "Para poder continuar con el trámite de su queja necesitamos que complete la " + salto
+                /*body5 = "Para poder continuar con el trámite de su queja necesitamos que complete la " + salto
                         + "información del siguiente link, así como que adjunte copia de la factura o" + salto
                         + " documento de respaldo de la compra y su DPI: "
                         + "<a href='http://" + server + "/dist6/#/consumidor/presencial/" + link + "/" + queja.getIdQueja() + "'>Click aqui </a>" + salto + salto
+                        + "Por favor, tome en cuenta que tiene 48 horas después de recibido este correo, " + salto
+                        + "para ingresar la información y subir sus los documentos." + salto + salto;*/
+                body5 = "Para poder continuar con el trámite de su queja necesitamos que complete la " + salto
+                        + "información del siguiente link:"
+                        + "<a href='https://" + server + "/dist6/#/consumidor/presencial/" + link + "/" + queja.getIdQueja() + "'>Click aquí </a>" + salto + salto
                         + "Por favor, tome en cuenta que tiene 48 horas después de recibido este correo, " + salto
                         + "para ingresar la información y subir sus los documentos." + salto + salto;
                 body = body1 + body5 + body2; //notificación de ingreso de queja web//notificación de ingreso de queja web 

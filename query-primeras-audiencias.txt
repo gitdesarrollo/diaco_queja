@@ -1,0 +1,5 @@
+select max(fecha_programada) fecha_programada, dpq.id_queja, da.es_primera_seg_audiencia from dbo.diaco_programa_audiencia dpa
+INNER JOIN dbo.diaco_audiencia da ON dpa.id_audiencia= da.id_audiencia
+INNER JOIN dbo.diaco_paso_queja dpq ON dpq.id_queja_paso= da.id_queja_paso
+WHERE da.es_primera_seg_audiencia = 1
+group by id_queja, da.es_primera_seg_audiencia

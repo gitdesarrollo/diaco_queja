@@ -632,26 +632,31 @@ export class PrimeraAudienciaComponent implements OnInit {
 
   GetAudienciaById(idAudiencia) {
     let tempstr = "";
-    this._audienciaService.getData(this.data.NoQueja, idAudiencia).subscribe(
+    this._audienciaService.getData(this.data.NoQueja, idAudiencia).subscribe( //MANDA A CONSULTAR AUDIENCIA 0, 1 O 2, DE UNA SOLA QUEJA
       (retvalue) => {
         console.log(
           "Respuesta de ws check ",
           retvalue["value"],
           " valueid ",
-          idAudiencia
+          idAudiencia,
+          "reason: ",
+          retvalue["reason"]
         );
         if (retvalue["reason"] == "OK") {
           tempstr = retvalue["value"];
-          if (tempstr != null) {
+          if (tempstr != null) { //ENTRA CUANDO SI ENCUENTRA AUDIENCIA
+            console.log('SI ENCONTRE AUDIENCIA');
             this.lst_audiencia = JSON.parse(
               "[" + retvalue["value"].slice(0, -1) + "]"
             );
-            // console.log(this.lst_audiencia);
+            console.log("Valor de lst_audiencia: ",this.lst_audiencia);
             this.LoadFrmData(false);
-            this.flag_ProgramadobyId = false;
-          } else {
+            //this.flag_ProgramadobyId = false;
+            console.log('Valor de flag_ProgramadobyId: '+this.flag_ProgramadobyId)
+          } else { //ENTRA CUANDO NO HAY AUDIENCIA PROGRAMADA
+            console.log('NO ENCONTRE AUDIENCIA');
             this.LoadFrmData(true);
-            this.flag_ProgramadobyId = true;
+            console.log('Valor de flag_ProgramadobyId: '+this.flag_ProgramadobyId)
             /*console.log('Informaci�n de queja no pudo ser obtenida.');
 					this.flagInfoError=true;
 					this.SetSecTimerInfoError();*/
@@ -698,9 +703,12 @@ export class PrimeraAudienciaComponent implements OnInit {
   }
 
   cambioEvento(event) {
-    if (event == 1) {
-      this.GetAudienciaById(1);
+    if (event == 0) {
+      this.GetAudienciaById(0);
       // console.log("valor actual positivo ", this.flag_ProgramadobyId)
+      this.flag_Programado = this.flag_ProgramadobyId;
+    } else if (event == 1) {
+      this.GetAudienciaById(1);
       this.flag_Programado = this.flag_ProgramadobyId;
     } else {
       this.GetAudienciaById(2);

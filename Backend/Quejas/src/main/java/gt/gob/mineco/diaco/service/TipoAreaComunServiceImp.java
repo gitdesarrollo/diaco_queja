@@ -815,8 +815,8 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
             if (efuente != null) {
                 if (efuente.getActivo() == 1) {
                     //correo comunicacion permanente
-                    String cuerpo = "Estimado Usuario, se ha comenzado el proceso de revisi&oacute;n de su queja por parte de personal interno de DIACO.<br>"
-                            + "Estatus: " + LimpiaStringTildes(formComConsumidor.getEstatus()) + "<br>"
+                    String cuerpo = "Estimado Usuario, se ha comenzado el proceso de revisión de su queja por parte de personal interno de DIACO.<br>"+"<br>"
+                            + "Descripción: " + LimpiaStringTildes(formComConsumidor.getEstatus()) + "<br>"
                             + "Observaciones: " + LimpiaStringTildes(formComConsumidor.getObservaciones());
                     String[] mailstring = GetEmailStringContribuyente(vTipoQueja.getId_consumidor());
                     System.out.println("JJ: funcion saveEmailEnviar: parametros, mailstring:" + mailstring + ",cuerpo: " + cuerpo);
@@ -2432,16 +2432,28 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
                 if (efuente != null) {
                     if (efuente.getActivo() == 1) {
                         //mandar correo consumidor 
-
-                        String cuerpo = "Estimado Consumidor(a) / Usuario(a):<br> DIACO le comunica que la audiencia motivo de la queja " + vTipoQueja.getQuejaNumero()
+                        if (formAudiencia.getEs_primera_seg_audiencia() == 0){
+                            String cuerpo = "Estimado Usuario(a):<br> DIACO le comunica que la AUDIENCIA VIRTUAL motivo de la queja " + vTipoQueja.getQuejaNumero()
                                 + " ha sido programada para el " + dateFormat.format(loc_date) + " a las " + timeFormat.format(loc_date)
-                                + ", por lo que se le pide tomar en cuenta que ser&aacute; necesario contar con su presencia debidamente identificado con su DPI y/o Pasaporte y/o Representaci&oacute;n Legal,"
-                                + " Patente de Comercio (cuando aplique), " + LimpiaStringTildes(direccion_fisica) + "<br>";
-                        String[] mailstring = GetEmailStringContribuyente(vTipoQueja.getId_consumidor());
+                                + ", por lo que se le pide tomar en cuenta que ser&aacute; necesario que por medio del siguiente link, se pueda llevar a cabo la audiencia:"
+                                + "<br>"+"https://dev.mineco.gob.gt/#/Chat/"+vTipoAudiencia.getId_audiencia()
+                                ;
+                                                    String[] mailstring = GetEmailStringContribuyente(vTipoQueja.getId_consumidor());
                         saveEmailEnviar(mailstring, Constants.REG_DIACO_FUENTE_EMAIL_NOTIFICACIONES_AUDIENCIA, cuerpo); // fuente de email 5: notificacion audiencia
                         //mandar correo proveedor
                         mailstring = GetEmailStringProveedor(vTipoQueja.getId_proveedor());
                         saveEmailEnviar(mailstring, Constants.REG_DIACO_FUENTE_EMAIL_NOTIFICACIONES_AUDIENCIA, cuerpo); // fuente de email 5: notificacion audiencia
+                        }else{
+                            String cuerpo = "Estimado Consumidor(a) / Usuario(a):<br> DIACO le comunica que la audiencia motivo de la queja " + vTipoQueja.getQuejaNumero()
+                                + " ha sido programada para el " + dateFormat.format(loc_date) + " a las " + timeFormat.format(loc_date)
+                                + ", por lo que se le pide tomar en cuenta que ser&aacute; necesario contar con su presencia debidamente identificado con su DPI y/o Pasaporte y/o Representaci&oacute;n Legal,"
+                                + " Patente de Comercio (cuando aplique), " + LimpiaStringTildes(direccion_fisica) + "<br>";
+                                                    String[] mailstring = GetEmailStringContribuyente(vTipoQueja.getId_consumidor());
+                        saveEmailEnviar(mailstring, Constants.REG_DIACO_FUENTE_EMAIL_NOTIFICACIONES_AUDIENCIA, cuerpo); // fuente de email 5: notificacion audiencia
+                        //mandar correo proveedor
+                        mailstring = GetEmailStringProveedor(vTipoQueja.getId_proveedor());
+                        saveEmailEnviar(mailstring, Constants.REG_DIACO_FUENTE_EMAIL_NOTIFICACIONES_AUDIENCIA, cuerpo); // fuente de email 5: notificacion audiencia
+                        }
                     }
                 }
                 //bitacora auto log
@@ -9329,6 +9341,12 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
                     case 9:
                         temp.addProperty("alerta_sp", loc_element.getVence_en());
                         break;
+                    case 10:
+                        temp.addProperty("expira_primera_audiencia", loc_element.getVence_en());
+                        break;
+                    case 11:
+                        temp.addProperty("expira_segunda_audiencia", loc_element.getVence_en());
+                        break;
                 }
             }
 
@@ -9438,6 +9456,16 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
                     case 9:
                         single_element2 = tipoDao.findByIdExpiracion(loc_element.getId());
                         single_element2.setVence_en(formulario.getDias_alerta_sp());
+                        tipoDao.saveExpiracion(single_element2);
+                        break;
+                    case 10:
+                        single_element2 = tipoDao.findByIdExpiracion(loc_element.getId());
+                        single_element2.setVence_en(formulario.getDias_primera_audiencia());
+                        tipoDao.saveExpiracion(single_element2);
+                        break;
+                    case 11:
+                        single_element2 = tipoDao.findByIdExpiracion(loc_element.getId());
+                        single_element2.setVence_en(formulario.getDias_segunda_audiencia());
                         tipoDao.saveExpiracion(single_element2);
                         break;
                 }
@@ -10741,6 +10769,7 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
             prov.setRazon_social(p.getRazon_social());
             prov.setHabilitado("1");
             prov.setTelefono(p.getTelefono());
+            System.out.println("codigo jj: "+p.getTipo_proveedor());
             prov.setTipo_proveedor(p.getTipo_proveedor());
 
             prov.setEmail(p.getEmail());
@@ -10811,6 +10840,9 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
             prov.setHabilitado_notificacion_electronica(p.getHabilitado_notificacion_electronica());
             prov.setHabilitado_conciliacion_previa(p.getHabilitado_conciliacion_previa());
             prov.setServicio_publico(p.isServicio_publico());
+            
+            prov.setAsesor(p.getAsesor());
+            prov.setFecha_fin_nombramiento(p.getFecha_fin_nombramiento());
 
             tipoDao.TokenCheck(p.getToken());
             response.setCode(0L);
@@ -10980,6 +11012,11 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
             TipoComercio comercio = tipoDao.findByIdTipoComercio(prov.getId_tipo_comercio());
             provForm.setTipo_comercio(comercio.getTipo_comercio());
             provForm.setTipo_proveedor(prov.getTipo_proveedor());
+            
+            provForm.setAsesor(prov.getAsesor());
+            provForm.setFecha_fin_nombramiento(prov.getFecha_fin_nombramiento());
+            
+            
             provListF.add(provForm);
             response.setValue(provListF);
 

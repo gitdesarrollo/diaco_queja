@@ -41,7 +41,8 @@ import gt.gob.mineco.diaco.util.CheckNull;
         query = "SELECT t FROM TipoQueja t where CONCAT(UPPER(t.no_queja), '-',UPPER(t.anio)) = :codigoqueja"),
     @NamedQuery(
         name = "TipoQueja.findAllExpiradoAtConCorreo",
-        query = "SELECT t FROM TipoQueja t where t.id_estado_queja = 150 and t.expirado_mail IS NULL"),
+        //query = "SELECT t FROM TipoQueja t where t.id_estado_queja = 150 and t.expirado_mail IS NULL"), //ORIGINAL
+        query = "SELECT t FROM TipoQueja t where (t.id_estado_queja = 150 or t.id_estado_queja = 151 or t.id_estado_queja = 151) and t.expirado_mail IS NULL"),
     @NamedQuery(
         name = "TipoQueja.findAllExpiradoJurCorreo",
         query = "SELECT t FROM TipoQueja t where t.id_estado_queja = 250 and t.expirado_mail IS NULL"),

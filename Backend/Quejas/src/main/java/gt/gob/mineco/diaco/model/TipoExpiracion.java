@@ -10,7 +10,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name="diaco_expiracionqueja")
-@NamedQuery(name="TipoExpiracion.findAll", query="SELECT t FROM TipoExpiracion t where t.id in (1,2,3,4,5,6,7,8,9)")
+@NamedQuery(name="TipoExpiracion.findAll", query="SELECT t FROM TipoExpiracion t where t.id in (1,2,3,4,5,6,7,8,9,10,11)")
 public class TipoExpiracion implements Serializable {
 	private static final long serialVersionUID = 1L;
 

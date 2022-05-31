@@ -191,6 +191,7 @@ export class FrmRazonFin {
 	nombre_consumidor: string;
 	nombre_proveedor: string;
 	id_estado_queja: number;
+	para_trabajar: boolean = false;
 }
 
 export class FrmBitacora {

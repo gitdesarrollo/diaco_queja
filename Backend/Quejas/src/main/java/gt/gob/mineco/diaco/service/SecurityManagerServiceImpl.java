@@ -96,6 +96,7 @@ public class SecurityManagerServiceImpl implements Serializable {
                 params.clear();
                 params.put("idUsuario", users.get(0).getIdUsuario());
                 TipoTokenBlacklist existeToken = dao.getExisteTokenUser(params);
+                //System.out.println("token obtenido, ID => "+existeToken.getIdUsuario()+"TOKEN => "+existeToken.getToken());
                 if (existeToken != null) {
                     if (this.authorized(existeToken.getToken())) {
                         
@@ -186,6 +187,7 @@ public class SecurityManagerServiceImpl implements Serializable {
                     String tokenGenerado = JWTUtils.generateToken(principal.getUsername(), payload, Constants.SESSION_DURATION);
                     principal.setToken(tokenGenerado);
                     principal.setFullname(user.getNombre());
+                    System.out.println("JJ Token generado"+tokenGenerado);
                     TipoTokenBlacklist blacklist = new TipoTokenBlacklist();
                     blacklist.setToken(principal.getToken());
                     Timestamp ahora = new Timestamp(new Date().getTime());

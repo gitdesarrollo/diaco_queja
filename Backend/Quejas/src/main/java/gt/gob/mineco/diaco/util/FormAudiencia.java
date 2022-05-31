@@ -23,6 +23,7 @@ public class FormAudiencia implements Serializable {
         private Integer id_departamento_interno;
         private Integer usuario;
         private String token;
+        private Integer id_audiencia_virtual;
 
         public FormAudiencia() {
         }
@@ -177,6 +178,20 @@ public class FormAudiencia implements Serializable {
 
     public void setUsuario(Integer usuario) {
         this.usuario = usuario;
+    }
+
+    /**
+     * @return the id_audiencia_virtual
+     */
+    public Integer getId_audiencia_virtual() {
+        return id_audiencia_virtual;
+    }
+
+    /**
+     * @param id_audiencia_virtual the id_audiencia_virtual to set
+     */
+    public void setId_audiencia_virtual(Integer id_audiencia_virtual) {
+        this.id_audiencia_virtual = id_audiencia_virtual;
     }
         
             

@@ -6,6 +6,7 @@
 package gt.gob.mineco.diaco.util;
 
 import com.google.gson.JsonObject;
+import java.util.Date;
 
 public class FormProveedor {
 
@@ -44,6 +45,8 @@ public class FormProveedor {
         private boolean permite_calificacion;
         private String token;
         private String usuario;
+        private String asesor;
+        private String fecha_fin_nombramiento;
 
     public String getToken() {
         return token;
@@ -378,10 +381,40 @@ public class FormProveedor {
                 temp.addProperty("servicio_publico",this.servicio_publico);
                 temp.addProperty("callecilla",this.callecilla);
                 temp.addProperty("permite_calificacion",this.permite_calificacion);
+            temp.addProperty("asesor",this.asesor);
+            temp.addProperty("fecha_fin_nombramiento",this.fecha_fin_nombramiento);
          
             
             return temp.toString()+",";
         }
+
+    /**
+     * @return the asesor
+     */
+    public String getAsesor() {
+        return asesor;
+    }
+
+    /**
+     * @param asesor the asesor to set
+     */
+    public void setAsesor(String asesor) {
+        this.asesor = asesor;
+    }
+
+    /**
+     * @return the fecha_fin_nombramiento
+     */
+    public String getFecha_fin_nombramiento() {
+        return fecha_fin_nombramiento;
+    }
+
+    /**
+     * @param fecha_fin_nombramiento the fecha_fin_nombramiento to set
+     */
+    public void setFecha_fin_nombramiento(String fecha_fin_nombramiento) {
+        this.fecha_fin_nombramiento = fecha_fin_nombramiento;
+    }
           
            
         

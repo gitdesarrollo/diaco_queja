@@ -116,7 +116,8 @@ export class SeguridadService {
   EditableporFlujo(flujo, estado){
 	  if(flujo==1){
 		  //if(estado>=101 && estado<=106)     ORIGINAL
-		  if(estado>=101 && estado<=133)     //EDITADO JJ
+		  //if(estado>=101 && estado<=133)     //EDITADO JJ
+		if(estado>=101 && estado<=152)   //EDITADO JJ
 			  return true;
 	  }else if(flujo==2){
 		  if(estado>=201 && estado<=206)

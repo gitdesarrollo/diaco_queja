@@ -489,7 +489,9 @@ public class SecurityManagerServiceImpl implements Serializable {
         blacklist.setInvalidationDate(ahora);
         blacklist.setIdUsuario(quejaini.getIdConsumidor());
         dao.createEntity(blacklist);
+        System.out.println("getBlacklistId(): "+blacklist.getBlacklistId() + " getToken():" +blacklist.getToken());
         //System.out.println("saved and replace "+token.replace(".", "a1b2c3"));
-        return token.replace(".", "a1b2c3");
+        //return token.replace(".", "a1b2c3"); LINEA ORIGINAL
+        return token;
     }
 }

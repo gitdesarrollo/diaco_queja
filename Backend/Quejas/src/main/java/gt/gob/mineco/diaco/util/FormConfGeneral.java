@@ -4,6 +4,20 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class FormConfGeneral implements Serializable {
+
+    /**
+     * @return the dias_primera_audiencia
+     */
+    public Integer getDias_primera_audiencia() {
+        return dias_primera_audiencia;
+    }
+
+    /**
+     * @param dias_primera_audiencia the dias_primera_audiencia to set
+     */
+    public void setDias_primera_audiencia(Integer dias_primera_audiencia) {
+        this.dias_primera_audiencia = dias_primera_audiencia;
+    }
         private String token;
         private Integer dias_expirar_atcon;
         private Integer dias_alerta_atcon;
@@ -22,6 +36,9 @@ public class FormConfGeneral implements Serializable {
         private Integer correos_audiencias;
         private Integer correos_archivar_sp;
         private Integer correos_conf_resp_pp;
+        
+        private Integer dias_primera_audiencia;
+        private Integer dias_segunda_audiencia;
         
         public FormConfGeneral() {
         }
@@ -168,6 +185,20 @@ public class FormConfGeneral implements Serializable {
 
     public void setCorreos_archivar_sp(Integer correos_archivar_sp) {
         this.correos_archivar_sp = correos_archivar_sp;
+    }
+
+    /**
+     * @return the dias_segunda_audiencia
+     */
+    public Integer getDias_segunda_audiencia() {
+        return dias_segunda_audiencia;
+    }
+
+    /**
+     * @param dias_segunda_audiencia the dias_segunda_audiencia to set
+     */
+    public void setDias_segunda_audiencia(Integer dias_segunda_audiencia) {
+        this.dias_segunda_audiencia = dias_segunda_audiencia;
     }
 
 }
