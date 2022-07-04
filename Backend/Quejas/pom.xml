@@ -6,7 +6,7 @@
 	 <artifactId>quejas</artifactId>
 	 <version>1.0.0</version>
 	 <packaging>war</packaging>
-	 <name>Quejas - JJ</name>
+	 <name>Quejas</name>
 	 <description>Proyecto backend DIACO</description>
 	<properties>
 		<java.version>8.0</java.version>
@@ -150,6 +150,12 @@
 				<version>5.5.13</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>4.5.10</version>
+        	</dependency>
+
 		<!-- <dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -165,7 +171,7 @@
             </dependency>
 	</dependencies>
 	<build>
-		<finalName>Quejas</finalName>
+		<finalName>quejas</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -40,7 +40,6 @@ public class Email {
     final String password="@DIACO$2019!";
     
     public boolean SendEmail(String from, String[] to, String subject, String body) throws Exception{
-            //Get the session object  
             Properties props = new Properties();  
             TipoMailServer mailserverparams = tipoDao.findAllTipoMailServer();
             
@@ -52,45 +51,20 @@ public class Email {
             props.put("mail.smtp.ehlo", "false");
             props.put("mail.smtp.auth", "false"); 
                Session session = Session.getInstance(props);
-            System.out.println("JJ-> SendEmail: Usuario: "+mailserverparams.getUsuario());
-            System.out.println("JJ-> SendEmail: from: "+from);
-            System.out.println("JJ-> SendEmail: to: "+to);
-            System.out.println("JJ-> SendEmail: subject: "+subject);
-            System.out.println("JJ-> SendEmail: body: "+body);
-            
-                //seccion para version local
-                /*props.put("mail.smtp.auth", "true");
-              Session session = Session.getInstance(props,
-             new javax.mail.Authenticator() {  
-               protected PasswordAuthentication getPasswordAuthentication() {  
-             return new PasswordAuthentication(user,password);  
-               }  
-             });*/            
-               
-               //Compose the message  
+             
                 try {  
                  MimeMessage message = new MimeMessage(session);  
                  message.setFrom(new InternetAddress(from));  
-                 
                 InternetAddress[] sendTo = new InternetAddress[to.length];
-		for (int i = 0; i <to.length; i++) {
-			sendTo[i] = new InternetAddress(to[i]);
-		}
-                 
+                for (int i = 0; i <to.length; i++) {
+                  sendTo[i] = new InternetAddress(to[i]);
+                }
                  message.addRecipients(Message.RecipientType.TO,sendTo);  
                  message.setSubject(subject);  
-                 //message.setText(body);  
                  message.setContent(body, "text/html; charset=utf-8");
-
-                //send the message  
-                 System.out.println("JJ-> SendEmail: message: "+message);
                  Transport.send(message);  
-                 System.out.println("message sent successfully...");  
-
             } catch (MessagingException e) {
-                System.out.println("Entrando al Catch de SendEmail.");
                 e.printStackTrace(); 
-                System.out.println("Error: SendEmail: "+e.getMessage());
                 return false;
             }
             return true;

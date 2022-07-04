@@ -34,6 +34,7 @@ export class QuejaService {
   
 
   getInfoConsumidorQueja(no_queja, anio){
+		
 	  return this._http.post(this.URLInfor, this.JsonInfo(no_queja, anio), this.httpOptions);
   }
 

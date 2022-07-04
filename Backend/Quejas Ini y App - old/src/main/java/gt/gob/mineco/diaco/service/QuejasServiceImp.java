@@ -25,6 +25,8 @@ import gt.gob.mineco.diaco.model.TipoPasoQueja;
 import gt.gob.mineco.diaco.model.TipoTelefono;
 import gt.gob.mineco.diaco.util.Constants;
 import gt.gob.mineco.diaco.util.Email;
+
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,6 +35,18 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+
+
 
 @Stateless
 public class QuejasServiceImp {
@@ -49,16 +63,9 @@ public class QuejasServiceImp {
     MunicipioRepository muniDao;
     @Inject
     PaisRepository paisDao;
-    
-    
-    ///////////////////////////////////////////////////FACTURA/////////////////////////////////////////////////////////////    
-    /*public DiacoQueja getFacturaByProveedor(String proveedor) {
-        try {
-            return quejaDao.findByProveedor(proveedor);
-        } catch (NoResultException ex) {
-            return null;
-        }
-    }*/
+
+    public static final String GET_URL_CALL = "http://128.5.4.59/api/diaco/sendNotificationDiacoCall";
+    public static final String GET_URL_WEB = "http://128.5.4.59/api/diaco/sendNotificationDiacoWeb";
     
     
     //////////////////////////////////////////////////////FINALIZA FACTURA/////////////////////////////////////////////////
@@ -131,57 +138,7 @@ public class QuejasServiceImp {
         return queja;
     }
 
-    /*
-    public DiacoQuejaDto saveQueja(DiacoQuejaDto quejaDto) {
-        DiacoQueja queja = new DiacoQueja();
-        // asignar estado 401
-        queja.setIdEstadoQueja(Constants.QUEJA_NUEVA);
-        // generar correlativo de queja
-        Integer noQueja = 1;
-        try {
-            noQueja = quejaDao.findMaxFromYear() + 1;
-        } catch (NoResultException ex) {
-            // si no hay resultados para el año actual, es la 1
-        }
-        queja.setAnio(LocalDate.now().getYear());
-        queja.setNoQueja(noQueja);
-        queja.setFechaQueja(new Timestamp(new Date().getTime()));
-        queja.setDetalleQueja(quejaDto.getDetalleQueja());
-        queja.setSolicitaQue(quejaDto.getSolicitaQue());
-        //busca proveedor
-        DiacoProveedor prov = new DiacoProveedor();
-        prov = proveedorDao.findByNit(quejaDto.getNitProveedor());
-        if (prov != null) {
-            queja.setIdProveedor(prov.getIdProveedor());
-        } else {
-            // crea el proveedor
-            prov = new DiacoProveedor();
-            prov.setIdProveedor(noQueja);
-            prov.setNitProveedor(quejaDto.getNitProveedor());
-            prov.setNombre("pendiente");
-            prov.setNombreEmpresa("pendiente");
-            proveedorDao.save(prov);
-            queja.setIdProveedor(prov.getIdProveedor());
-        }
-        //busca consumidor
-        DiacoConsumidor cons = new DiacoConsumidor();
-        cons = consumidorDao.findByDocumentoIdentificacion(quejaDto.getDpiPasaporte());
-        if (cons != null) {
-            queja.setIdConsumidor(cons.getIdConsumidor());
-        } else {
-            // crea consumidor
-            cons = new DiacoConsumidor();
-            cons.setDocumentoIdentificacion(quejaDto.getDpiPasaporte());
-            cons.setCorreoElectronico1(quejaDto.getCorreo());
-            cons.setTelefono(quejaDto.getTelefono());
-            cons.setNombre1(quejaDto.getNombre());
-            consumidorDao.save(cons);
-            queja.setIdConsumidor(cons.getIdConsumidor());
-        }
-        queja.setIdDiacoSede(1);
-        quejaDao.save(queja);
-        return quejaDto;
-    }*/
+    
     private Integer findNoQueja() {
         return this.quejaDao.findValInicialSec();//MANDA A TRAER EL CORRELATIVO DE DONDE DEBE EMPEZAR EL CORRELATIVO DE CADA AÑO
     }
@@ -439,12 +396,6 @@ public class QuejasServiceImp {
         return quejaIni;
     }
 
-    /*
-    public List<DiacoQuejaIniDto> getquejas(DiacoQuejaIniDto quejaIni) {
-        List<DiacoQuejaIniDto> rlist = new ArrayList<>();
-
-        return rlist;
-    }*/
     public Long getSecuencia() {
         return quejaDao.getSecuencia();
     }
@@ -488,18 +439,30 @@ public class QuejasServiceImp {
     }
 
     public boolean sendMail(DiacoQuejaIniDto queja, String subject, String tipo, String link) {
+
         Email correo = new Email();
         boolean resp = false;
         String server = this.proveedorDao.findParametro("instanciaServer");
+        
+
+       
+            
+       
         String salto = "<br>";
         String from = "info@diaco.gob.gt";
         String body = "";
         String body3 = "";
         String body5 = "";
+        String link_server = "";
+        String URL_FLAG = "";
+
+    
+        
         String body1 = "Estimado Sr.(a) " + queja.getNombre() + ":" + salto
                 + " Le notificamos que su queja ha sido recibida con éxito, "
                 //+ " para darle seguimiento a la misma puede consultar el No. " + queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString()) + salto;
                 + " la misma se identifica con el No. " + queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString()) + salto;
+        
         String body4 = "Estimado Sr.(a) " + queja.getNombre() + ":" + salto
                 + " Le notificamos que sus documentos de su queja se han recibido con éxito, "
                 //+ " para darle seguimiento a la misma puede consultar el No. " + queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString()) + salto;
@@ -512,12 +475,8 @@ public class QuejasServiceImp {
                 + "Área de Restaurantes 3er. Nivel Tel: 2501-9600";
         switch (tipo) {
             case "1":
-                /*body5 = "Para poder continuar con el trámite de su queja necesitamos que complete la " + salto
-                        + "información del siguiente link, así como que adjunte copia de la factura o" + salto
-                        + " documento de respaldo de la compra y su DPI: "
-                        + "<a href='http://" + server + "/dist6/#/consumidor/presencial/" + link + "/" + queja.getIdQueja() + "'>Click aqui </a>" + salto + salto
-                        + "Por favor, tome en cuenta que tiene 48 horas después de recibido este correo, " + salto
-                        + "para ingresar la información y subir sus los documentos." + salto + salto;*/
+                URL_FLAG = GET_URL_WEB;
+                link_server = "https://" + server + "/dist6/#/consumidor/presencial/" + link + "/" + queja.getIdQueja();
                 body5 = "Para poder continuar con el trámite de su queja necesitamos que complete la " + salto
                         + "información del siguiente link:"
                         + "<a href='https://" + server + "/dist6/#/consumidor/presencial/" + link + "/" + queja.getIdQueja() + "'>Click aquí </a>" + salto + salto
@@ -529,33 +488,58 @@ public class QuejasServiceImp {
                 body = body4 + body2; //notificación de ingreso de queja por el usuario.
                 break;
             case "3": //notificación de ingreso de queja call center
-                /*
-                body3 = "Le solicitamos por favor ingresar al siguiente link: " + salto + salto
-                        + "http://"+server+"/dist5/#/quejacon/0/" + link + salto + salto
-                        + " para ingresar copia de la factura o documento y su DPI" + salto
-                        + " tome en cuenta que tiene 24 horas despues de recibido este correo para subir sus documentos." + salto;
-                 */
+                URL_FLAG = GET_URL_CALL;
+                link_server = "https://" + server + "/dist5/#/quejacon/0/" + link;
                 body3 = "Para poder continuar con el trámite de su queja necesitamos que rectifique" + salto
                         + " la información del siguiente link, así como que adjunte copia de la factura " + salto
                         + " o documento de respaldo de la compra y su DPI: "
                         + "<a href='http://" + server + "/dist5/#/quejacon/0/" + link + "'>Click aqui </a>" + salto + salto
                         + "Por favor, tome en cuenta que tiene 48 horas después de recibido este correo, " + salto
                         + "para verificar la información y subir los documentos.";
-                body = body1 + body3 + body2 + salto + salto + salto; //notificación de ingreso de que archivos
+                body = body1 + body3 + body2 + salto + salto + salto; 
+                
                 break;
             default:
                 break;
         }
         try {
-            subject = "Notificación de queja grabada ".concat(queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString()));
-            System.out.println(queja.getCorreo());
-            String quejas[] = {queja.getCorreo()};
-            System.out.println(quejas.length);
+            // subject = "Notificación de queja grabada ".concat(queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString()));
+            // System.out.println(queja.getCorreo());
+            // String quejas[] = {queja.getCorreo()};
+            // System.out.println(quejas.length);
 
-            resp = correo.SendEmail(from, quejas, subject, body,
-                    this.proveedorDao.findParametro("email_host"),
-                    this.proveedorDao.findParametro("email_user"),
-                    this.proveedorDao.findParametro("email_pass"));
+   
+
+
+            List<NameValuePair> urlParameters = new ArrayList<>();
+            urlParameters.add(new BasicNameValuePair("to", queja.getCorreo()));
+            urlParameters.add(new BasicNameValuePair("name", queja.getNombre()));
+            urlParameters.add(new BasicNameValuePair("number",queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString())));
+            urlParameters.add(new BasicNameValuePair("link", link_server));
+    
+    
+            try {
+                HttpPost post = new HttpPost(URL_FLAG);
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                try (CloseableHttpClient httpClient = HttpClients.createDefault(); 
+                    CloseableHttpResponse response = httpClient.execute(post)){
+                        System.out.println("Enviado " + EntityUtils.toString(response.getEntity()));
+                        resp = true;
+                    
+                } catch (Exception e) {
+                    System.out.println("error en el envio " + e);
+                }
+            } catch (UnsupportedEncodingException e1) {
+                System.out.println("Error dos en el envio " + e1);
+            }
+
+
+            
+
+            // resp = correo.SendEmail(from, quejas, subject, body,
+            //         this.proveedorDao.findParametro("email_host"),
+            //         this.proveedorDao.findParametro("email_user"),
+            //         this.proveedorDao.findParametro("email_pass"));
         } catch (Exception e) {
 
         }

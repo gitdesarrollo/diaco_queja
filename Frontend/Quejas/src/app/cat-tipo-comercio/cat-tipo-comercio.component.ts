@@ -44,6 +44,7 @@ export class CatTipoComercioComponent implements OnInit {
     }
  
    addOrEdit() {
+    console.log("idActividad ", this.idActividad, " nombre ", this.nombre)
     let str="";
 if(this.id == 0) {
 if(this.nombre!=null) {

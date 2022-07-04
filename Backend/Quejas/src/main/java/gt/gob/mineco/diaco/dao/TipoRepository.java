@@ -109,9 +109,14 @@ import gt.gob.mineco.diaco.util.FormConsumidorQuery;
 import gt.gob.mineco.diaco.util.FormUsuarioSrch;
 import gt.gob.mineco.diaco.util.FormViewMainQueja1;
 import gt.gob.mineco.diaco.util.FormViewMainQueja2;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -125,6 +130,7 @@ import javax.persistence.Query;
 import javax.persistence.StoredProcedureQuery;
 import javax.persistence.TemporalType;
 import javax.transaction.SystemException;
+import gt.gob.mineco.diaco.dao.ConexionDb;
 
 @ApplicationScoped
 public class TipoRepository {
@@ -355,14 +361,43 @@ public class TipoRepository {
     }
 
     @SuppressWarnings("unchecked")
+    public List<TipoConsumidor> getIndoConsumidor(FormConsumidorQuery queja){
+        ConexionDb bd = new ConexionDb();
+        String sql = "select t.* from diaco_consumidor t inner join diaco_queja q on q.id_consumidor = t.id_consumidor  where q.no_queja = ? and q.anio = ?";
+        List<TipoConsumidor> lista = new ArrayList<TipoConsumidor>();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            connection = bd.getConnection();
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1,Integer.parseInt(queja.getNo_queja()));
+            ps.setInt(2,Integer.parseInt(queja.getAnio()));
+            rs = ps.executeQuery();
+            while(rs.next()){
+                TipoConsumidor consumidor = new TipoConsumidor();
+                consumidor.setTelefono(rs.getString("telefono"));
+                consumidor.setCorreo_electronico1(rs.getString("correo_electronico1"));
+                lista.add(consumidor);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return  lista;
+    }
+
+    @SuppressWarnings("unchecked")
     public List<TipoConsumidor> getConsumidorByQueja(FormConsumidorQuery queja) {
+        
         Query nq;
         // String querystring = "select t.telefono, t.correo_electronico1, t.correo_electronico2 from diaco_consumidor t inner join diaco_queja q on q.id_consumidor = t.id_consumidor where q.no_queja = :queja and q.anio = :anio";
         String querystring = "SELECT t from TipoConsumidor t inner join TipoQueja q where q.no_queja = :queja and q.anio = :anio";
         nq = this.em.createQuery(querystring);
         nq.setParameter("queja", Integer.parseInt(queja.getNo_queja()));
         nq.setParameter("anio", Integer.parseInt(queja.getAnio()));
-        return nq.getResultList();
+        //System.out.println("Queja "+queja.getNo_queja() + " año "+ queja.getAnio() +" Resultado " + DataList.get(0));
+        return  nq.getResultList();
     }
 
     @SuppressWarnings("unchecked")

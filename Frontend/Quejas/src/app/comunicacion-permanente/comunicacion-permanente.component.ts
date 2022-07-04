@@ -107,6 +107,7 @@ export class ComunicacionPermanenteComponent implements OnInit {
 }
 
   getInfoQueja(no_queja, anio){
+	console.log("queja ", no_queja , " año ", anio)
 	  this._quejaService.getInfoConsumidorQueja(no_queja,anio).subscribe(response => {
 		this.infoConsumidor = JSON.parse('['+response["value"].slice(0, -1) +']');
 	  })

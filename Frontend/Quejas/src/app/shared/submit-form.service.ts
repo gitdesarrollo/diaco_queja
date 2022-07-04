@@ -246,6 +246,7 @@ export class SubmitFormService {
   }
   
   LoadJuridico(formsubmit){
+	
 	  /*0-ninguno  1-normal  2-revisor  3-administrador*/
 	let str_queja_list='';
 	let i=0;

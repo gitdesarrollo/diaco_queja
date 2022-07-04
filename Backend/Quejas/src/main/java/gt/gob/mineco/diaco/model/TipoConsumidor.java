@@ -8,6 +8,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.Date;
 import gt.gob.mineco.diaco.model.TipoDepartamento;
 import gt.gob.mineco.diaco.model.TipoMunicipio;
+import gt.gob.mineco.diaco.model.TipoQueja;
 /**
  * The persistent class for the diaco_consumidor database table.
  * 
@@ -26,57 +27,57 @@ public class TipoConsumidor implements Serializable {
 	@Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "consumidor_seq")
         @SequenceGenerator(name = "consumidor_seq", sequenceName = "seq_diaco_consumidor", allocationSize = 1)
-	@Column(name="id_consumidor", precision=0) 
+	    @Column(name="id_consumidor", precision=0) 
         private Integer id_consumidor;
         @Column(name="nacionalidad")
         private Integer nacionalidad;
         @Column(name="tipo_consumidor")        
-	private Integer tipo_consumidor;
+	    private Integer tipo_consumidor;
         @Column(name="nit_consumidor")
         private String nit_consumidor;
-	@Column(name="documento_identificacion")        
-	private String documento_identificacion;
+	    @Column(name="documento_identificacion")        
+	    private String documento_identificacion;
         @Column(name="genero")        
-	private String genero;
+	    private String genero;
         @Column(name="direccion_calle")        
-	private String direccion_calle;
+	    private String direccion_calle;
         @Column(name="direccion_avenida")        
-	private String direccion_avenida;
+	    private String direccion_avenida;
         @Column(name="direccion_zona")        
-	private String direccion_zona;
+	    private String direccion_zona;
         @Column(name="codigo_municipio")        
-	private Integer codigo_municipio;
+	    private Integer codigo_municipio;
         @Column(name="codigo_departamento")        
-	private Integer codigo_departamento;
+	    private Integer codigo_departamento;
         @Column(name="sede_diaco_cercana")        
-	private Integer sede_diaco_cercana;
+	    private Integer sede_diaco_cercana;
         @Column(name="habilitado_notificacion_electronica")        
-	private String habilitado_notificacion_electronica;
+	    private String habilitado_notificacion_electronica;
         @Temporal(TemporalType.TIMESTAMP)
         @Column(name="fecha_adicion")
         private Date fecha_adicion;
         @Column(name="usuario_adiciono")        
-	private String usuario_adiciono;
+	    private String usuario_adiciono;
         @Column(name="usuario_modifico")        
-	private String usuario_modifico;
+	    private String usuario_modifico;
         @Column(name="nombre1")        
-	private String nombre1;
+	    private String nombre1;
         @Column(name="nombre2")        
-	private String nombre2;
+	    private String nombre2;
         @Column(name="nombre3")        
-	private String nombre3;
+	    private String nombre3;
         @Column(name="apellido1")        
-	private String apellido1;
+	    private String apellido1;
         @Column(name="apellido2")        
-	private String apellido2;
+	    private String apellido2;
         @Column(name="apellido_casada")        
-	private String apellido_casada;
+	    private String apellido_casada;
         @Column(name="id_motivo_queja")        
-	private Integer id_motivo_queja;
+	    private Integer id_motivo_queja;
         @Column(name="tipo_documento")        
-	private Integer tipo_documento;
+	    private Integer tipo_documento;
         @Column(name="id_pais")        
-	private Integer id_pais;
+	    private Integer id_pais;
         @Column(name="id_etnia")
         private Integer id_etnia;
         @Column(name="domicilio")
@@ -104,9 +105,11 @@ public class TipoConsumidor implements Serializable {
        @Column(name="autorizoPublicar")
        private String autorizoPublicar;
        
+       
         
         
         
+
         @OneToOne
         @JoinColumn(name = "codigo_departamento", referencedColumnName = "codigo_departamento",updatable=false, insertable=false)
         private TipoDepartamento tipoDepartamento;
@@ -563,4 +566,7 @@ public class TipoConsumidor implements Serializable {
             temp.addProperty("nombre_consumidor",nombrecompleto.replaceAll("null", "").replaceAll("\\s+", " ").trim());
             return temp;
         }
+
+   
+
 }

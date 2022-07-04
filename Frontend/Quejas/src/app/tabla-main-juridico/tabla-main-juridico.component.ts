@@ -74,6 +74,7 @@ export class TablaMainJuridicoComponent implements OnInit {
   data = [];
   filteredData = [];
   selected = [];
+  isDocumentador: boolean;
 
 
   //dtOptions: DataTables.Settings = {};
@@ -95,8 +96,8 @@ export class TablaMainJuridicoComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.LoadInputInfo();
-    //if( this.ValidateRefresh() ){
+    
+
     this.LoadServiceInfo();
     //this.setupDT();
     this.flagDBError = false;
@@ -177,6 +178,7 @@ export class TablaMainJuridicoComponent implements OnInit {
   }*/
 
   openVerifVirtual(NoQueja, strQueja) {
+    
     this.Token();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
@@ -531,6 +533,13 @@ export class TablaMainJuridicoComponent implements OnInit {
         this.flagDBError = true;
         this.SetSecTimerDBError();
       }
+
+      if(this._submitFormService.Get_Juridico() === 1){
+        this.isDocumentador = true
+      }else{
+        this.isDocumentador = false
+      }
+      
     }, (error) => {
       this.flagDBError = true;
       this.SetSecTimerDBError();

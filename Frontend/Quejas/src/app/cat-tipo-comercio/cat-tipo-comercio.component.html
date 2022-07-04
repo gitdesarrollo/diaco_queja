@@ -18,7 +18,7 @@
 <div class="container">
 <div class="row">
   <div class="col-md-8 mt-4">
-        <ul>
+        <!-- <ul>
       <li 
       *ngFor="let comercio of comercioArray"
       class="list-group-item list-group-item-action"
@@ -27,7 +27,7 @@
       >
       <span class="badge badge.primary">{{comercio.id_tipo_comercio}}</span> {{comercio.tipo_comercio}}
       </li>
-    </ul>
+    </ul> -->
     <div class="card mt-4">
       <div class="card-body">
 
@@ -35,7 +35,10 @@
           <tr>
             <td>(*)Selecciona actividad economica</td>
             <td>
-              <select>
+              <select [(ngModel)]="selectedTipoComercio.id_actividad_economica" class="form-control">
+                <option *ngFor="let actividad of actividadArray" [value]="actividad.id_actividad_economica">{{actividad.nombre_actividad_economica}}</option>
+              </select>
+              <!-- <select>
                 <option selected>
                     {{selectedTipoComercio.id_actividad_economica}}  {{selectedTipoComercio.nombre_actividad_economica}}
                 </option>
@@ -46,7 +49,7 @@
                 {{actividad.id_actividad_economica}} {{actividad.nombre_actividad_economica}}
               </option>
                 
-              </select>
+              </select> -->
 
             </td>
           </tr>

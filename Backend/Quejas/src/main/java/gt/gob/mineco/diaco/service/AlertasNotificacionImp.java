@@ -42,7 +42,7 @@ public class AlertasNotificacionImp implements AlertasNotificacionService{
     }
 
     public List<TipoConsumidor> getDataByQueja(FormConsumidorQuery queja){
-        return tipoDao.getConsumidorByQueja(queja);
+        return tipoDao.getIndoConsumidor(queja);
     }
 
 

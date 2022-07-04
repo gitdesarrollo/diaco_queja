@@ -76,27 +76,27 @@
         <ngx-datatable-column name="Datos Completos" prop="completo_dato" [flexGrow]="2">
           <ng-template ngx-datatable-cell-template let-value="value" let-row="row"  >
             <ng-container *ngIf="row.completo_datos === 'Datos Completos'">
-              Datos Completos
+              Datos Completos 
             </ng-container><ng-container *ngIf="row.completo_datos === 'Faltan Datos'">
-            Faltan Datos
+            Faltan Datos 
           </ng-container>
           </ng-template>
         </ngx-datatable-column>
-			<ngx-datatable-column name="actions" sortable="false" prop="id_queja" [flexGrow]="4">
-				 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-						<button 
-							title="Conciliación Previa"
+			<ngx-datatable-column name="actions" sortable="false" prop="id_queja" [flexGrow]="4"  *ngIf="isDocumentador; else noes">
+				 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template >
+						<!-- <button 
+							title="Archivos Pdf"
 							[ngClass]="downloadClassIcon()"
 							(click)="clickStopper($event);donwloadFileZip(row.quejanumero);">
 							<i class="fa fa-download fa-2x" aria-hidden="true"></i>
-						</button>
+						</button> -->
 						<button 
 							title="Documentado" 
 							[ngClass]="changeClassIcon()" 
 							(click)="clickStopper($event);openDocumentar(value, row.quejanumero);">
 							<i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i>
 						</button>
-						<button 
+						<!-- <button 
 							title="Audencia de Ofrecimientos de Medio de Prueba" 
 							[ngClass]="changeClassIcon()" 
 							(click)="clickStopper($event);openSegundaAudiencia(value, row.quejanumero,2);">
@@ -159,9 +159,93 @@
 							(click)="clickStopper($event);openListadoArchivos(value, row.quejanumero, 2);">
 							<i class="fa fa-paperclip fa-2x" aria-hidden="true"></i>
 						</button>
-						</div>
+						</div> -->
 				</ng-template>
 			</ngx-datatable-column>
+			<ng-template #noes>
+				<ngx-datatable-column name="actions" sortable="false" prop="id_queja" [flexGrow]="4"  >
+					 <ng-template let-row="row" let-value="value" ngx-datatable-cell-template >
+							<button 
+								title="Archivos Pdf"
+								[ngClass]="downloadClassIcon()"
+								(click)="clickStopper($event);donwloadFileZip(row.quejanumero);">
+								<i class="fa fa-download fa-2x" aria-hidden="true"></i>
+							</button>
+							<button 
+								title="Documentado" 
+								[ngClass]="changeClassIcon()" 
+								(click)="clickStopper($event);openDocumentar(value, row.quejanumero);">
+								<i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i>
+							</button>
+							<button 
+								title="Audencia de Ofrecimientos de Medio de Prueba" 
+								[ngClass]="changeClassIcon()" 
+								(click)="clickStopper($event);openSegundaAudiencia(value, row.quejanumero,2);">
+								<i class="fa fa-calendar fa-2x" aria-hidden="true"></i>
+							</button>
+							<button 
+								title="Resultado de Audiencia" 
+								[ngClass]="changeClassIcon()" 
+								(click)="clickStopper($event);openJuridicoResultadoAudiencia(value, row.quejanumero);">
+								<i class="fa fa-calendar-check-o fa-2x" aria-hidden="true"></i>
+							</button>
+							<button 
+								title="Resolución Final" 
+								[ngClass]="changeClassIcon()" 
+								(click)="clickStopper($event);openJuridicoResolucionFinal(value, row.quejanumero);">
+								<i class="fa fa-check-square-o fa-2x" aria-hidden="true"></i>
+							</button>
+							<button 
+								title="Comunicación Permanente" 
+								[ngClass]="changeClassIcon()" 
+								(click)="clickStopper($event);openComPermanente(value, row.quejanumero,2, row.anio);">
+								<i class="fa fa-commenting-o fa-2x" aria-hidden="true"></i>
+							</button>
+							<div class="hoverbtns" style="display:none">
+							<p style="font-size:25%"></p>
+							<button 
+								title="Verificación de Datos" 
+								[ngClass]="changeClassIcon()" 
+								(click)="clickStopper($event);openVerifDatos(value, row.quejanumero,2);">
+								<i class="fa fa-list-alt fa-2x" aria-hidden="true"></i>
+							</button>
+							<button 
+								title="Movimiento de Expendiente" 
+								[ngClass]="changeClassIcon()" 
+								(click)="clickStopper($event);openMovimientoExpediente(value, row.quejanumero);">
+								<i class="fa fa-arrow-right fa-2x" aria-hidden="true"></i>
+							</button>
+							<button 
+								title="Cierre de la Queja" 
+								[ngClass]="changeClassIcon()" 
+								(click)="clickStopper($event);openArchivarQueja(value, row.quejanumero);">
+								<i class="fa fa-times fa-2x" aria-hidden="true"></i>
+							</button>
+							<button 
+								title="Conciliación" 
+								[ngClass]="changeClassIcon()" 
+								(click)="clickStopper($event);openConciliacion(value, row.quejanumero);">
+								<i class="fa fa-check fa-2x" aria-hidden="true"></i>
+							</button>
+							<button 
+								title="Bit&aacute;cora" 
+								[ngClass]="changeClassIcon()" 
+								(click)="clickStopper($event);openBitacora(value, row.quejanumero, 2);">
+								<i class="fa fa-database fa-2x" aria-hidden="true"></i>
+							</button>
+							<hr class="hr-dashboard">
+							<button 
+								title="Listado de Archivos" 
+								[ngClass]="changeClassIcon()" 
+								(click)="clickStopper($event);openListadoArchivos(value, row.quejanumero, 2);">
+								<i class="fa fa-paperclip fa-2x" aria-hidden="true"></i>
+							</button>
+							</div>
+					</ng-template>
+				</ngx-datatable-column>
+
+			</ng-template>
+
 
       </ngx-datatable>
   </div>

@@ -137,6 +137,7 @@ import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.transaction.UserTransaction;
 import org.apache.commons.lang3.RandomStringUtils;
+import gt.gob.mineco.diaco.service.NotificacionServiceImp;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -150,6 +151,7 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
     private SecurityManagerServiceImpl smsi;
     @Inject
     private Crypto cryptoSvc;
+    
     //Crypto cryptoSvc;
     String[] ArrMagicLink = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
     /**
@@ -159,6 +161,8 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
     NotificacionCorreoImp notificacionService;
     // Constante que almacena la cadena: ERROR.
     private static final String ERROR = "ERROR";
+
+    NotificacionServiceImp emailService = new NotificacionServiceImp();
 
     //queja
     @Override
@@ -815,13 +819,17 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
             if (efuente != null) {
                 if (efuente.getActivo() == 1) {
                     //correo comunicacion permanente
-                    String cuerpo = "Estimado Usuario, se ha comenzado el proceso de revisión de su queja por parte de personal interno de DIACO.<br>"+"<br>"
-                            + "Descripción: " + LimpiaStringTildes(formComConsumidor.getEstatus()) + "<br>"
-                            + "Observaciones: " + LimpiaStringTildes(formComConsumidor.getObservaciones());
-                    String[] mailstring = GetEmailStringContribuyente(vTipoQueja.getId_consumidor());
-                    System.out.println("JJ: funcion saveEmailEnviar: parametros, mailstring:" + mailstring + ",cuerpo: " + cuerpo);
-                    boolean resp = saveEmailEnviar(mailstring, Constants.REG_DIACO_FUENTE_EMAIL_COM_PERMANENTE, cuerpo); // fuente de email 7 com perm
-                    System.out.println("Respuesta de saveEmailEnviar: " + resp);
+
+                    
+                    //String cuerpo = "Estimado Usuario, se ha comenzado el proceso de revisión de su queja por parte de personal interno de DIACO.<br>"+"<br>"
+                          //  + "Descripción: " + LimpiaStringTildes(formComConsumidor.getEstatus()) + "<br>"
+                         //   + "Observaciones: " + LimpiaStringTildes(formComConsumidor.getObservaciones());
+                    //String[] mailstring = GetEmailStringContribuyente(vTipoQueja.getId_consumidor());
+                    //System.out.println("JJ: funcion saveEmailEnviar: parametros, mailstring:" + mailstring + ",cuerpo: " + cuerpo);
+                    //boolean resp = saveEmailEnviar(mailstring, Constants.REG_DIACO_FUENTE_EMAIL_COM_PERMANENTE, cuerpo); // fuente de email 7 com perm
+                    //System.out.println("Respuesta de saveEmailEnviar: " + resp);
+                    String to = getEmailConsumer(vTipoQueja.getId_consumidor());
+                    emailService.permanentCommunitacion(to, LimpiaStringTildes(formComConsumidor.getEstatus()), LimpiaStringTildes(formComConsumidor.getObservaciones()), true);
                 }
             }
             //bitacora auto log
@@ -5821,35 +5829,23 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
     private boolean saveEmailEnviar(String[] para, Integer idfuente, String cuerpo) throws Exception {
         TipoEmailEnviar vTipoEmailEnviar = new TipoEmailEnviar();
         TipoEmailFuente vTipoEmailFuente = tipoDao.findByIdEmailFuente(idfuente);
-        System.out.println("REVISOR JJ: Resultado de variable vTipoEmailFuente: " + vTipoEmailFuente);
-        System.out.println("REVISOR JJ: Resultado de variable vTipoEmailFuente.getDe(): " + vTipoEmailFuente.getDe());
-        System.out.println("REVISOR JJ: Resultado de variable vTipoEmailFuente.getSubject(): " + vTipoEmailFuente.getSubject());
-        System.out.println("REVISOR JJ: Resultado de variable cuerpo: " + cuerpo);
-        //Email email=new Email();
-        //send email
-        boolean result = email.SendEmail(vTipoEmailFuente.getDe(), para, vTipoEmailFuente.getSubject(), cuerpo);
-        System.out.println("REVISOR JJ: Resultado de variable result: " + result);
+        //boolean result = email.SendEmail(vTipoEmailFuente.getDe(), para, vTipoEmailFuente.getSubject(), cuerpo);
         vTipoEmailEnviar.setMensaje(cuerpo);
         vTipoEmailEnviar.setDe(vTipoEmailFuente.getDe());
         vTipoEmailEnviar.setPara(Arrays.toString(para));
         vTipoEmailEnviar.setSubject(vTipoEmailFuente.getSubject());
         vTipoEmailEnviar.setFecha_creado(new Date());
         vTipoEmailEnviar.setId_fuente(idfuente);
-        System.out.println("LLEGÒ SIN ERROR, saveEmailEnviar, valor de id_queja: " + vTipoEmailEnviar.getId_queja());
-        if (result) {
+        //if (result) {
             vTipoEmailEnviar.setEstado("I");
             vTipoEmailEnviar.setFallos(0);
             vTipoEmailEnviar.setFecha_enviado(new Date());
-        } else {
-            vTipoEmailEnviar.setEstado("A");
-            vTipoEmailEnviar.setFallos(1);
-            //System.out.println("else, valor de vTipoEmailEnviar: "+ vTipoEmailEnviar.toString());
-            //tipoDao.saveEmailEnviar(vTipoEmailEnviar);
-            return false;
-        }
-        //System.out.println("if, valor de vTipoEmailEnviar: "+ vTipoEmailEnviar.toString());
-        //tipoDao.saveEmailEnviar(vTipoEmailEnviar);
-        System.out.println("LLEGÒ SIN ERROR, despues de saveEmailEnviar");
+       // } 
+        // else {
+        //     vTipoEmailEnviar.setEstado("A");
+        //     vTipoEmailEnviar.setFallos(1);
+        //     return false;
+        // }
         return true;
     }
 
@@ -5883,6 +5879,19 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
             return recipients;
         } else {
             return new String[0];
+        }
+    }
+
+    private String getEmailConsumer(Integer id) {
+        List<TipoEmail> vTipoEmail = tipoDao.findAllTiposEmail(id, "C");
+        if (!vTipoEmail.isEmpty()) {
+            String recipients = "";
+            for (TipoEmail loc : vTipoEmail) {
+                recipients = loc.getCorreo_electronico();
+            }
+            return recipients;
+        } else {
+            return "failed";
         }
     }
 
@@ -5923,11 +5932,12 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
             }
             vTipoMagicLink.setId_referencia(param1);
             tipoDao.saveMagicLink(vTipoMagicLink);
-            String link = "<a href='" + vTipoEmailFuente.getRoot() + "#/Redirect/" + magiclink;
+            //String link = "<a class='es-button' target='_blank' href='" + vTipoEmailFuente.getRoot() + "#/Redirect/" + magiclink;
+            String link = vTipoEmailFuente.getRoot() + "#/Redirect/" + magiclink;
             /*if (!param1.isEmpty()) {
                 link = link + "/" + param1;
             }*/
-            link = link + "'>Click aqui</a>";
+            //link = link + "'>Click aqui</a>";
             return link;
         } else {
             return GenerateMagicLink(id_queja, id_fuente, param1);
@@ -6034,31 +6044,26 @@ public class TipoAreaComunServiceImp implements TipoAreaComunService {
 
             //revisar si correo esta activo en parametros de sistema
             TipoEmailFuente efuente = tipoDao.findByIdEmailFuente(Constants.REG_DIACO_FUENTE_EMAIL_VERIF_DATOS_INFO_EXTRA);
+
             if (efuente != null) {
                 if (efuente.getActivo() == 1) {
                     //save, send email
                     TipoVerifConcVirt vTipoVerifConcVirt = tipoDao.findAllVerifConcVirt(formulario.getId_queja());
                     String cuerpo;
+                    String to = getEmailConsumer(vTipoQueja.getId_consumidor());
+                    
                     if (vTipoVerifConcVirt != null) {
 
-                        cuerpo = "Estimado Consumidor(a) / Usuario(a):<br> DIACO le informa que en el sistema aparece que no hubo un acuerdo entre el proveedor y su persona."
-                                + "Por lo que, para que Diaco programe la audiencia de conciliaci&oacute;n y no se cierre el caso, por favor ingresar datos complementarios "
-                                + "para el proceso respectivo en la siguiente direcci&oacute;n: ";
+                        // cuerpo = "Estimado Consumidor(a) / Usuario(a):<br> DIACO le informa que en el sistema aparece que no hubo un acuerdo entre el proveedor y su persona."
+                        //         + "Por lo que, para que Diaco programe la audiencia de conciliaci&oacute;n y no se cierre el caso, por favor ingresar datos complementarios "
+                        //         + "para el proceso respectivo en la siguiente direcci&oacute;n: ";
+                        emailService.consumerNotification(to, GenerateMagicLink(formulario.getId_queja(), Constants.REG_DIACO_FUENTE_EMAIL_VERIF_DATOS_INFO_EXTRA, 0),false);
                     } else {
-                        cuerpo = "Estimado Consumidor(a) / Usuario(a):<br> DIACO le informa que para poder continuar con el tramite de su queja necesitamos que llene la informaci&oacute;n del siguiente link: ";
+                        
+                        emailService.consumerNotification(to, GenerateMagicLink(formulario.getId_queja(), Constants.REG_DIACO_FUENTE_EMAIL_VERIF_DATOS_INFO_EXTRA, 0),true);
                     }
-                    cuerpo = cuerpo + GenerateMagicLink(formulario.getId_queja(), Constants.REG_DIACO_FUENTE_EMAIL_VERIF_DATOS_INFO_EXTRA, 0);
-                    String[] mailstring = GetEmailStringContribuyente(vTipoQueja.getId_consumidor());
-                    System.out.println("REVISOR JJ: Resultado de variable mailstring: " + mailstring);
-                    System.out.println("REVISOR JJ: Resultado de variable mailstring como Array: " + Arrays.toString(mailstring));
-                    System.out.println("REVISOR JJ: Resultado de variable cuerpo: " + cuerpo);
-                    boolean sendmail = saveEmailEnviar(mailstring, Constants.REG_DIACO_FUENTE_EMAIL_VERIF_DATOS_INFO_EXTRA, cuerpo); // fuente de email 2: verificacion de datos informacion adicional
 
-                    if (!sendmail) {
-                        response.setReason("EMAILFAIL");
-                    } else {
                         response.setReason("OK");
-                    }
                 }
             }
 
