@@ -81,6 +81,7 @@ import gt.gob.mineco.diaco.util.NumerosEnLetras;
 import gt.gob.mineco.diaco.util.NumerosEnLetrasOrdinales;
 import gt.gob.mineco.diaco.util.OOoOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.text.Format;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -111,13 +112,13 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
     private bitacoraPdfService bitacoraPdf;
 
     
-        private final String URL_PATH = "/home/diaco/Documentos/FILESERVER/FILESERVER/files"; //PRODUCCION
-        private final String oooExeFolder = "/opt/libreoffice6.1/program";//PRODUCCION
-        private final String workingDir= "/home/diaco/Documentos/FILESERVER/diacoRegistros1/"; //PRODUCCION
+        // private final String URL_PATH = "/home/diaco/Documentos/FILESERVER/FILESERVER/files"; //PRODUCCION
+        // private final String oooExeFolder = "/opt/libreoffice6.1/program";//PRODUCCION
+        // private final String workingDir= "/home/diaco/Documentos/FILESERVER/diacoRegistros1/"; //PRODUCCION
 
-        // private final String URL_PATH = "D:/www/diaco_java/diaco_queja/files"; //DESARROLLO
-        // private final String oooExeFolder="C:/Program Files/LibreOffice/program"; //DESARROLLO
-        // private final String workingDir="D:/www/FILESERVER/diacoRegistros1/"; //DESARROLLO
+        private final String URL_PATH = "D:/www/diaco_java/diaco_queja/files"; //DESARROLLO
+        private final String oooExeFolder="C:/Program Files/LibreOffice/program"; //DESARROLLO
+        private final String workingDir="D:/www/FILESERVER/diacoRegistros1/"; //DESARROLLO
     
 
         public String CreateDirectory(String no_queja){
@@ -163,6 +164,7 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
                         return false;
                 }
         }
+        
         static public void zipFolder(String srcFolder, String destZipFile) throws Exception {
                 ZipOutputStream zip = null;
                 FileOutputStream fileWriter = null;
@@ -431,15 +433,17 @@ public class TipoRegistrosQuejaServiceImpl implements TipoRegistrosQuejaService 
 
                 ByteArrayInputStream inStream = new ByteArrayInputStream(output.toByteArray());
 
-                //     construcción del pdf, utilizando itextpdf       
+                //     construcción del pdf, utilizando itextpdf    
+                
 
                 String no_queja = formQueja.getQuejanumero().toString() + "-" + formQueja.getAnio_queja();
                 if (setPdfDirectory(no_queja,"caratula","DIACO-AQ-FO-02", output.toByteArray())){
-                        System.out.println("guardado");
+                        String nombre_archivo2 = no_queja + "-caratula.pdf"; 
+                        System.out.println("guardado " + nombre_archivo2);
                 }
 
                 ResponseBuilder response = Response.ok((Object) inStream);
-                response.header("Content-Disposition", "attachment;filename=queja.docx");
+                response.header("Content-Disposition", "attachment;filename=archivo.pdf");
                 return response.build();
 
         } catch (Exception e) {

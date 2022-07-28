@@ -129,6 +129,7 @@ export class PquejainiComponent implements OnInit {
 				
 			}
 		);
+		console.log("p ", this.vdato, " p2 ", this.vid)
 		//verificar parametros
 		//console.info("--->>",this.vdato,this.vid,this.vqueja);
 		if ((this.vdato == "presencial" || this.vdato == "callcenter") && this.vid != "") {
@@ -199,7 +200,7 @@ export class PquejainiComponent implements OnInit {
 		console.info(type);
 
 		this.vact = this.uploader.queue.length - 1;
-		console.info(this.factura);
+		console.info(" vact " , this.vact);
 		if (this.uploader.queue.length > 0) {
 			if (type == 'FAC') {
 				if (this.factura && this.facturaIndex > -1) {
@@ -765,7 +766,7 @@ export class PquejainiComponent implements OnInit {
 						console.log('entro a getFormularioQuejaRegistro', registrodata[0]['id'], tempresponse, tempstr.value["id"], tempresponse["id"], tempresponse['id'], tempresponse.id, tempstr['value']['id']);
 						//this.quejasService.getFormularioQuejaRegistro(registrodata[0]['id'],this.vid).subscribe((Data)=>{
 						this.quejasService.getFormularioQuejaRegistro(this.vidqueja, this.vid).subscribe((Data) => {
-							console.log('entro a openRegisto');
+							console.log('entro a openRegisto', Data);
 							//this._registrosservice.FileDownLoadChoose(Data,1);
 							const blob = new Blob([Data], { type: 'application/pdf' });
 							const url = window.URL.createObjectURL(blob);

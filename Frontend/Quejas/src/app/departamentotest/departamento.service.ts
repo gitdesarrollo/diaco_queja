@@ -15,8 +15,8 @@ import { Observable, of, Subject } from 'rxjs';*/
 })
 export class DepartamentoService {
   //http://desagestorquejas.diaco.gob.gt
-  //private baseUrl:string='http://localhost:8080/diaco-int-web/rs/tipos-departamentos/';
-	private baseUrl:string='http://desagestorquejas.diaco.gob.gt/diaco-int-web/rs/tipos-departamentos/';
+  private baseUrl:string='http://localhost:8080/diaco-int-web/rs/tipos-departamentos/';
+	// private baseUrl:string='http://dev.mineco.gob.gt/diaco-int-web/rs/tipos-departamentos/';
 	private headers= new Headers({'Content.Type':'application/json'});
 	private options=new RequestOptions({headers:this.headers});
   constructor(private _http:Http) { }

@@ -32,6 +32,7 @@
     "@swimlane/ngx-datatable": "^14.0.0",
     "angular-datatables": "^7.0.0",
     "angular-popper": "^2.0.1",
+    "angular2-jwt": "^0.2.3",
     "bootstrap": "^4.2.1",
     "core-js": "^2.4.1",
     "datatables.net": "^1.10.19",

@@ -46,8 +46,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-
-
 @Stateless
 public class QuejasServiceImp {
 
@@ -66,22 +64,22 @@ public class QuejasServiceImp {
 
     public static final String GET_URL_CALL = "http://128.5.4.59/api/diaco/sendNotificationDiacoCall";
     public static final String GET_URL_WEB = "http://128.5.4.59/api/diaco/sendNotificationDiacoWeb";
-    
-    
-    //////////////////////////////////////////////////////FINALIZA FACTURA/////////////////////////////////////////////////
 
-    //procedimiento que se llama cuando se llena los 40 datos
+    ////////////////////////////////////////////////////// FINALIZA
+    ////////////////////////////////////////////////////// FACTURA/////////////////////////////////////////////////
+
+    // procedimiento que se llama cuando se llena los 40 datos
     public DiacoQueja saveQuejadq(DiacoQueja queja) {
         boolean existeq = false;
-        
+
         if (queja.getIdQueja() != null) {
             System.out.println("actualiza queja " + queja.getIdQueja());
             existeq = true;
-            //busca proveedor para envio a cola de asignacion
+            // busca proveedor para envio a cola de asignacion
         } else {
             System.out.println("graba nueva queja ");
             // asignar estado 401
-            //queja.setIdEstadoQueja(Constants.QUEJA_NUEVA);
+            // queja.setIdEstadoQueja(Constants.QUEJA_NUEVA);
             // generar correlativo de queja
             Integer noQueja = 0;
             Integer noQuejaIni = this.findNoQueja();
@@ -105,12 +103,16 @@ public class QuejasServiceImp {
             queja.setFechaQueja(new Timestamp(new Date().getTime()));
 
         }
+
+
         if (existeq) {
             quejaDao.merge(queja);
-            
+
         } else {
             quejaDao.save(queja);
         }
+
+        
         if (queja.getIdEstadoQueja() != null) {
             // pasar la linea 101
             this.quejaDao.grabaAtencionConsumidor(queja);
@@ -127,39 +129,32 @@ public class QuejasServiceImp {
                     }
                 } else {
                     System.out.println("finaliza la queja, el proveedor no tiene estado en la habilitacion .");
-                    //this.quejaDao.grabaAtencionConsumidor(queja);
+                    // this.quejaDao.grabaAtencionConsumidor(queja);
                     System.out.println("ingreso a cola");
                 }
             } else {
                 System.out.println("no existe proveedor ");
             }
         }
-        //DiacoProveedor pt = this.proveedorDao.findByNit(quejaIni.getNitProveedor() != null ? quejaIni.getNitProveedor() : "0");
+        // DiacoProveedor pt = this.proveedorDao.findByNit(quejaIni.getNitProveedor() !=
+        // null ? quejaIni.getNitProveedor() : "0");
         return queja;
     }
 
-    
     private Integer findNoQueja() {
-        return this.quejaDao.findValInicialSec();//MANDA A TRAER EL CORRELATIVO DE DONDE DEBE EMPEZAR EL CORRELATIVO DE CADA AÑO
+        return this.quejaDao.findValInicialSec();// MANDA A TRAER EL CORRELATIVO DE DONDE DEBE EMPEZAR EL CORRELATIVO DE
+                                                 // CADA AÑO
     }
 
     public DiacoQuejaIniDto saveQuejaIni(DiacoQuejaIniDto quejaIni) {
         DiacoQueja queja = new DiacoQueja();
         Integer noQueja = 0;
-        Integer noQuejaIni = this.findNoQueja(); //noQuejaIni contiene al correlativo de donde debe empezar.
+        Integer noQuejaIni = this.findNoQueja();
         String conciliacion = "0";
-        //verifica si existe el proveedor
-        //DiacoProveedor pt = this.proveedorDao.findById(quejaIni.getIdProveedor() != null ? quejaIni.getIdProveedor() : 0);
-        //DiacoProveedor pt = this.proveedorDao.findByNit(quejaIni.getNitProveedor() != null ? quejaIni.getNitProveedor() : "0");    //ORIGINAL
         DiacoProveedor pt = this.proveedorDao.findByNit(quejaIni.getNitProveedor() != null && "".equals(quejaIni.getNitProveedor()) ? "NULL" : quejaIni.getNitProveedor());
-        //DiacoConsumidor ct = this.consumidorDao.findById(quejaIni.getIdConsumidor() != null ? quejaIni.getIdConsumidor() : 0);
         DiacoConsumidor ct = this.consumidorDao.findByDocumentoIdentificacion(quejaIni.getDpiPasaporte() != null ? quejaIni.getDpiPasaporte() : "0");
-
-        //verificamos que exista el 
         try {
-            //System.out.println("noqueja "+noQuejaIni!=null?noQuejaIni:0);
-            noQueja = quejaDao.findMaxFromYear();// + 1; //TRAE EL NO. DE QUEJA DE LA ULTIMA QUEJA DEL AÑO
-            //System.out.println("noqueja "+noQueja!=null?noQueja:0);
+            noQueja = quejaDao.findMaxFromYear();
             if (noQueja != null) {
                 noQueja = noQueja + 1;
                 if (noQueja < noQuejaIni) {
@@ -169,34 +164,40 @@ public class QuejasServiceImp {
                 noQueja = noQuejaIni;
             }
         } catch (NoResultException ex) {
-            // si no hay resultados para el año actual, es la 1
+            System.out.println("En catch 1");
             noQueja = noQuejaIni;
         }
-        //if (!quejaIni.getIdProveedor().toString().equals("0")) {
         if (pt != null) {
             queja.setIdProveedor(pt.getIdProveedor());
-
-            if (pt.getHabilitadoConciliacionPrevia().equals("1")) {
-                System.out.println("graba estado queja 401");
-                queja.setIdEstadoQueja(Constants.QUEJA_NUEVA);
-                queja.setDireccionProveedor(pt.getDireccion() != null ? pt.getDireccion() : (pt.getDireccionDetalle() != null ? pt.getDireccionDetalle() : "Sin direccion"));
-                queja.setIdDepartamentoProveedor(pt.getCodigoDepartamento() != null ? pt.getCodigoDepartamento() : (pt.getDepartamento() != null ? pt.getDepartamento().getCodigoDepartamento() : 9));
-                queja.setIdMunicipioProveedor(pt.getCodigoMunicipio() != null ? pt.getCodigoMunicipio() : (pt.getMunicipio() != null ? pt.getMunicipio().getCodigoMunicipio() : 1));
-                queja.setZonaProveedor(pt.getDireccionZona() != null ? Integer.parseInt(pt.getDireccionZona()) : 0);
-                queja.setIdDiacoSede(1);
-                conciliacion = "1";
+            if(pt.getHabilitadoConciliacionPrevia() != null){
+                if (pt.getHabilitadoConciliacionPrevia().equals("1")) {
+                    System.out.println("graba estado queja 401");
+                    queja.setIdEstadoQueja(Constants.QUEJA_NUEVA);
+                    queja.setDireccionProveedor(pt.getDireccion() != null ? pt.getDireccion()
+                            : (pt.getDireccionDetalle() != null ? pt.getDireccionDetalle() : "Sin direccion"));
+                    queja.setIdDepartamentoProveedor(pt.getCodigoDepartamento() != null ? pt.getCodigoDepartamento()
+                            : (pt.getDepartamento() != null ? pt.getDepartamento().getCodigoDepartamento() : 9));
+                    queja.setIdMunicipioProveedor(pt.getCodigoMunicipio() != null ? pt.getCodigoMunicipio()
+                            : (pt.getMunicipio() != null ? pt.getMunicipio().getCodigoMunicipio() : 1));
+                    queja.setZonaProveedor(pt.getDireccionZona() != null ? Integer.parseInt(pt.getDireccionZona()) : 0);
+                    queja.setIdDiacoSede(1);
+                    conciliacion = "1";
+                }
+            }else {
+                System.out.println("El proveedor es null");
             }
+
         } else {
-            //Graba proveedor
+            // Graba proveedor
             DiacoProveedor prov = new DiacoProveedor();
             prov = new DiacoProveedor();
-            //prov.setIdProveedor(noQueja);
+            // prov.setIdProveedor(noQueja);
             prov.setNitProveedor(quejaIni.getNitProveedor());
             prov.setNombre("pendiente");
             prov.setPrimerNombre("pendiente");
             prov.setPrimerApellido("pendiente");
             prov.setNombreEmpresa("pendiente");
-            prov.setHabilitadoConciliacionPrevia("0");  //para que pueda arrncar sin problemas la cola
+            prov.setHabilitadoConciliacionPrevia("0");
             prov.setDireccion("direccion");
             prov.setDireccionDetalle("direccion");
             prov.setAutorizoPublicar("0");
@@ -219,11 +220,10 @@ public class QuejasServiceImp {
             queja.setIdProveedor(prov.getIdProveedor());
             conciliacion = "0";
         }
-        //if (!quejaIni.getIdConsumidor().toString().equals("0")) {
         if (ct != null) {
             System.out.println("existe consumidor");
             queja.setIdConsumidor(ct.getIdConsumidor());
-            //actualiza los datos si hubieron
+            // actualiza los datos si hubieron
             String[] nombres = quejaIni.getNombre().replace(" ", "-").split("-");
             switch (nombres.length) {
                 case 1:
@@ -257,7 +257,6 @@ public class QuejasServiceImp {
                     ct.setApellido2(apellidos[1]);
                     break;
             }
-            //verifica si existe telefono grabado en la tabla telefono
             List<TipoEmail> correos = this.consumidorDao.findCorreosById(quejaIni.getIdConsumidor());
             for (TipoEmail te : correos) {
                 if (te.getCorreo_electronico().equals(ct.getCorreoElectronico1())) {
@@ -265,7 +264,6 @@ public class QuejasServiceImp {
                     this.consumidorDao.updateCorreo(te);
                 }
             }
-            //verifica si existe correo en la tabla correo
             List<TipoTelefono> telefonos = this.consumidorDao.findTelefonosById(quejaIni.getIdConsumidor());
             for (TipoTelefono te : telefonos) {
                 if (te.getTelefono().equals(ct.getTelefono())) {
@@ -277,11 +275,8 @@ public class QuejasServiceImp {
             ct.setCorreoElectronico1(quejaIni.getCorreo());
             this.consumidorDao.updateCon(ct);
         } else {
-            // grabar consumidor
             System.out.println("no existe consumidor");
             DiacoConsumidor cons = new DiacoConsumidor();
-            //cons.setIdConsumidor(noQueja);
-
             String[] nombres = quejaIni.getNombre().replace(" ", "-").split("-");
             switch (nombres.length) {
                 case 1:
@@ -311,7 +306,7 @@ public class QuejasServiceImp {
                     cons.setApellido2(apellidos[1]);
                     break;
             }
-            //cons.setNombre1(quejaIni.getNombre());
+            // cons.setNombre1(quejaIni.getNombre());
             cons.setDocumentoIdentificacion(quejaIni.getDpiPasaporte());
             cons.setTelefono(quejaIni.getTelefono());
             cons.setCorreoElectronico1(quejaIni.getCorreo());
@@ -332,7 +327,7 @@ public class QuejasServiceImp {
             consumidorDao.save(cons);
 
             queja.setIdConsumidor(cons.getIdConsumidor());
-            //graba el correo
+            // graba el correo
             TipoEmail correo = new TipoEmail();
             correo.setCorreo_electronico(quejaIni.getCorreo());
             correo.setFecha_adicion(new Date());
@@ -345,22 +340,22 @@ public class QuejasServiceImp {
             tel.setFecha_adicion(new Date());
             this.consumidorDao.saveTelefono(tel);
         }
-//        queja.setIdDiacoSede(2);
-//        setSede
-//        queja.setIdDiacoSede(ct.getSedeDiacoCercana());
+        // queja.setIdDiacoSede(2);
+        // setSede
+        // queja.setIdDiacoSede(ct.getSedeDiacoCercana());
         queja.setAnio(LocalDate.now().getYear());
         queja.setNoQueja(noQueja);
-        //queja.setFechaQueja(new Timestamp(new Date().getTime()));
+        // queja.setFechaQueja(new Timestamp(new Date().getTime()));
         queja.setFechaQueja(new Date());
         queja.setDetalleQueja(quejaIni.getDetalleQueja());
         queja.setSolicitaQue(quejaIni.getSolicitaQue());
-        queja.setFuente(quejaIni.getIdFuente() != null && !quejaIni.getIdFuente().equals("") ? quejaIni.getIdFuente() : "webMobil");
+        queja.setFuente(quejaIni.getIdFuente() != null && !quejaIni.getIdFuente().equals("") ? quejaIni.getIdFuente()
+                : "webMobil");
         queja.setUbicacion(quejaIni.getUbicacion());
         queja.setIdDepartamento(9);
         queja.setIdMunicipio(1);
         queja.setFacturaNumero(quejaIni.getFacturaNumero());
-        //queja.setIdFuente(Integer.parseInt(quejaIni.getIdFuente()));
-        //graba la queja
+        // queja.setIdFuente(Integer.parseInt(quejaIni.getIdFuente()));
         quejaDao.save(queja);
 
         quejaIni.setAnio(queja.getAnio());
@@ -368,8 +363,6 @@ public class QuejasServiceImp {
         quejaIni.setSecuencia(queja.getNoQueja());
         quejaIni.setConciliacion(conciliacion);
         System.out.println("a cola");
-        //boolean aquejanueva = false;
-        //if (quejaIni.getIdProveedor().toString().equals("0")) {
         try {
             DiacoProveedor tempp = this.proveedorDao.findById(queja.getIdProveedor());
             System.out.println("------" + tempp.getHabilitadoConciliacionPrevia());
@@ -377,21 +370,20 @@ public class QuejasServiceImp {
                 System.out.println("no ingreso -graba estado queja 401");
 
                 // CODIGO modificado
-                //queja.setIdEstadoQueja(Constants.QUEJA_NUEVA);
-                //quejaDao.save(queja);
+                // queja.setIdEstadoQueja(Constants.QUEJA_NUEVA);
+                // quejaDao.save(queja);
             } else {
                 if (quejaIni.getPresencial() != null) {
                     System.out.println("ingreso presencial a 30-40 datos, conciliacion " + quejaIni.getConciliacion());
                 } else {
-                    //System.out.println('verificar jj');
-                    //this.quejaDao.grabaAtencionConsumidor(queja);
+                    // System.out.println('verificar jj');
+                    // this.quejaDao.grabaAtencionConsumidor(queja);
                     System.out.println("ingreso");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //}
 
         return quejaIni;
     }
@@ -443,11 +435,7 @@ public class QuejasServiceImp {
         Email correo = new Email();
         boolean resp = false;
         String server = this.proveedorDao.findParametro("instanciaServer");
-        
 
-       
-            
-       
         String salto = "<br>";
         String from = "info@diaco.gob.gt";
         String body = "";
@@ -456,19 +444,24 @@ public class QuejasServiceImp {
         String link_server = "";
         String URL_FLAG = "";
 
-    
-        
         String body1 = "Estimado Sr.(a) " + queja.getNombre() + ":" + salto
                 + " Le notificamos que su queja ha sido recibida con éxito, "
-                //+ " para darle seguimiento a la misma puede consultar el No. " + queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString()) + salto;
-                + " la misma se identifica con el No. " + queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString()) + salto;
-        
+                // + " para darle seguimiento a la misma puede consultar el No. " +
+                // queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString())
+                // + salto;
+                + " la misma se identifica con el No. "
+                + queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString()) + salto;
+
         String body4 = "Estimado Sr.(a) " + queja.getNombre() + ":" + salto
                 + " Le notificamos que sus documentos de su queja se han recibido con éxito, "
-                //+ " para darle seguimiento a la misma puede consultar el No. " + queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString()) + salto;
-                + " la misma se identifica con el No. " + queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString()) + salto;
+                // + " para darle seguimiento a la misma puede consultar el No. " +
+                // queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString())
+                // + salto;
+                + " la misma se identifica con el No. "
+                + queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString()) + salto;
         String body2 = " Gracias por utilizar nuestros servicios electronicos. " + salto
-                + "Atentamente, " + salto + salto + salto + " DIACO" + salto + " Dirección de atención y asistencia al consumidor " + salto
+                + "Atentamente, " + salto + salto + salto + " DIACO" + salto
+                + " Dirección de atención y asistencia al consumidor " + salto
                 + "Oficinas: 7a av. 7-61 Zona 4, 3er. Nivel Edificio del Registro Mercantil " + salto
                 + "Teléfono: 2501-9898 " + salto
                 + "Centro de Atención de Quejas: 6av. 0-35 Zona 4 centro comercial Plaza Zona 4 " + salto
@@ -479,53 +472,54 @@ public class QuejasServiceImp {
                 link_server = "https://" + server + "/dist6/#/consumidor/presencial/" + link + "/" + queja.getIdQueja();
                 body5 = "Para poder continuar con el trámite de su queja necesitamos que complete la " + salto
                         + "información del siguiente link:"
-                        + "<a href='https://" + server + "/dist6/#/consumidor/presencial/" + link + "/" + queja.getIdQueja() + "'>Click aquí </a>" + salto + salto
+                        + "<a href='https://" + server + "/dist6/#/consumidor/presencial/" + link + "/"
+                        + queja.getIdQueja() + "'>Click aquí </a>" + salto + salto
                         + "Por favor, tome en cuenta que tiene 48 horas después de recibido este correo, " + salto
                         + "para ingresar la información y subir sus los documentos." + salto + salto;
-                body = body1 + body5 + body2; //notificación de ingreso de queja web//notificación de ingreso de queja web 
+                body = body1 + body5 + body2; // notificación de ingreso de queja web//notificación de ingreso de queja
+                                              // web
                 break;
             case "2":
-                body = body4 + body2; //notificación de ingreso de queja por el usuario.
+                body = body4 + body2; // notificación de ingreso de queja por el usuario.
                 break;
-            case "3": //notificación de ingreso de queja call center
+            case "3": // notificación de ingreso de queja call center
                 URL_FLAG = GET_URL_CALL;
                 link_server = "https://" + server + "/dist5/#/quejacon/0/" + link;
                 body3 = "Para poder continuar con el trámite de su queja necesitamos que rectifique" + salto
                         + " la información del siguiente link, así como que adjunte copia de la factura " + salto
                         + " o documento de respaldo de la compra y su DPI: "
-                        + "<a href='http://" + server + "/dist5/#/quejacon/0/" + link + "'>Click aqui </a>" + salto + salto
+                        + "<a href='http://" + server + "/dist5/#/quejacon/0/" + link + "'>Click aqui </a>" + salto
+                        + salto
                         + "Por favor, tome en cuenta que tiene 48 horas después de recibido este correo, " + salto
                         + "para verificar la información y subir los documentos.";
-                body = body1 + body3 + body2 + salto + salto + salto; 
-                
+                body = body1 + body3 + body2 + salto + salto + salto;
+
                 break;
             default:
                 break;
         }
         try {
-            // subject = "Notificación de queja grabada ".concat(queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString()));
+            // subject = "Notificación de queja grabada
+            // ".concat(queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString()));
             // System.out.println(queja.getCorreo());
             // String quejas[] = {queja.getCorreo()};
             // System.out.println(quejas.length);
 
-   
-
-
             List<NameValuePair> urlParameters = new ArrayList<>();
             urlParameters.add(new BasicNameValuePair("to", queja.getCorreo()));
             urlParameters.add(new BasicNameValuePair("name", queja.getNombre()));
-            urlParameters.add(new BasicNameValuePair("number",queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString())));
+            urlParameters.add(new BasicNameValuePair("number",
+                    queja.getSecuencia().toString().concat("-").concat(queja.getAnio().toString())));
             urlParameters.add(new BasicNameValuePair("link", link_server));
-    
-    
+
             try {
                 HttpPost post = new HttpPost(URL_FLAG);
                 post.setEntity(new UrlEncodedFormEntity(urlParameters));
-                try (CloseableHttpClient httpClient = HttpClients.createDefault(); 
-                    CloseableHttpResponse response = httpClient.execute(post)){
-                        System.out.println("Enviado " + EntityUtils.toString(response.getEntity()));
-                        resp = true;
-                    
+                try (CloseableHttpClient httpClient = HttpClients.createDefault();
+                        CloseableHttpResponse response = httpClient.execute(post)) {
+                    System.out.println("Enviado " + EntityUtils.toString(response.getEntity()));
+                    resp = true;
+
                 } catch (Exception e) {
                     System.out.println("error en el envio " + e);
                 }
@@ -533,13 +527,10 @@ public class QuejasServiceImp {
                 System.out.println("Error dos en el envio " + e1);
             }
 
-
-            
-
             // resp = correo.SendEmail(from, quejas, subject, body,
-            //         this.proveedorDao.findParametro("email_host"),
-            //         this.proveedorDao.findParametro("email_user"),
-            //         this.proveedorDao.findParametro("email_pass"));
+            // this.proveedorDao.findParametro("email_host"),
+            // this.proveedorDao.findParametro("email_user"),
+            // this.proveedorDao.findParametro("email_pass"));
         } catch (Exception e) {
 
         }
@@ -612,7 +603,7 @@ public class QuejasServiceImp {
      * </ul>
      *
      * @param pCalendarioDto Detalle de los parametros para realizar la
-     * consulta.
+     *                       consulta.
      * @return Objeto con el detalle de audiencias.
      * @throws ErrorException Si ocurre un error.
      */

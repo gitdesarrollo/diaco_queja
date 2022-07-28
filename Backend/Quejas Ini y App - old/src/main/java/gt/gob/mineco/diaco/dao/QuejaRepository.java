@@ -151,32 +151,19 @@ public class QuejaRepository {
         //ResponseRs response = new ResponseRs();
         //UserTransaction transaction = null;
         try {
-            //TokenCheck(token);
-            //transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
-            //transaction.begin();
-            //130 pendiente confirmar accion en atencion al consumidor
-            //TipoQueja tipoqueja = findByIdQueja(id_queja);
-            //if (tipoqueja.getId_estado_queja() == 130) {
+            System.out.println("Al cambiar queja "+ tipoqueja.getIdEstadoQueja());
             if (tipoqueja.getIdEstadoQueja() != null) {
 
             } else {
                 tipoqueja.setIdEstadoQueja(0);
             }
             if (tipoqueja.getIdEstadoQueja() == 130) {
-                //response.setCode(1L);
-                //response.setReason("ERROR_REPETIDO");
             } else {
                 /*
                 Mantenimiento: Copia del repositorio.
                  */
                 tipoqueja.setIdEstadoQueja(401);
                 em.merge(tipoqueja);
-                //SaveConfirmarAccion(tipoqueja.getIdQueja(), 130);
-//                SaveConfirmarAccion(tipoqueja.getIdQueja(), 1, "f", tipoqueja); cambio de sede
-                //SaveConfirmarAccion(tipoqueja.getIdQueja(), 1, "f", tipoqueja);
-                //response.setCode(0L);
-                //response.setReason("OK");
-                //response.setValue("{ id_queja: " + id_queja.toString() + " }");
             }
             //transaction.commit();
         } catch (Exception e) {

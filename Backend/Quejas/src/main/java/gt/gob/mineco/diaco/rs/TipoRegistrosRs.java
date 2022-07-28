@@ -41,7 +41,6 @@ public class TipoRegistrosRs {
     @Path("/form_queja")
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseRs addTipoFormQueja(FormRegistro pFormQueja) {
-       // return RegistroService.saveReg_ComPermanente(formReg_ComPerm);
        return RegistroService.saveReg_FormularioQ(pFormQueja);
     }
 

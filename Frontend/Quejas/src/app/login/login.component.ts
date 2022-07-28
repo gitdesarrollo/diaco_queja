@@ -39,6 +39,11 @@ export class LoginComponent implements OnInit {
 	}
 	
 	ngOnInit() {
+		// const currentUser = JSON.parse(localStorage.getItem('tokenDiaco'));
+		// console.log("curren ",currentUser)
+		// if (currentUser) {
+		// 	this.router.navigate(['/mainAtCon']);
+		// }
 	  this.portallinkgrid=[]
 	  this.UsrNameCtrl =  new FormControl('',Validators.required);
 	  this.PsswordCtrl =  new FormControl('',Validators.required);
@@ -100,6 +105,10 @@ export class LoginComponent implements OnInit {
 		}
   }
 
+  setToken(token){
+	localStorage.setItem("tokenDiaco",JSON.stringify(token))
+  }
+
 	LogIn(){
 		if (this.myForm.valid) {
 		  let tempstr='';
@@ -109,7 +118,7 @@ export class LoginComponent implements OnInit {
 					tempstr=retvalue['value'];
 					if(tempstr != null)	{
 						lst_login=JSON.parse('['+retvalue["value"].slice(0, -1) +']');
-						//console.log(lst_login);
+						this.setToken(lst_login[0])
 						this.flagDBError=false;
 						this.SaveUserMove(lst_login[0]);
 					}else{

@@ -6,18 +6,26 @@ import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { FrmMainParam, FrmMainFD, BASE_URL_REST } from "../atencion-consumidor-const";
 import { SubmitFormService } from "../shared/submit-form.service";
+import { User } from '../models/user.model';
+import { tokenNotExpired } from 'angular2-jwt';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
+	authenticatedUser: User;
 	private baseUrl:string=BASE_URL_REST+'tipos-usuario';
 	private httpOptions = {
 	  headers: new HttpHeaders({
 		'content-type':'application/json; charset=iso-8859-1'
 	  })
 	};
-  constructor(private _http:HttpClient, private _submitFormService:SubmitFormService) { }
+  constructor(private _http:HttpClient, private _submitFormService:SubmitFormService) { 
+	this.authenticatedUser = JSON.parse(localStorage.getItem('tokenDiaco'));
+    if (this.authenticatedUser != null && !tokenNotExpired(null, this.authenticatedUser.token)) {
+      this.authenticatedUser = null;
+    }
+  }
   
   private extractData(res: Response) {
 	  let body = res;

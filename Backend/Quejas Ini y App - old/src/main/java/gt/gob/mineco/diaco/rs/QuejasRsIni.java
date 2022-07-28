@@ -51,19 +51,21 @@ public class QuejasRsIni {
     SecurityManagerServiceImpl securityService;
 
     /*
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public ResponseRs getQuejas(DiacoQuejaIniDto quejaini) {
-        ResponseRs response = new ResponseRs();
-        try {
-            List<DiacoQuejaIniDto> paises = quejasService.getquejas(quejaini);
-            response.setValue(paises);
-        } catch (Exception e) {
-            System.out.println("Error en getQuejas " + e.getMessage());
-        }
-        return response;
-    }*/
-	
+     * @GET
+     * 
+     * @Produces(MediaType.APPLICATION_JSON)
+     * public ResponseRs getQuejas(DiacoQuejaIniDto quejaini) {
+     * ResponseRs response = new ResponseRs();
+     * try {
+     * List<DiacoQuejaIniDto> paises = quejasService.getquejas(quejaini);
+     * response.setValue(paises);
+     * } catch (Exception e) {
+     * System.out.println("Error en getQuejas " + e.getMessage());
+     * }
+     * return response;
+     * }
+     */
+
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -81,7 +83,8 @@ public class QuejasRsIni {
         response.setValue(queja);
         return response;
     }
-    ////////////////////////////////////////FACTURA////////////////////////
+
+    //////////////////////////////////////// FACTURA////////////////////////
     @GET
     @Path("/factura")
     @Produces(MediaType.APPLICATION_JSON)
@@ -91,20 +94,18 @@ public class QuejasRsIni {
         facturas = quejaDao.findMaxFromYear();
         try {
 
-
         } catch (Exception e) {
-            System.out.println("Error en fecha: " );
+            System.out.println("Error en fecha: ");
         }
-        //response.setValue();
+        // response.setValue();
         return response;
     }
-    
-    
+
     @GET
     public ResponseRs getFacturaProveedor(@QueryParam(value = "proveedor") Integer proveedor) {
-        System.out.println("Ingresando a getFacturaProveedor jj"+ proveedor);
+        System.out.println("Ingresando a getFacturaProveedor jj" + proveedor);
         ResponseRs response = new ResponseRs();
-        
+
         try {
             response.setCode(0L);
             response.setReason("OK");
@@ -116,25 +117,31 @@ public class QuejasRsIni {
         }
         return response;
 
-        /*if (queja != null) {
-            TipoTelefono tel = consumidoresService.findTelefonoById(consumidor.getIdConsumidor());
-            TipoEmail correo = consumidoresService.findCorreoById(consumidor.getIdConsumidor());
-            if (tel != null) {
-                consumidor.setTelefono(tel.getTelefono());
-            }
-            if (correo != null) {
-                consumidor.setCorreoElectronico1(correo.getCorreo_electronico());
-            }
-        }*/
-        
+        /*
+         * if (queja != null) {
+         * TipoTelefono tel =
+         * consumidoresService.findTelefonoById(consumidor.getIdConsumidor());
+         * TipoEmail correo =
+         * consumidoresService.findCorreoById(consumidor.getIdConsumidor());
+         * if (tel != null) {
+         * consumidor.setTelefono(tel.getTelefono());
+         * }
+         * if (correo != null) {
+         * consumidor.setCorreoElectronico1(correo.getCorreo_electronico());
+         * }
+         * }
+         */
+
     }
 
-    //////////////////////////////////////FINALIZA FACTURA/////////////////////////////////////////////
-    
+    ////////////////////////////////////// FINALIZA
+    ////////////////////////////////////// FACTURA/////////////////////////////////////////////
+
     @GET
     @Path("/noqueja/{anio}/{correlativo}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseRs getQuejasAnioSec(@PathParam(value = "anio") Integer anio, @PathParam(value = "correlativo") Integer correlativo) {
+    public ResponseRs getQuejasAnioSec(@PathParam(value = "anio") Integer anio,
+            @PathParam(value = "correlativo") Integer correlativo) {
         ResponseRs response = new ResponseRs();
         DiacoQueja queja = quejasService.getquejasAnioSec(anio, correlativo);
         this.getarchivos(queja);
@@ -174,6 +181,7 @@ public class QuejasRsIni {
             if (pqueja.equals("0")) {
                 response.setValue(null);
             } else {
+
                 DiacoQueja queja = this.securityService.findTokenIntExt(dato, id, pqueja);
                 response.setValue(queja);
                 response.setCode(queja != null ? 1L : 0L);
@@ -181,12 +189,13 @@ public class QuejasRsIni {
                 response.setReason(queja != null ? "OK" : "ERROR");
             }
         } else if (dato.equals("externo") || dato.equals("externo1") || dato.equals("pr")) {
-            //externo -  busca si existe el link y esta activo, adicionalmente del dato de la queja
-            //esterno1 -  elimina el link para que ya no sea utiliza
+            // externo - busca si existe el link y esta activo, adicionalmente del dato de
+            // la queja
+            // esterno1 - elimina el link para que ya no sea utiliza
             DiacoQueja queja = this.securityService.findTokenIntExt(dato, id, "");
             try {
                 String tempFormat = new SimpleDateFormat("dd/MM/yyyy").format(queja.getFechaQueja());
-                //System.out.println("fecha: " + tempFormat);
+                // System.out.println("fecha: " + tempFormat);
                 queja.setFechaFactura_(tempFormat);
                 this.getarchivos(queja);
             } catch (Exception e) {
@@ -231,21 +240,23 @@ public class QuejasRsIni {
     public ResponseRs createQueja(DiacoQuejaIniDto queja) {
         ResponseRs response = new ResponseRs();
         queja = quejasService.saveQuejaIni(queja);
-        System.out.println("Variable queja de (createQueja):"+queja.getConciliacion());
+        System.out.println("Variable queja de (createQueja):" + queja.getConciliacion());
         response.setValue(queja);
-        //send email for notification
+        // send email for notification
         if (queja.getConciliacion().equals("1")) {
             String token = this.securityService.createTokenByConsumidor(queja);
             System.out.println("Envio correo queja web" + this.quejasService.sendMail(queja, "subject", "1", token));
         } else {
             if (queja.getPresencial() != null) {
                 System.out.println("No envio correo queja web se llenaran 40-30 datos");
-                //    if (queja.getPresencial().equals("1")) {
-                //        System.out.println("Envio correo queja web" + this.quejasService.sendMail(queja, "subject", "1", ""));
-                //    }
+                // if (queja.getPresencial().equals("1")) {
+                // System.out.println("Envio correo queja web" +
+                // this.quejasService.sendMail(queja, "subject", "1", ""));
+                // }
             } else {
                 String token = this.securityService.createTokenByConsumidor(queja);
-                System.out.println("Envio correo queja web" + this.quejasService.sendMail(queja, "subject", "1", token));
+                System.out
+                        .println("Envio correo queja web" + this.quejasService.sendMail(queja, "subject", "1", token));
             }
         }
 
@@ -262,29 +273,19 @@ public class QuejasRsIni {
         response.setValue(queja);
         if (queja.getConciliacion().equals("1")) {
             if (queja.getPresencial() != null) {
-                //System.out.println("No envio correo queja web se llenaran 40-30 datos");
-                //    if (queja.getPresencial().equals("1")) {
                 System.out.println("Envio correo queja presencial" + this.quejasService.sendMail(queja, "subject", "2", ""));
-                //    }
             } else {
-                //send email for upload files
                 String token = this.securityService.createTokenByConsumidor(queja);
                 System.out.println("tocken  " + token);
-                System.out.println("Envio correo queja int"
-                        + this.quejasService.sendMail(queja, "subject", "3", token));
+                System.out.println("Envio correo queja int" + this.quejasService.sendMail(queja, "subject", "3", token));
             }
         } else {
             if (queja.getPresencial() != null) {
                 System.out.println("No envio correo queja web se llenaran 40-30 datos");
-                //    if (queja.getPresencial().equals("1")) {
-                //        System.out.println("Envio correo queja web" + this.quejasService.sendMail(queja, "subject", "1", ""));
-                //    }
             } else {
-                //send email for upload files
                 String token = this.securityService.createTokenByConsumidor(queja);
                 System.out.println("token  " + token);
-                System.out.println("Envio correo queja int"
-                        + this.quejasService.sendMail(queja, "subject", "3", token));
+                System.out.println("Envio correo queja int"+ this.quejasService.sendMail(queja, "subject", "3", token));
             }
         }
 
@@ -299,7 +300,7 @@ public class QuejasRsIni {
         ResponseRs response = new ResponseRs();
         queja = quejasService.saveQuejaIni(queja);
         response.setValue(queja);
-        //send email for notification upload files
+        // send email for notification upload files
         System.out.println("Envio correo queja upload"
                 + this.quejasService.sendMail(queja, "subject", "2", ""));
         return response;
@@ -312,13 +313,13 @@ public class QuejasRsIni {
     public ResponseRs upload(@FormDataParam("document") InputStream is,
             @FormDataParam("document") FormDataContentDisposition fileDetails,
             @QueryParam("id_queja") Integer id_queja,
-            @QueryParam("id_categoria_imagen") Integer id_categoria_imagen, //dpi o factura
+            @QueryParam("id_categoria_imagen") Integer id_categoria_imagen, // dpi o factura
             @DefaultValue("0") @QueryParam("correo") Integer pcorreo,
-            @DefaultValue("0") @QueryParam("data") String ptoken
-    ) {
+            @DefaultValue("0") @QueryParam("data") String ptoken) {
         Integer id_tipo_imagen = 3;
         Integer id_flujo = 1;
-        System.out.println("idqueja " + id_queja + ", tipoImange " + id_tipo_imagen + ", categoria " + id_categoria_imagen + ", flujo " + id_flujo);
+        System.out.println("idqueja " + id_queja + ", tipoImange " + id_tipo_imagen + ", categoria "
+                + id_categoria_imagen + ", flujo " + id_flujo);
         if (pcorreo > 0) {
             DiacoQuejaIniDto sigSecuencia = this.securityService.findTokenByConsumidor("0", ptoken);
             if (sigSecuencia != null) {
@@ -331,8 +332,7 @@ public class QuejasRsIni {
                 id_queja,
                 id_tipo_imagen,
                 id_categoria_imagen,
-                id_flujo
-        );
+                id_flujo);
     }
 
     @GET
@@ -345,7 +345,7 @@ public class QuejasRsIni {
     }
 
     private DiacoQueja getarchivos(DiacoQueja pq) {
-        //busca si existen archivos
+        // busca si existen archivos
         return pq = this.quejasService.buscaArchivos(pq);
     }
 
@@ -357,8 +357,9 @@ public class QuejasRsIni {
         ResponseRs response = new ResponseRs();
         DiacoQueja qq = quejasService.updateQuejaCon(queja);
         response.setValue(qq);
-        //send email for notification upload files
-        //System.out.println("Envio correo queja upload" + this.quejasService.sendMail(qq, "subject", "2", ""));
+        // send email for notification upload files
+        // System.out.println("Envio correo queja upload" +
+        // this.quejasService.sendMail(qq, "subject", "2", ""));
         return response;
     }
 }

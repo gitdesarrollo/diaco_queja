@@ -94,6 +94,8 @@ import { TablaMainCalendarioComponent } from './tabla-main-calendario/tabla-main
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { ChatComponent } from './chat/chat.component';
 
+import { Authguard } from './shared/auth.guard';
+
 
 
 
@@ -198,7 +200,7 @@ import { ChatComponent } from './chat/chat.component';
 	FullCalendarModule, //<-- calendario modulo
 	
   ],
-providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}, DatePipe],
+providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}, DatePipe,Authguard],
   bootstrap: [AppComponent],
   entryComponents: [ComunicacionPermanenteComponent, VerifConcicliacionVirtComponent, BitacoraACComponent, PrimeraAudienciaComponent, SegundaAudienciaComponent, ConciliacionComponent, IncomparecenciaComponent, VisitaCampoComponent, ArchivarQuejaComponent, MovimientoExpedienteComponent, GuiaRegistrosComponent, ResumenQuejasComponent, VerifDatosComponent, ConfirmarAccionComponent, BusquedaComponent, MovimientoConfirmarComponent, SubirArchivosComponent, MovimientoServPubComponent, ArchivarServPubComponent, ActaVerificacionComponent, InformeFinalVerificacionComponent, ArchivarVerificacionComponent, MovimientoVerificacionComponent, MovimientoConfVerificacionComponent, DocumentarComponent, ConciliacionJuridicoComponent, MovimientoConfJuridicoComponent, MovimientoJuridicoComponent, ArchivarJuridicoComponent, ReasignarReactivarComponent, ParamGeneralesComponent, ConfUsuarioComponent, UsuarioDetalleComponent, ConfiguracionSistemaComponent, ConfUsuarioConcPreviaComponent, UsuarioDetalleConcPreviaComponent, AsignarColaComponent, AprobarConcPreviaComponent,CatDepartamentoComponent,CatPaisesComponent,CatDepartamentoInternoComponent,CatMotivoQuejaComponent,CatMunicipioComponent,CatSedesComponent,CatDiaInhabilComponent,CatProveedorComponent,JuridicoResultadoAudienciaComponent, JuridicoResolucionFinalComponent,CambiarPasswordComponent, VyvAsignaColaComponent,CatPuestoComponent,CatTipoColaComponent,CatConsumidorComponent,CatTipoConsumidorComponent,CatAreaComponent,CatFinalizacionComponent ,CatActividadEconomicaComponent,CatTipoComercioComponent,CatSucursalComponent,TablaMainCalendarioComponent ]
 })

@@ -77,6 +77,7 @@ public class ProveedoresServiceImp {
         }
         if (temp != null) {
             System.out.println("modifica proveedor ");
+            proveedor.setHabilitadoConciliacionPrevia( "0");
             proveedor.setFechaModificacion(new Timestamp(new Date().getTime()));
             proveedor.setFechaAdicion(temp.getFechaAdicion() != null ? temp.getFechaAdicion() : new Timestamp(new Date().getTime()));
             if (temp.getFechaRegistroConciliacionPrevia() != null) {

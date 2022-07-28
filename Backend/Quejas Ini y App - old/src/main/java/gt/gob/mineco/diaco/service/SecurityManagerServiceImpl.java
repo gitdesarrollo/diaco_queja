@@ -279,8 +279,7 @@ public class SecurityManagerServiceImpl implements Serializable {
 
             //Invalidacion del token default 24 horas
             long horas = (new Date().getTime() - sesionActual.getInvalidationDate().getTime()) / (1000 * 60 * 60);
-            System.out.println("ahora " + new Date().getTime() + ", grabada " + sesionActual.getInvalidationDate().getTime());
-            System.out.println("lleva de vida " + horas);
+            
             if (!dato.equals("0")) {
                 sesionActual.setToken("");
                 dao.createEntity(sesionActual);
@@ -295,7 +294,6 @@ public class SecurityManagerServiceImpl implements Serializable {
             }
 
         }
-        System.out.println("autorizado " + autorized);
         return autorized;
     }
 
@@ -354,12 +352,12 @@ public class SecurityManagerServiceImpl implements Serializable {
                 }
             } else if (dato.equals("interno") || dato.equals("presencial")) {
                 //valida token
-                System.out.println(dato + ", " + token + ", " + idqueja);
+                
                 if (this.authorized(token, "0") || this.authorized(token.replace("a1b2c3", "."), "0") ) { // verifica si el token esta activo en db
+                    System.out.println("Uno " + this.authorized(token, "0"));
+                    System.out.println("dos "+ this.authorized(token.replace("a1b2c3", "."), "0"));
                     quejaini = this.quejaDao.findByDIdQueja(Integer.parseInt(idqueja));
-                    System.out.println(quejaini != null ? "existe" : "no existe");
                     quejaini.setUsuarioToken(JWTUtils.getUserName(token));
-                    System.out.println(quejaini != null ? JWTUtils.getUserName(token) : "no existe user");
                 } else {
                     quejaini = null;
                 }

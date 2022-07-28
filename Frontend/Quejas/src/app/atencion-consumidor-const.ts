@@ -6,17 +6,17 @@
 	Desarrollo
 
  */
-// export const BASE_URL_REST = 'http://localhost:8080/Quejas/rs/';
-// export const BASE_URL_REST_CALENDARIO = 'http://localhost:8080/web-quejaini/rs/quejas/calendario';
-// export const BASE_VERIFICACION_DATOS_LINK = 'http://localhost:8080/dist6/#/consumidor/interno/';
-// export const BASE_PRESENCIAL_LINK = 'http://localhost:8080/dist6/#/pquejaini/presencial/';
-// export const BASE_CALLCENTER_LINK = 'http://localhost:8080/dist6/#/pquejaini/callcenter/';
+export const BASE_URL_REST = 'http://localhost:8080/Quejas/rs/';
+export const BASE_URL_REST_CALENDARIO = 'http://localhost:8080/web-quejaini/rs/quejas/calendario';
+export const BASE_VERIFICACION_DATOS_LINK = 'http://localhost:8080/dist6/#/consumidor/interno/';
+export const BASE_PRESENCIAL_LINK = 'http://localhost:8080/dist6/#/pquejaini/presencial/';
+export const BASE_CALLCENTER_LINK = 'http://localhost:8080/dist6/#/pquejaini/callcenter/';
 
- export const BASE_URL_REST = 'https://dev.mineco.gob.gt/Quejas/rs/';
- export const BASE_URL_REST_CALENDARIO = 'https://dev.mineco.gob.gt/web-quejaini/rs/quejas/calendario';
- export const BASE_VERIFICACION_DATOS_LINK = 'https://dev.mineco.gob.gt/dist6/#/consumidor/interno/';
- export const BASE_PRESENCIAL_LINK = 'https://dev.mineco.gob.gt/dist6/#/pquejaini/presencial/';
- export const BASE_CALLCENTER_LINK = 'https://dev.mineco.gob.gt/dist6/#/pquejaini/callcenter/';
+//  export const BASE_URL_REST = 'https://dev.mineco.gob.gt/Quejas/rs/';
+//  export const BASE_URL_REST_CALENDARIO = 'https://dev.mineco.gob.gt/web-quejaini/rs/quejas/calendario';
+//  export const BASE_VERIFICACION_DATOS_LINK = 'https://dev.mineco.gob.gt/dist6/#/consumidor/interno/';
+//  export const BASE_PRESENCIAL_LINK = 'https://dev.mineco.gob.gt/dist6/#/pquejaini/presencial/';
+//  export const BASE_CALLCENTER_LINK = 'https://dev.mineco.gob.gt/dist6/#/pquejaini/callcenter/';
 
 
 export const BASE_URL_REST_FILE = BASE_URL_REST;

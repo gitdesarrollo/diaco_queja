@@ -56,9 +56,6 @@ public class QuejasRs {
     @Consumes(MediaType.APPLICATION_JSON)
     public ResponseRs createQueja(DiacoQueja queja) {
         ResponseRs response = new ResponseRs();
-        // consumidor.setIdConsumidor(queja.getIdConsumidor());
-        // consumidor = consumidoresService.updateConsumidor(consumidor);
-        
         DiacoConsumidor id = this.consumidorDao.findById(queja.getIdConsumidor());
         System.out.println("Id consumidor controlador" + queja.getIdConsumidor());
         System.out.println("Id sede cercana metodo" + id.getSedeDiacoCercana());

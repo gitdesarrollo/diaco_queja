@@ -1,20 +1,22 @@
 import { NgModule }             from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Router, RouterModule, Routes } from '@angular/router';
 import { MainAtencionConsumidorComponent }      from './main-atencion-consumidor/main-atencion-consumidor.component';
 import { MainServiciosPublicosComponent }      from './main-servicios-publicos/main-servicios-publicos.component';
 import { MainVerificacionVigilanciaComponent }      from './main-verificacion-vigilancia/main-verificacion-vigilancia.component';
 import { MainJuridicoComponent } from './main-juridico/main-juridico.component';
 import { LoginComponent } from './login/login.component';
+import { Authguard } from './shared/auth.guard'
 
 import { ChatComponent } from './chat/chat.component';
+import { routerNgProbeToken } from '@angular/router/src/router_module';
 
 const routes: Routes = [
   { path: '', redirectTo: '/Login', pathMatch: 'full' },
-  { path: 'mainAtCon', component: MainAtencionConsumidorComponent },
-  { path: 'mainServPub', component: MainServiciosPublicosComponent },
-  { path: 'mainVyV', component: MainVerificacionVigilanciaComponent },
-  { path: 'mainJuridico', component: MainJuridicoComponent },
-  { path: 'Login', component: LoginComponent },/*,
+  { path: 'mainAtCon', component: MainAtencionConsumidorComponent, canActivate: [Authguard]  },
+  { path: 'mainServPub', component: MainServiciosPublicosComponent, canActivate: [Authguard]  },
+  { path: 'mainVyV', component: MainVerificacionVigilanciaComponent, canActivate: [Authguard]  },
+  { path: 'mainJuridico', component: MainJuridicoComponent, canActivate: [Authguard]  },
+  { path: 'Login', component: LoginComponent},/*,
   { path: 'VerifConcVirt/:id', component: VerifConcicliacionVirtComponent },
   { path: 'ComPermanente/:id', component: ComunicacionPermanenteComponent },
   { path: 'FinalizarQueja/:id', component: FinalizarQuejaComponent },
@@ -25,6 +27,7 @@ const routes: Routes = [
 
   { path: 'Chat/:idAudiencia', component: ChatComponent }
 ];
+
 
 @NgModule({
 	imports: [ RouterModule.forRoot(routes, { useHash: true }) ],

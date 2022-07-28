@@ -58,7 +58,6 @@ public class ConsumidoresServiceImp {
     }
 
     public DiacoConsumidor updateSede(DiacoConsumidor consumidor){
-        System.out.println("Sede Cercana"+ consumidor.getSedeDiacoCercana());
         DiacoConsumidor data = this.findConsumidorById(consumidor.getIdConsumidor());
         data.setSedeDiacoCercana(consumidor.getSedeDiacoCercana());
          return this.consumidorDao.merge(data);
@@ -108,12 +107,11 @@ public class ConsumidoresServiceImp {
             consumidor.setMunicipio(municipio);
         }
         // asociar sede
-        //System.out.println("sede ----------------- "+pconsumidor.getSedeDiacoCercana());
         if (pconsumidor.getSedeDiacoCercana() != null) {
             //DiacoSede sede = rsRespositoryDao.findByIdSede(Integer.parseInt(pconsumidor.getSedeDiacoCercana()));
             consumidor.setSedeDiacoCercana(Integer.parseInt(pconsumidor.getSedeDiacoCercana()));
-            //System.out.println("sede ----------------- "+sede.getIdDiacoSede());
         }
+
         consumidor.setHabilitadoNotificacionElectronica("0");
         consumidor.setFechaAdicion(new Timestamp(new Date().getTime()));
         //consumidor.setUsuarioAdiciono("");

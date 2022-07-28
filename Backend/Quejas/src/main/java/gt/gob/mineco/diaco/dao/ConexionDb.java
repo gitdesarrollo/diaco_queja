@@ -36,7 +36,7 @@ public class ConexionDb  implements Serializable{
 
     }
 
-    private void close(Connection connection, ResultSet rs, Statement stmt){
+    public void close(Connection connection, ResultSet rs, Statement stmt){
         if(rs != null){
             try {
                 if(!rs.isClosed()){
